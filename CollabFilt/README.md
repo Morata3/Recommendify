@@ -1,0 +1,3 @@
+Basic KNN Collaborative filter in Jupyter Notebooks format
+
+It is necessary to check if Android will support all the libraries used for this demo...
