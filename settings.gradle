@@ -1,2 +1,7 @@
+include ':spotify-auth'
+include ':spotify-auth'
+include ':spotify-auth-release'
+include ':spotify-auth-release'
+include ':spotify-app-remote'
 include ':app'
 rootProject.name = "Recommendify4"
