@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "4b1b0a636b8046a7b305efbf5745c09b";
     private static final String REDIRECT_URI = "recommendify://";
     private FloatingActionButton infoButton;
+    private Button artistButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +32,14 @@ public class MainActivity extends AppCompatActivity {
         infoButton = (FloatingActionButton) findViewById(R.id.infoButton);
         infoButton.setOnClickListener(v -> openDialogInfo());
 
+        artistButton = (Button) findViewById(R.id.buttonArtist);
+        artistButton.setOnClickListener(v -> artistRecommendation());
+
         //Initializa and Assign variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         //Set home selected
-       bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setSelectedItemId(R.id.home);
 
         //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
             return false;
-
         }
     });
     }
@@ -73,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 "user-read-email",
                 "ugc-image-upload"
         });
-//        builder.setShowDialog(true);
         AuthorizationRequest request = builder.build();
 
         AuthorizationClient.openLoginActivity(this,REQUEST_CODE,request);
@@ -83,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
     public void openDialogInfo(){
         DialogInfo dialogInfo = new DialogInfo();
         dialogInfo.show(getSupportFragmentManager(),"Dialog Information");
+    }
+
+    public void artistRecommendation(){
+        setContentView(R.layout.activity_artist_recommendation);
+
     }
 
     protected  void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -96,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
                 // Response was successful and contains auth token
                 case TOKEN:
 
-                    Log.d("MainActivity","TAMOS DENTRO TOKEN:" + response.getAccessToken());
+                    Log.d("MainActivity","USER TOKEN:" + response.getAccessToken());
                     break;
-
+                    
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response

@@ -21,26 +21,27 @@
         app:menu="@menu/menu_navigation" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch1"
-        android:layout_width="235dp"
-        android:layout_height="56dp"
+        android:id="@+id/switchParam"
+        android:layout_width="240dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="124dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginRight="84dp"
-        android:text="Aply filter"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="88dp"
+        android:layout_marginRight="88dp"
+        android:text="  Aply filter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/radioGroupParam"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/switch1"
-        app:layout_constraintStart_toStartOf="@+id/switch1"
-        app:layout_constraintTop_toBottomOf="@+id/switch1">
+        app:layout_constraintEnd_toEndOf="@+id/switchParam"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/switchParam"
+        app:layout_constraintTop_toBottomOf="@+id/switchParam">
 
         <RadioButton
             android:id="@+id/loudness"
@@ -72,6 +73,85 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Popularity" />
+
+    </RadioGroup>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchGenre"
+        android:layout_width="240dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="84dp"
+        android:layout_marginRight="84dp"
+        android:text="  Aply filter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupGenre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/switchGenre"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/switchGenre"
+        app:layout_constraintTop_toBottomOf="@+id/switchGenre">
+
+        <RadioButton
+            android:id="@+id/Rock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rock" />
+
+        <RadioButton
+            android:id="@+id/Metal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Metal" />
+
+        <RadioButton
+            android:id="@+id/Rap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rap" />
+
+        <RadioButton
+            android:id="@+id/Trap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trap" />
+
+        <RadioButton
+            android:id="@+id/Reggaeton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reggaeton" />
+
+        <RadioButton
+            android:id="@+id/Reggae"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reggae" />
+
+        <RadioButton
+            android:id="@+id/Jazz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Jazz" />
+
+        <RadioButton
+            android:id="@+id/Techno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Techno" />
+
+        <RadioButton
+            android:id="@+id/Classic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Classic" />
 
     </RadioGroup>
 
