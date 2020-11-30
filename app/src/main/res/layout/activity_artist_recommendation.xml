@@ -7,7 +7,7 @@
     tools:context=".ArtistRecommendation">
 
     <EditText
-        android:id="@+id/plain_text_input"
+        android:id="@+id/artist1"
         android:layout_width="272dp"
         android:layout_height="38dp"
         android:layout_marginTop="172dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/plain_text_input2"
+        android:id="@+id/artist2"
         android:layout_width="272dp"
         android:layout_height="38dp"
         android:layout_marginTop="280dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/plain_text_input3"
+        android:id="@+id/artist3"
         android:layout_width="272dp"
         android:layout_height="38dp"
         android:layout_marginTop="400dp"
@@ -40,7 +40,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/buttonContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="476dp"
@@ -61,11 +61,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/artistRecommend"
         android:layout_width="212dp"
         android:layout_height="62dp"
         android:layout_marginBottom="92dp"
-        android:text="TextView"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

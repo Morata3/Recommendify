@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void artistRecommendation(){
-        setContentView(R.layout.activity_artist_recommendation);
-
+        Intent intent = new Intent(this, ArtistRecommendation.class);
+        startActivity(intent);
     }
 
     protected  void onActivityResult(int requestCode, int resultCode, Intent intent){

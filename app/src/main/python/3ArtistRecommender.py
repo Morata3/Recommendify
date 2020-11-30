@@ -61,4 +61,3 @@ def recommend_artist(artist1, artist2, artist3):
     
     return ', '.join(recommendations)
 
-recommend_artist("Nirvana", "Led Zeppelin", "Red Hot Chili Peppers")
