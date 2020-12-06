@@ -6,7 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class History extends AppCompatActivity {
@@ -21,6 +25,17 @@ public class History extends AppCompatActivity {
 
         //Set home selected
         bottomNavigationView.setSelectedItemId(R.id.history);
+
+        TextView text = (TextView) findViewById(R.id.textView5);
+
+        if (!Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
+        Python py= Python.getInstance();
+        PyObject pyf = py.getModule("FinalRecomendator");
+        PyObject obj= pyf.callAttr("rank_song_similarity_by_measure","Bohemian Rhapsody","Queen",2);
+        text.setText(obj.toString());
+
 
         //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

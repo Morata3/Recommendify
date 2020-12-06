@@ -32,4 +32,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/menu_navigation" />
 
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="356dp"
+        android:layout_height="205dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="38dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
