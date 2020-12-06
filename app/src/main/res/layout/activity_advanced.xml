@@ -18,141 +18,109 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:menu="@menu/menu_navigation" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchParam"
-        android:layout_width="240dp"
-        android:layout_height="60dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="88dp"
-        android:layout_marginRight="88dp"
-        android:text="  Aply filter"
-        app:layout_constraintEnd_toEndOf="parent"
+    <Switch
+        android:id="@+id/positive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Positive"
+        app:layout_constraintBottom_toTopOf="@+id/negative"
+        app:layout_constraintStart_toStartOf="@+id/danceable"
+        app:layout_constraintTop_toBottomOf="@+id/danceable" />
+
+    <Switch
+        android:id="@+id/instru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="254dp"
+        android:text="Instrumental"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintStart_toStartOf="@+id/high"
+        app:layout_constraintTop_toBottomOf="@+id/high" />
+
+    <Switch
+        android:id="@+id/danceable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Danceable"
+        app:layout_constraintBottom_toTopOf="@+id/positive"
+        app:layout_constraintStart_toStartOf="@+id/live"
+        app:layout_constraintTop_toBottomOf="@+id/live" />
+
+    <Switch
+        android:id="@+id/low"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Low Energy"
+        app:layout_constraintBottom_toTopOf="@+id/high"
+        app:layout_constraintStart_toStartOf="@+id/negative"
+        app:layout_constraintTop_toBottomOf="@+id/negative" />
+
+    <Switch
+        android:id="@+id/live"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginLeft="19dp"
+        android:text="Live"
+        app:layout_constraintBottom_toTopOf="@+id/danceable"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Switch
+        android:id="@+id/high"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="High Energy"
+        app:layout_constraintBottom_toTopOf="@+id/instru"
+        app:layout_constraintStart_toStartOf="@+id/low"
+        app:layout_constraintTop_toBottomOf="@+id/low" />
+
+    <Switch
+        android:id="@+id/negative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Negative"
+        app:layout_constraintBottom_toTopOf="@+id/low"
+        app:layout_constraintStart_toStartOf="@+id/positive"
+        app:layout_constraintTop_toBottomOf="@+id/positive" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="172dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginBottom="45dp"
+        android:text="Filters to apply"
+        app:layout_constraintBottom_toTopOf="@+id/live"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/radioGroupParam"
-        android:layout_width="0dp"
+    <Button
+        android:id="@+id/songs"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/switchParam"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/switchParam"
-        app:layout_constraintTop_toBottomOf="@+id/switchParam">
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:text="Songs!"
+        app:layout_constraintEnd_toEndOf="@+id/instru"
+        app:layout_constraintTop_toBottomOf="@+id/instru" />
 
-        <RadioButton
-            android:id="@+id/loudness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Loudness" />
-
-        <RadioButton
-            android:id="@+id/energy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Energy" />
-
-
-        <RadioButton
-            android:id="@+id/instrumental"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Instrumental" />
-
-        <RadioButton
-            android:id="@+id/liveness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Liveness" />
-
-        <RadioButton
-            android:id="@+id/popularity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Popularity" />
-
-    </RadioGroup>
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchGenre"
-        android:layout_width="240dp"
-        android:layout_height="60dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="300dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginRight="84dp"
-        android:text="  Aply filter"
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="205dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="585dp"
+        android:layout_marginBottom="29dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <RadioGroup
-        android:id="@+id/radioGroupGenre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/switchGenre"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/switchGenre"
-        app:layout_constraintTop_toBottomOf="@+id/switchGenre">
-
-        <RadioButton
-            android:id="@+id/Rock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rock" />
-
-        <RadioButton
-            android:id="@+id/Metal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Metal" />
-
-        <RadioButton
-            android:id="@+id/Rap"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rap" />
-
-        <RadioButton
-            android:id="@+id/Trap"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Trap" />
-
-        <RadioButton
-            android:id="@+id/Reggaeton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reggaeton" />
-
-        <RadioButton
-            android:id="@+id/Reggae"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reggae" />
-
-        <RadioButton
-            android:id="@+id/Jazz"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Jazz" />
-
-        <RadioButton
-            android:id="@+id/Techno"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Techno" />
-
-        <RadioButton
-            android:id="@+id/Classic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Classic" />
-
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
