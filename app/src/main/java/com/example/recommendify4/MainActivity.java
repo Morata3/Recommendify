@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import  androidx.lifecycle.LifecycleOwner;
 import androidx.annotation.NonNull;
@@ -32,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String REDIRECT_URI = "recommendify://";
     private FloatingActionButton infoButton;
     private Button artistButton;
-    private LifecycleOwner LifecycleOwner;
+    public TextView text;
+    public String myresult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         infoButton = (FloatingActionButton) findViewById(R.id.infoButton);
         infoButton.setOnClickListener(v -> openDialogInfo());
 
@@ -51,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
         //Set home selected
         bottomNavigationView.setSelectedItemId(R.id.home);
 
-        WorkerParameters params = null;
-   //     MyWorker worker = new MyWorker(this, params);
-
           Data myData = new Data.Builder()
                 .putString(CANCIONES, "xxx")
                 .build();
@@ -65,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
         WorkManager.getInstance().getWorkInfoByIdLiveData(mathWork.getId())
                 .observe(this, info -> {
                     if (info != null && info.getState().isFinished()) {
-                        String myResult = info.getOutputData().getString(KEY_RESULT);
+                        myresult = info.getOutputData().getString(KEY_RESULT);
+                        System.out.println("Recomendaciones: " + myresult);
 
-                        System.out.println("Recomendaciones: " + myResult);
 
                     }
                 });

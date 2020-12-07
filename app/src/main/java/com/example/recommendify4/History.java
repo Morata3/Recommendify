@@ -28,7 +28,6 @@ public class History extends AppCompatActivity {
 
         TextView text = (TextView) findViewById(R.id.textView5);
 
-        System.out.println("Esto es this: " + this);
 
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
