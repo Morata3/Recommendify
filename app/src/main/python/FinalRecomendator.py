@@ -24,7 +24,7 @@ def rank_song_similarity_by_measure(song, artist, genre_parameter):
     
     song_and_artist_data = data[(data.Artist == artist) & (data['Song Name'] == song)].sort_values('Year')[0:1]
     
-    print(song_and_artist_data)
+    #print(song_and_artist_data)
     
     similarity_data = data.copy()
     

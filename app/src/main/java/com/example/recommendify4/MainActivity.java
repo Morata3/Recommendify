@@ -2,13 +2,19 @@ package com.example.recommendify4;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import  androidx.lifecycle.LifecycleOwner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkerParameters;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,11 +24,15 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static final String KEY_RESULT = "result";
+    public static final String CANCIONES = "Canciones";
+
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "4b1b0a636b8046a7b305efbf5745c09b";
     private static final String REDIRECT_URI = "recommendify://";
     private FloatingActionButton infoButton;
     private Button artistButton;
+    private LifecycleOwner LifecycleOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,28 @@ public class MainActivity extends AppCompatActivity {
 
         //Set home selected
         bottomNavigationView.setSelectedItemId(R.id.home);
+
+        WorkerParameters params = null;
+   //     MyWorker worker = new MyWorker(this, params);
+
+          Data myData = new Data.Builder()
+                .putString(CANCIONES, "xxx")
+                .build();
+        OneTimeWorkRequest mathWork = new OneTimeWorkRequest.Builder(MyWorker.class)
+                .setInputData(myData)
+                .build();
+        WorkManager.getInstance().enqueue(mathWork);
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(mathWork.getId())
+                .observe(this, info -> {
+                    if (info != null && info.getState().isFinished()) {
+                        String myResult = info.getOutputData().getString(KEY_RESULT);
+
+                        System.out.println("Recomendaciones: " + myResult);
+
+                    }
+                });
+
 
         //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
