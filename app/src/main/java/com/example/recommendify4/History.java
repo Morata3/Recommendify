@@ -28,12 +28,14 @@ public class History extends AppCompatActivity {
 
         TextView text = (TextView) findViewById(R.id.textView5);
 
+
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
         }
         Python py= Python.getInstance();
         PyObject pyf = py.getModule("FinalRecomendator");
         PyObject obj= pyf.callAttr("rank_song_similarity_by_measure","Bohemian Rhapsody","Queen",2);
+
         text.setText(obj.toString());
 
 

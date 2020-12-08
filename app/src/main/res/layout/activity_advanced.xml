@@ -124,4 +124,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <RadioGroup
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteX="315dp"
+        tools:layout_editor_absoluteY="258dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
