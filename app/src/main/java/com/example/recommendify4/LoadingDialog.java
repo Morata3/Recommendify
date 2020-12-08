@@ -14,7 +14,6 @@ public class LoadingDialog {
     }
 
     void startLoadingAnimation(){
-        System.out.println("INICIANDO DIALOGO");
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         LayoutInflater inflater = activity.getLayoutInflater();

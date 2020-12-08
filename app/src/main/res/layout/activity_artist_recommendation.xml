@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/artist1"
         android:layout_width="272dp"
-        android:layout_height="38dp"
+        android:layout_height="50dp"
         android:layout_marginTop="172dp"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +20,7 @@
     <EditText
         android:id="@+id/artist2"
         android:layout_width="272dp"
-        android:layout_height="38dp"
+        android:layout_height="50dp"
         android:layout_marginTop="280dp"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
     <EditText
         android:id="@+id/artist3"
         android:layout_width="272dp"
-        android:layout_height="38dp"
+        android:layout_height="50dp"
         android:layout_marginTop="400dp"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,8 +62,8 @@
 
     <TextView
         android:id="@+id/artistRecommend"
-        android:layout_width="212dp"
-        android:layout_height="62dp"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="92dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
