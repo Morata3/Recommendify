@@ -1,6 +1,7 @@
 package com.example.recommendify4;
-
+import com.example.recommendify4.UserInfo.UserProfile;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -33,18 +34,25 @@ public class MainActivity extends AppCompatActivity {
     private static final String REDIRECT_URI = "recommendify://";
     private FloatingActionButton infoButton;
     private Button artistButton;
+
     public TextView text;
     public String myresult;
+    private UserProfile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
+        userProfile = new UserProfile(userPreferences.getString("UserToken",null));
+
         infoButton = (FloatingActionButton) findViewById(R.id.infoButton);
         infoButton.setOnClickListener(v -> openDialogInfo());
 
         artistButton = (Button) findViewById(R.id.buttonArtist);
         artistButton.setOnClickListener(v -> artistRecommendation());
+
 
         //Initializa and Assign variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -99,16 +107,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        AuthorizationRequest.Builder builder =
-//                new AuthorizationRequest.Builder(CLIENT_ID,
-//                        AuthorizationResponse.Type.TOKEN,REDIRECT_URI);
-//        builder.setScopes(new String[]{
-//                "user-read-email",
-//                "ugc-image-upload"
-//        });
-//        AuthorizationRequest request = builder.build();
-//
-//        AuthorizationClient.openLoginActivity(this,REQUEST_CODE,request);
 
     }
 
@@ -122,31 +120,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    protected  void onActivityResult(int requestCode, int resultCode, Intent intent){
-//        super.onActivityResult(requestCode,resultCode,intent);
-//
-//        // Check if result comes from the correct activity
-//        if (requestCode == REQUEST_CODE) {
-//            AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, intent);
-//
-//            switch (response.getType()) {
-//                // Response was successful and contains auth token
-//                case TOKEN:
-//
-//                    Log.d("MainActivity","USER TOKEN:" + response.getAccessToken());
-//                    break;
-//
-//                // Auth flow returned an error
-//                case ERROR:
-//                    // Handle error response
-//                    break;
-//
-//                // Most likely auth flow was cancelled
-//                default:
-//                    // Handle other cases
-//            }
-//        }
-//    }
 
     @Override
     protected void onStop() {

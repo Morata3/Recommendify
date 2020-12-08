@@ -30,7 +30,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences userPreferences = this.getSharedPreferences("Login", MODE_PRIVATE);
+        SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
         if(userPreferences.getString("UserToken",null) != null ) goMain();
     }
 
@@ -41,7 +41,11 @@ public class Login extends AppCompatActivity {
                         AuthorizationResponse.Type.TOKEN,REDIRECT_URI);
         builder.setScopes(new String[]{
                 "user-read-email",
-                "ugc-image-upload"
+                "ugc-image-upload",
+                "user-read-recently-played",
+                "user-top-read"
+
+
         });
         AuthorizationRequest request = builder.build();
 
@@ -85,4 +89,5 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
 }
