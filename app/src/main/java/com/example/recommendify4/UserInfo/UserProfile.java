@@ -1,12 +1,15 @@
 package com.example.recommendify4.UserInfo;
 
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class UserProfile {
+public class UserProfile implements Runnable {
 
     private static String accessToken;
     private ArrayList<Song> topSongs;
@@ -37,7 +40,7 @@ public class UserProfile {
         return topSongs;
     }
 
-    public void setRecentlyPlayedSongs() {
+    private void setRecentlyPlayedSongs() {
 
         try{
             String recentlyPlayedSongsAsString = SpotifyApiData.getRecentlyPlayedSongs(accessToken);
@@ -55,7 +58,7 @@ public class UserProfile {
 
     }
 
-    public void setRecentlyPlayedArtists(){
+    private void setRecentlyPlayedArtists(){
 
         for(Song song : recentlyPlayedSongs) {
             for (Artist artist : song.getArtists()) {
@@ -67,7 +70,7 @@ public class UserProfile {
 
     }
 
-    public void setTopSongs() {
+    private void setTopSongs() {
 
         try{
             String topSongsAsString = SpotifyApiData.getTopSongs(accessToken);
@@ -85,7 +88,7 @@ public class UserProfile {
 
     }
 
-    public void setTopArtists() {
+    private void setTopArtists() {
 
         try{
             String topArtistsAsString = SpotifyApiData.getTopArtists(accessToken);
@@ -175,7 +178,12 @@ public class UserProfile {
         return new Song(songName, albumName, artistsList, songId);
     }
 
-
-
+    @Override
+    public void run() {
+        setRecentlyPlayedSongs();
+        setRecentlyPlayedArtists();
+        setTopSongs();
+        setTopArtists();
+    }
 }
 

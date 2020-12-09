@@ -40,7 +40,8 @@ public class SpotifyApiData {
                 return "ERROR";
             }
         } catch (Exception e) {
-            System.out.println("Error creating JSONArray from received data");
+            System.out.println("Error getting recently played songs from spotify api");
+            e.printStackTrace();
             System.out.println(e.getMessage());
             return "ERROR";
         }
@@ -71,7 +72,7 @@ public class SpotifyApiData {
                 return "ERROR";
             }
         } catch (Exception e) {
-            System.out.println("Error creating JSONArray from received data");
+            System.out.println("Error getting top songs from spotify api");
             System.out.println(e.getMessage());
             return "ERROR";
         }
@@ -105,7 +106,7 @@ public class SpotifyApiData {
 
             }
         } catch (Exception e) {
-            System.out.println("Error creating JSONArray from received data");
+            System.out.println("Error getting top artists from spotify api");
             System.out.println(e.getMessage());
             return "ERROR";
         }

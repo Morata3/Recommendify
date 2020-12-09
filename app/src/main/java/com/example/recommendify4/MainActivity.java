@@ -1,28 +1,23 @@
 package com.example.recommendify4;
+import com.example.recommendify4.UserInfo.Song;
 import com.example.recommendify4.UserInfo.UserProfile;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import  androidx.lifecycle.LifecycleOwner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.arch.core.executor.TaskExecutor;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
-import androidx.work.WorkerParameters;
 
+import com.example.recommendify4.UserInfo.UserProfileBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.spotify.sdk.android.auth.AuthorizationClient;
-import com.spotify.sdk.android.auth.AuthorizationRequest;
-import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,11 +36,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        System.out.println("PIROLA");
         setContentView(R.layout.activity_main);
 
         SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
         userProfile = new UserProfile(userPreferences.getString("UserToken",null));
+
+        UserProfileBuilder builder = new UserProfileBuilder();
+        builder.execute(userProfile);
+
+        for(Song song: userProfile.getRecentlyPlayedSongs()) System.out.println(song);
 
         infoButton = (FloatingActionButton) findViewById(R.id.infoButton);
         infoButton.setOnClickListener(v -> openDialogInfo());
