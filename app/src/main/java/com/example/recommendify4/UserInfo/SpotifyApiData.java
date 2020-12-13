@@ -10,7 +10,7 @@ public class SpotifyApiData {
     private static final String RECENTLY_PLAYED_ENDPOINT = "https://api.spotify.com/v1/me/player/recently-played";
     private static final String TOP_ARTISTS_AND_TRACKS_ENDPOINT = "https://api.spotify.com/v1/me/top";
     private static final int RECOVERED_SONGS = 50;
-    private static final String TIME_RANGE = "medium_term";
+    private static final String TIME_RANGE = "long_term";
     private static final int LIMIT = 50;
     private static final int OFFSET = 0;
 
@@ -73,6 +73,7 @@ public class SpotifyApiData {
             }
         } catch (Exception e) {
             System.out.println("Error getting top songs from spotify api");
+            e.printStackTrace();
             System.out.println(e.getMessage());
             return "ERROR";
         }

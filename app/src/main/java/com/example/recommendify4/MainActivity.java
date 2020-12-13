@@ -1,4 +1,5 @@
 package com.example.recommendify4;
+import com.example.recommendify4.UserInfo.Artist;
 import com.example.recommendify4.UserInfo.Song;
 import com.example.recommendify4.UserInfo.UserProfile;
 import android.content.Intent;
@@ -19,6 +20,10 @@ import com.example.recommendify4.UserInfo.UserProfileBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     public static final String KEY_RESULT = "result";
@@ -38,16 +43,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        System.out.println("PIROLA");
         setContentView(R.layout.activity_main);
 
         SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
         userProfile = new UserProfile(userPreferences.getString("UserToken",null));
-
         UserProfileBuilder builder = new UserProfileBuilder();
         builder.execute(userProfile);
 
-        for(Song song: userProfile.getRecentlyPlayedSongs()) System.out.println(song);
+        ArrayList<Song> TopSongs = userProfile.getTopSongs();
+       // System.out.println("Top songs:\n" + TopSongs);
+        List<Song> TopSongsAux  = userProfile.getTopSongs().subList(0,10);
+
+
+       // for(Song song: userProfile.getRecentlyPlayedSongs()) System.out.println(song);
 
         infoButton = (FloatingActionButton) findViewById(R.id.infoButton);
         infoButton.setOnClickListener(v -> openDialogInfo());
@@ -61,16 +69,15 @@ public class MainActivity extends AppCompatActivity {
 
         //Set home selected
         bottomNavigationView.setSelectedItemId(R.id.home);
-
           Data myData = new Data.Builder()
-                .putString(CANCIONES, "xxx")
+                .putString(CANCIONES, TopSongsAux.toString())
                 .build();
-        OneTimeWorkRequest mathWork = new OneTimeWorkRequest.Builder(MyWorker.class)
+        OneTimeWorkRequest recommendWork = new OneTimeWorkRequest.Builder(MyWorker.class)
                 .setInputData(myData)
                 .build();
-        WorkManager.getInstance().enqueue(mathWork);
+        WorkManager.getInstance().enqueue(recommendWork);
 
-        WorkManager.getInstance().getWorkInfoByIdLiveData(mathWork.getId())
+        WorkManager.getInstance().getWorkInfoByIdLiveData(recommendWork.getId())
                 .observe(this, info -> {
                     if (info != null && info.getState().isFinished()) {
                         myresult = info.getOutputData().getString(KEY_RESULT);
@@ -79,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+
+
 
 
         //Perform ItemSelectedListener

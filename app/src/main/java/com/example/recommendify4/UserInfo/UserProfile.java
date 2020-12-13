@@ -70,7 +70,7 @@ public class UserProfile implements Runnable {
 
     }
 
-    private void setTopSongs() {
+    public void setTopSongs() {
 
         try{
             String topSongsAsString = SpotifyApiData.getTopSongs(accessToken);
