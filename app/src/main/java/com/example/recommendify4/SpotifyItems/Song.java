@@ -1,4 +1,9 @@
-package com.example.recommendify4.UserInfo;
+package com.example.recommendify4.SpotifyItems;
+
+import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -9,13 +14,29 @@ public class Song {
     private String id;
     private ArrayList<Artist> artists;
     private int timesInList;
+    private boolean recommended;
 
-    public Song(String songName, String albumName, ArrayList<Artist> artistsList, String songId){
+    public Song(String songName, String albumName, ArrayList<Artist> artistsList, String songId, int timesInList){
         this.name = songName;
         this.album = albumName;
         this.artists = artistsList;
         this.id = songId;
-        timesInList = 1;
+        this.timesInList = timesInList;
+    }
+
+    public Song(JSONObject songInfo, int timesInList) throws JSONException {
+        this.artists = new ArrayList<>();
+        this.name = songInfo.getString("name");
+        this.id = songInfo.getString("id");
+        this.album = songInfo.getJSONObject("album").getString("name");
+        JSONArray artistsJSON = songInfo.getJSONArray("artists");
+        for(int artist = 0; artist < artistsJSON.length(); artist++){
+            String artistName = artistsJSON.getJSONObject(artist).getString("name");
+            String artistId = artistsJSON.getJSONObject(artist).getString("id");
+            this.artists.add(new Artist(artistName, artistId));
+        }
+        this.timesInList = timesInList;
+
     }
 
     public ArrayList<Artist> getArtists() {
@@ -50,6 +71,10 @@ public class Song {
         this.id = id;
     }
 
+    public boolean isRecommended() { return recommended; }
+
+    public void setRecommended(boolean recommended) { this.recommended = recommended; }
+
     public void addOneToTimesInList(){ this.timesInList++; }
 
     public int getTimesInList() { return timesInList; }
@@ -72,4 +97,3 @@ public class Song {
                 '}';
     }
 }
-

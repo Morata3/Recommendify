@@ -1,6 +1,6 @@
 package com.example.recommendify4;
-import com.example.recommendify4.UserInfo.Artist;
-import com.example.recommendify4.UserInfo.Song;
+
+import com.example.recommendify4.SpotifyItems.Song;
 import com.example.recommendify4.UserInfo.UserProfile;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,20 +8,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.arch.core.executor.TaskExecutor;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
-
 import com.example.recommendify4.UserInfo.UserProfileBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
