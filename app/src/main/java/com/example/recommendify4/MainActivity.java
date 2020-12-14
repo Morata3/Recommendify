@@ -5,11 +5,14 @@ import com.example.recommendify4.UserInfo.UserProfile;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -20,25 +23,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     public static final String KEY_RESULT = "result";
     public static final String CANCIONES = "Canciones";
 
-    private static final int REQUEST_CODE = 1337;
-    private static final String CLIENT_ID = "4b1b0a636b8046a7b305efbf5745c09b";
-    private static final String REDIRECT_URI = "recommendify://";
     private FloatingActionButton infoButton;
     private Button artistButton;
+    private Button playlistButton;
 
     public TextView text;
     public String myresult;
     private UserProfile userProfile;
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navigation_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_info:
+                openDialogInfo();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //BARRA DE NAVEGACION
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
         userProfile = new UserProfile(userPreferences.getString("UserToken",null));
@@ -49,41 +72,17 @@ public class MainActivity extends AppCompatActivity {
        // System.out.println("Top songs:\n" + TopSongs);
         List<Song> TopSongsAux  = userProfile.getTopSongs().subList(0,10);
 
-
-       // for(Song song: userProfile.getRecentlyPlayedSongs()) System.out.println(song);
-
-        infoButton = (FloatingActionButton) findViewById(R.id.infoButton);
-        infoButton.setOnClickListener(v -> openDialogInfo());
-
         artistButton = (Button) findViewById(R.id.buttonArtist);
         artistButton.setOnClickListener(v -> artistRecommendation());
 
+        playlistButton = (Button) findViewById(R.id.buttonPlaylist);
+        playlistButton.setOnClickListener(v -> openDialogCreatePlaylist());
 
         //Initializa and Assign variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         //Set home selected
         bottomNavigationView.setSelectedItemId(R.id.home);
-          Data myData = new Data.Builder()
-                .putString(CANCIONES, TopSongsAux.toString())
-                .build();
-        OneTimeWorkRequest recommendWork = new OneTimeWorkRequest.Builder(MyWorker.class)
-                .setInputData(myData)
-                .build();
-        WorkManager.getInstance().enqueue(recommendWork);
-
-        WorkManager.getInstance().getWorkInfoByIdLiveData(recommendWork.getId())
-                .observe(this, info -> {
-                    if (info != null && info.getState().isFinished()) {
-                        myresult = info.getOutputData().getString(KEY_RESULT);
-                        System.out.println("Recomendaciones: " + myresult);
-
-
-                    }
-                });
-
-
-
 
         //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -104,10 +103,28 @@ public class MainActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
 
-            }
+              }
             return false;
-        }
-    });
+            }
+        });
+
+        Data myData = new Data.Builder()
+                .putString(CANCIONES, TopSongsAux.toString())
+                .build();
+        OneTimeWorkRequest recommendWork = new OneTimeWorkRequest.Builder(MyWorker.class)
+                .setInputData(myData)
+                .build();
+        WorkManager.getInstance().enqueue(recommendWork);
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(recommendWork.getId())
+                .observe(this, info -> {
+                    if (info != null && info.getState().isFinished()) {
+                        myresult = info.getOutputData().getString(KEY_RESULT);
+                        System.out.println("Recomendaciones: " + myresult);
+
+
+                    }
+                });
     }
 
     @Override
@@ -121,11 +138,15 @@ public class MainActivity extends AppCompatActivity {
         dialogInfo.show(getSupportFragmentManager(),"Dialog Information");
     }
 
+    public void openDialogCreatePlaylist(){
+        CreatePlaylistDialog createPlaylistDialog = new CreatePlaylistDialog();
+        createPlaylistDialog.show(getSupportFragmentManager(),"Create Playlist");
+    }
+
     public void artistRecommendation(){
         Intent intent = new Intent(this, ArtistRecommendation.class);
         startActivity(intent);
     }
-
 
     @Override
     protected void onStop() {

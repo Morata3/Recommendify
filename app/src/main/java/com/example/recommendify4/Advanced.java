@@ -52,8 +52,6 @@ public class Advanced extends AppCompatActivity {
         songs.setOnClickListener(v -> FilteredSongs());
 
 
-
-
         //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -77,6 +77,15 @@ repositories {
 }
 
 dependencies {
+    def nav_version = "2.3.2"
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+    implementation "androidx.fragment:fragment:1.2.5"
+
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.spotify.android:auth:1.2.3'
 

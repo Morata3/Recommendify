@@ -34,10 +34,6 @@ public class History extends AppCompatActivity {
         }
         Python py= Python.getInstance();
         PyObject pyf = py.getModule("FinalRecomendator");
-        PyObject obj= pyf.callAttr("rank_song_similarity_by_measure","Bohemian Rhapsody","Queen",2);
-
-        text.setText(obj.toString());
-
 
         //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -1,12 +1,19 @@
 package com.example.recommendify4.SpotifyApi;
 
+import android.os.Build;
+import android.util.Base64;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.recommendify4.SpotifyItems.Song;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class RequestSender {
@@ -17,6 +24,7 @@ public class RequestSender {
     private static final String USER_INFO_ENDPOINT = "https://api.spotify.com/v1/me";
     private static final String CREATE_PLAYLIST_ENDPOINT = "https://api.spotify.com/v1/users/";
     private static final String ADD_SONGS_TO_PLAYLIST_ENDPOINT = "https://api.spotify.com/v1/playlists/";
+    private static final String TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 
     private static final int RECOVERED_SONGS = 50;
     private static final String TIME_RANGE = "long_term";
@@ -173,6 +181,98 @@ public class RequestSender {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT) //Fai falta para o StandardCharset.UTF-8
+    public static String getTokens(String AuthorizationCode, String cliend_id, String client_secret, String redirect_URL){
+        try {
+            String app_credentials = cliend_id + ":" + client_secret;
+            byte[] toEncode = app_credentials.getBytes("UTF-8");
+            String urlParameters = "grant_type=authorization_code&code=" + AuthorizationCode + "&redirect_uri=" + redirect_URL;
+            byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
+            int    postDataLength = postData.length;
+
+            URL obj = new URL(TOKEN_ENDPOINT);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setDoOutput( true );
+            con.setDoInput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("Authorization","Basic " + Base64.encodeToString(toEncode, Base64.NO_WRAP));
+            con.setRequestProperty("charset", "utf-8");
+            con.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+
+            try( DataOutputStream wr = new DataOutputStream( con.getOutputStream())) {
+                wr.write( postData );
+            }
+
+            int responseCode = con.getResponseCode();
+            if(responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader responseReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                StringBuffer response = new StringBuffer();
+                String inputLine;
+                while((inputLine = responseReader.readLine()) != null) response.append(inputLine);
+                return response.toString();
+            }
+            else{
+                if(responseCode == HttpURLConnection.HTTP_BAD_REQUEST){
+
+                }
+                System.out.println("Codigo de respuesta: " + responseCode);
+                return "ERROR";
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting TOKEN from spotify api");
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return "ERROR";
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getAccessToken(String refresh_token, String cliend_id, String client_secret){
+        try {
+            String app_credentials = cliend_id + ":" + client_secret;
+            byte[] toEncode = app_credentials.getBytes("UTF-8");
+            String urlParameters = "grant_type=refresh_token&refresh_token=" + refresh_token;
+            byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
+            int    postDataLength = postData.length;
+
+            URL obj = new URL(TOKEN_ENDPOINT);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setDoOutput( true );
+            con.setDoInput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("Authorization","Basic " + Base64.encodeToString(toEncode, Base64.NO_WRAP));
+            con.setRequestProperty("charset", "utf-8");
+            con.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+
+            try( DataOutputStream wr = new DataOutputStream( con.getOutputStream())) {
+                wr.write( postData );
+            }
+
+            int responseCode = con.getResponseCode();
+            if(responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader responseReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                StringBuffer response = new StringBuffer();
+                String inputLine;
+                while((inputLine = responseReader.readLine()) != null) response.append(inputLine);
+
+                return response.toString();
+            }
+            else{
+                if(responseCode == HttpURLConnection.HTTP_BAD_REQUEST){
+
+                }
+                System.out.println("Codigo de respuesta: " + responseCode);
+                return "ERROR";
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting TOKEN from spotify api");
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return "ERROR";
+        }
+    }
 
 }
 
