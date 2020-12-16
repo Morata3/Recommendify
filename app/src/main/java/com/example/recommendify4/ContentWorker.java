@@ -12,14 +12,14 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 
 
-public class MyWorker extends Worker {
-    public static final String KEY_RESULT = "result";
-    public static final String CANCIONES = "Canciones";
+public class ContentWorker extends Worker {
+    public static final String KEY_CONTENT = "content";
+    public static final String CONTENT = "Content";
 
 
     private Context context;
 
-    public MyWorker(
+    public ContentWorker(
             @NonNull Context context,
             @NonNull WorkerParameters params) {
         super(context, params);
@@ -29,7 +29,7 @@ public class MyWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        String TopSongs = getInputData().getString(CANCIONES);
+        String TopSongs = getInputData().getString(CONTENT);
         String[] songs = TopSongs.split("Song |Song |Song|Song |Song|Song|Song|Song|Song");
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(context));
@@ -39,7 +39,7 @@ public class MyWorker extends Worker {
 
         PyObject obj = pyf.callAttr("rank_song_similarity_by_measure", TopSongs, 2);
         Data outputData = new Data.Builder()
-                .putString(KEY_RESULT, obj.toString())
+                .putString(KEY_CONTENT, obj.toString())
                 .build();
 
     /*int x = getInputData().getInt(KEY_X_ARG, 0);

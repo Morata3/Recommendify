@@ -24,8 +24,11 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity{
-    public static final String KEY_RESULT = "result";
-    public static final String CANCIONES = "Canciones";
+    public static final String KEY_CONTENT = "content";
+    public static final String KEY_COLAB = "colab";
+    public static final String CONTENT = "Content";
+    public static final String COLAB = "Colab";
+
 
     private FloatingActionButton infoButton;
     private Button artistButton;
@@ -63,14 +66,6 @@ public class MainActivity extends AppCompatActivity{
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
-        userProfile = new UserProfile(userPreferences.getString("UserToken",null));
-        UserProfileBuilder builder = new UserProfileBuilder();
-        builder.execute(userProfile);
-
-        ArrayList<Song> TopSongs = userProfile.getTopSongs();
-       // System.out.println("Top songs:\n" + TopSongs);
-        List<Song> TopSongsAux  = userProfile.getTopSongs().subList(0,10);
 
         artistButton = (Button) findViewById(R.id.buttonArtist);
         artistButton.setOnClickListener(v -> artistRecommendation());
@@ -108,10 +103,20 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+
+        SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
+        userProfile = new UserProfile(userPreferences.getString("UserToken",null));
+        UserProfileBuilder builder = new UserProfileBuilder();
+        builder.execute(userProfile);
+
+        ArrayList<Song> TopSongs = userProfile.getTopSongs();
+        // System.out.println("Top songs:\n" + TopSongs);
+        List<Song> TopSongsAux  = userProfile.getTopSongs().subList(0,10);
+
         Data myData = new Data.Builder()
-                .putString(CANCIONES, TopSongsAux.toString())
+                .putString(CONTENT, TopSongsAux.toString())
                 .build();
-        OneTimeWorkRequest recommendWork = new OneTimeWorkRequest.Builder(MyWorker.class)
+        OneTimeWorkRequest recommendWork = new OneTimeWorkRequest.Builder(ContentWorker.class)
                 .setInputData(myData)
                 .build();
         WorkManager.getInstance().enqueue(recommendWork);
@@ -119,8 +124,26 @@ public class MainActivity extends AppCompatActivity{
         WorkManager.getInstance().getWorkInfoByIdLiveData(recommendWork.getId())
                 .observe(this, info -> {
                     if (info != null && info.getState().isFinished()) {
-                        myresult = info.getOutputData().getString(KEY_RESULT);
-                        System.out.println("Recomendaciones: " + myresult);
+                        myresult = info.getOutputData().getString(KEY_CONTENT);
+                        System.out.println("Recomendaciones Content: " + myresult);
+
+
+                    }
+                });
+
+        Data Colab = new Data.Builder()
+                .putString(COLAB, "")
+                .build();
+        OneTimeWorkRequest ColabWork = new OneTimeWorkRequest.Builder(ColabWorker.class)
+                .setInputData(Colab)
+                .build();
+        WorkManager.getInstance().enqueue(ColabWork);
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(ColabWork.getId())
+                .observe(this, info -> {
+                    if (info != null && info.getState().isFinished()) {
+                        myresult = info.getOutputData().getString(KEY_COLAB);
+                        System.out.println("Recomendaciones Colab: " + myresult);
 
 
                     }
