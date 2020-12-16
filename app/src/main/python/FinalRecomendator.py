@@ -46,7 +46,7 @@ def rank_song_similarity_by_measure(song, genre_parameter):
 
 
     song_and_artist_data = data[(data.id == nsongid)].sort_values('Year')[0:1]
-    song = song_and_artist_data['Song Name']
+    song = nsongname
 
 
     print("Encontró esto: ",song_and_artist_data)
@@ -79,7 +79,7 @@ def rank_song_similarity_by_measure(song, genre_parameter):
 
     similarity_data = similarity_data.drop_duplicates(subset=[f'Similar Song to {song}'], keep='first')
 
-    lista = similarity_data.head(15)[[f'Similar Song to {song}','id']]
-    lista.loc[190900] = ['Waste',''.join(wasted)]
+    lista = similarity_data.head(15)[[f'Similar Song to {song}','id','Artist']]
+    lista.loc[190900] = ['Waste',''.join(wasted),'']
 
     return lista

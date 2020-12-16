@@ -42,10 +42,6 @@ public class ContentWorker extends Worker {
                 .putString(KEY_CONTENT, obj.toString())
                 .build();
 
-    /*int x = getInputData().getInt(KEY_X_ARG, 0);
-         Data outputData = new Data.Builder()
-                .putInt(KEY_RESULT, result)
-                .build();*/
         return Result.success(outputData);
 
     }
