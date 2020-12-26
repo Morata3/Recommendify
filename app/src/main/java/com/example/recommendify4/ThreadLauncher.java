@@ -1,8 +1,8 @@
-package com.example.recommendify4.UserInfo;
+package com.example.recommendify4;
 
 import java.util.concurrent.Executor;
 
-public class UserProfileBuilder implements Executor {
+public class ThreadLauncher implements Executor {
 
     @Override
     public void execute(Runnable command) {

@@ -1,8 +1,14 @@
 package com.example.recommendify4;
 
+<<<<<<< Updated upstream
 import com.example.recommendify4.Dialogs.DialogCreatePlaylist;
 import com.example.recommendify4.Dialogs.DialogInformation;
 import com.example.recommendify4.Dialogs.DialogLogOut;
+=======
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
+>>>>>>> Stashed changes
 import com.example.recommendify4.SpotifyItems.Song;
 import com.example.recommendify4.UserInfo.UserProfile;
 import android.content.Intent;
@@ -15,17 +21,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+<<<<<<< Updated upstream
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+=======
+import androidx.core.content.res.TypedArrayUtils;
+>>>>>>> Stashed changes
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
-import com.example.recommendify4.UserInfo.UserProfileBuilder;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -116,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+<<<<<<< Updated upstream
         Data myData = new Data.Builder()
                 .putString(CONTENT, TopSongsAux.toString())
                 .build();
@@ -151,6 +163,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                 });
+=======
+
+        SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
+        userProfile = new UserProfile(userPreferences.getString("UserToken",null));
+        ThreadLauncher builder = new ThreadLauncher();
+        builder.execute(userProfile);
+
+        ArrayList<Song> TopSongs = userProfile.getTopSongs();
+
+>>>>>>> Stashed changes
     }
 
     @Override

@@ -13,6 +13,7 @@ public class Song {
     private String album;
     private String id;
     private ArrayList<Artist> artists;
+    private String Artist;
     private int timesInList;
     private boolean recommended;
 
@@ -22,6 +23,12 @@ public class Song {
         this.artists = artistsList;
         this.id = songId;
         this.timesInList = timesInList;
+    }
+
+    public Song(String songName, String artistsList, String songId){
+        this.name = songName;
+        this.Artist = artistsList;
+        this.id = songId;
     }
 
     public Song(JSONObject songInfo, int timesInList) throws JSONException {
@@ -66,6 +73,10 @@ public class Song {
     public String getId() {
         return id;
     }
+
+    public String getartists() {return Artist;}
+
+    public void setArtists(String Artist){this.Artist = Artist;}
 
     public void setId(String id) {
         this.id = id;
