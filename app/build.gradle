@@ -79,6 +79,7 @@ repositories {
 dependencies {
     def nav_version = "2.3.2"
 
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 

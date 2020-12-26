@@ -3,13 +3,13 @@ package com.example.recommendify4;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.example.recommendify4.Dialogs.DialogLoading;
 
 public class ArtistRecommendation extends AppCompatActivity {
 
@@ -24,8 +24,8 @@ public class ArtistRecommendation extends AppCompatActivity {
 
     }
     public void getArtist(){
-        final LoadingDialog loadingDialog = new LoadingDialog(ArtistRecommendation.this);
-        loadingDialog.startLoadingAnimation();
+        final DialogLoading dialogLoading = new DialogLoading(ArtistRecommendation.this);
+        dialogLoading.startLoadingAnimation();
 
         String artist1 = ((TextView) findViewById(R.id.artist1)).getText().toString();
         String artist2 = ((TextView) findViewById(R.id.artist2)).getText().toString();
@@ -40,7 +40,7 @@ public class ArtistRecommendation extends AppCompatActivity {
         PyObject pyf = py.getModule("3ArtistRecommender");
         PyObject obj= pyf.callAttr("recommend_artist", artist1, artist2, artist3);
 
-        loadingDialog.dismiss();
+        dialogLoading.dismiss();
         artistRecommend.setText(obj.toString());
     }
 }

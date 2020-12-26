@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
-    <item android:id="@+id/action_info"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:id="@+id/menu_info"
         android:icon="@drawable/ic_baseline_info_24"
         android:title="@string/action_info"
         app:showAsAction="ifRoom"/>
 
     <group>
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/menu_aboutMe"
         android:icon="@drawable/ic_about_user"
         android:title="About me" />
 
     <item
-        android:id="@+id/nav_cycle"
+        android:id="@+id/menu_logout"
         android:icon="@drawable/ic_logout"
         android:title="Logout" />
     </group>

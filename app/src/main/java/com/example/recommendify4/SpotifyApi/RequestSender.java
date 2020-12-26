@@ -1,11 +1,17 @@
 package com.example.recommendify4.SpotifyApi;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Base64;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.recommendify4.Login;
 import com.example.recommendify4.SpotifyItems.Song;
+import com.example.recommendify4.UserInfo.Credentials;
+import com.example.recommendify4.UserInfo.UserProfileBuilder;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RequestSender {
 
@@ -31,10 +38,12 @@ public class RequestSender {
     private static final int LIMIT = 50;
     private static final int OFFSET = 0;
 
-    public static String getUserInfo(String accessToken){
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getUserInfo(Credentials credentials){
+        credentials.checkTokenExpiration();
         try {
             URL obj = new URL(USER_INFO_ENDPOINT);
-            HttpURLConnection con = buildHttpRequest(accessToken, obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Search Artist By Name: Error receiving data from Spotify Api");
@@ -44,13 +53,14 @@ public class RequestSender {
         }
     }
 
-    public static String createPlaylist(String accessToken, String playlistName, String user_id){
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String createPlaylist(Credentials credentials, String playlistName, String user_id){
+        credentials.checkTokenExpiration();
         try {
             String payloadAsString = "{\"name\": \"" + playlistName + "\"}";
             byte[] payload = payloadAsString.getBytes("utf-8");
             URL obj = new URL(CREATE_PLAYLIST_ENDPOINT + user_id + "/playlists");
-            HttpURLConnection con = buildHttpRequest(accessToken, obj, "POST");
+            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "POST");
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
             os.write(payload);
@@ -63,8 +73,9 @@ public class RequestSender {
         }
     }
 
-    public static String addSongsToPlaylist(String accessToken, ArrayList<Song> songs, String playlist_id){
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String addSongsToPlaylist(Credentials credentials, ArrayList<Song> songs, String playlist_id){
+        credentials.checkTokenExpiration();
         try {
             StringBuilder payloadBuilder = new StringBuilder();
             payloadBuilder.append("{\"uris\": [");
@@ -75,7 +86,7 @@ public class RequestSender {
             String payloadAsString = payloadBuilder.toString();
             byte[] payload = payloadAsString.getBytes("utf-8");
             URL obj = new URL(ADD_SONGS_TO_PLAYLIST_ENDPOINT + playlist_id + "/tracks");
-            HttpURLConnection con = buildHttpRequest(accessToken, obj, "POST");
+            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "POST");
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
             os.write(payload);
@@ -89,12 +100,13 @@ public class RequestSender {
     }
 
 
-    public static String searchArtistByName(String artistName, String accessToken) {
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String searchArtistByName(String artistName, Credentials credentials) {
+        credentials.checkTokenExpiration();
         String artistNameEncoded = artistName.replace(" ", "%20");
         try {
             URL obj = new URL(SEARCH_ENDPOINT + "?q=" + artistNameEncoded + "&type=artist");
-            HttpURLConnection con = buildHttpRequest(accessToken, obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Search Artist By Name: Error receiving data from Spotify Api");
@@ -106,11 +118,12 @@ public class RequestSender {
     }
 
 
-    public static String getRecentlyPlayedSongs(String accessToken) {
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getRecentlyPlayedSongs(Credentials credentials) {
+        credentials.checkTokenExpiration();
         try {
             URL obj = new URL(RECENTLY_PLAYED_ENDPOINT + "?limit=" + RECOVERED_SONGS);
-            HttpURLConnection con = buildHttpRequest(accessToken, obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Get Recently Played Songs: Error receiving data from Spotify Api");
@@ -122,11 +135,12 @@ public class RequestSender {
     }
 
 
-    public static String getTopSongs(String accessToken) {
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getTopSongs(Credentials credentials) {
+        credentials.checkTokenExpiration();
         try {
             URL obj = new URL(TOP_ARTISTS_AND_TRACKS_ENDPOINT + "/tracks?time_range=" + TIME_RANGE + "&limit=" + LIMIT + "&offset=" + OFFSET);
-            HttpURLConnection con = buildHttpRequest(accessToken, obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Get Top Songs: Error receiving data from Spotify Api");
@@ -138,11 +152,12 @@ public class RequestSender {
 
     }
 
-    public static String getTopArtists(String accessToken) {
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getTopArtists(Credentials credentials) {
+        credentials.checkTokenExpiration();
         try {
             URL obj = new URL(TOP_ARTISTS_AND_TRACKS_ENDPOINT + "/artists?time_range=" + TIME_RANGE + "&limit=" + LIMIT + "&offset=" + OFFSET);
-            HttpURLConnection con = buildHttpRequest(accessToken, obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Get Top Artists: Error receiving data from Spotify Api");
@@ -213,10 +228,7 @@ public class RequestSender {
                 return response.toString();
             }
             else{
-                if(responseCode == HttpURLConnection.HTTP_BAD_REQUEST){
-
-                }
-                System.out.println("Codigo de respuesta: " + responseCode);
+                System.out.println("[getTokens] Codigo de respuesta: " + responseCode);
                 return "ERROR";
             }
         } catch (Exception e) {
@@ -260,10 +272,7 @@ public class RequestSender {
                 return response.toString();
             }
             else{
-                if(responseCode == HttpURLConnection.HTTP_BAD_REQUEST){
-
-                }
-                System.out.println("Codigo de respuesta: " + responseCode);
+                System.out.println("[getAccessToken] Codigo de respuesta : " + responseCode);
                 return "ERROR";
             }
         } catch (Exception e) {

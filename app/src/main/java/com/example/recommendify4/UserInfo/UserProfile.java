@@ -1,4 +1,8 @@
 package com.example.recommendify4.UserInfo;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.recommendify4.SpotifyApi.RequestSender;
 import com.example.recommendify4.SpotifyApi.ResponseProcessor;
 import com.example.recommendify4.SpotifyItems.Artist;
@@ -9,8 +13,7 @@ import java.util.ArrayList;
 
 public class UserProfile implements Runnable{
 
-    private String accessToken;
-
+    private Credentials credentials;
     private User user;
     private ArrayList<Song> topSongs;
     private ArrayList<Artist> topArtists;
@@ -18,9 +21,9 @@ public class UserProfile implements Runnable{
     private ArrayList<Artist> recentlyPlayedArtists;
 
 
-    public UserProfile(String newAccessToken){
+    public UserProfile(Credentials newCredentials){
 
-        accessToken = newAccessToken;
+        credentials = newCredentials;
         user = new User();
         recentlyPlayedSongs = new ArrayList<>();
         topSongs = new ArrayList<>();
@@ -45,16 +48,18 @@ public class UserProfile implements Runnable{
         return topSongs;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setUser() {
-        String responseString = RequestSender.getUserInfo(accessToken);
+        String responseString = RequestSender.getUserInfo(credentials);
         User newUser = ResponseProcessor.processUserInfoResponse(responseString);
         if(newUser != null) user = newUser;
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setRecentlyPlayedSongs() {
 
-        String response = RequestSender.getRecentlyPlayedSongs(accessToken);
+        String response = RequestSender.getRecentlyPlayedSongs(credentials);
         ArrayList<Song> recentlyPlayedSongsList = ResponseProcessor.processRecentlyPlayedResponse(response);
         if(recentlyPlayedSongsList != null) recentlyPlayedSongs = recentlyPlayedSongsList;
 
@@ -72,22 +77,25 @@ public class UserProfile implements Runnable{
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setTopSongs() {
 
-        String response = RequestSender.getTopSongs(accessToken);
+        String response = RequestSender.getTopSongs(credentials);
         ArrayList<Song> topSongsList = ResponseProcessor.processTopSongsResponse(response);
         if(topSongsList != null) topSongs = topSongsList;
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setTopArtists() {
 
-        String response = RequestSender.getTopArtists(accessToken);
+        String response = RequestSender.getTopArtists(credentials);
         ArrayList<Artist> topArtistsList = ResponseProcessor.processTopArtistsResponse(response, topSongs);
         if(topArtistsList != null) topArtists = topArtistsList;
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
         setRecentlyPlayedSongs();

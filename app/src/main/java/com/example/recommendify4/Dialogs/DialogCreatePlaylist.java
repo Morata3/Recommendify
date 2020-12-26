@@ -1,4 +1,4 @@
-package com.example.recommendify4;
+package com.example.recommendify4.Dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-public class CreatePlaylistDialog extends AppCompatDialogFragment {
+public class DialogCreatePlaylist extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

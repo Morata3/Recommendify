@@ -1,9 +1,12 @@
 package com.example.recommendify4.UserInfo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.recommendify4.Login;
 import com.example.recommendify4.SpotifyApi.RequestSender;
 
 import org.json.JSONObject;
@@ -18,12 +21,10 @@ public class Credentials implements Runnable{
     private static Date time_to_expire;
     private String acces_token;
     private String refresh_token;
-    private boolean refresh;
     private String token;
 
-    public Credentials(String token, boolean refresh){
+    public Credentials(String token){
         this.token = token;
-        this.refresh = refresh;
     }
 
     public String getAcces_token() { return acces_token; }
@@ -49,13 +50,14 @@ public class Credentials implements Runnable{
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void setRefreshToken(){
+    public void updateToken(){
         try{
             String tokens_response = RequestSender.getAccessToken(token,CLIENT_ID,CLIENT_SECRET);
             if(!tokens_response.equals("ERROR")){
                 JSONObject jsonToken = new JSONObject(tokens_response);
                 this.acces_token = jsonToken.getString("access_token");
                 setTimeExpire(jsonToken.getInt("expires_in"));
+                System.out.println("TOKEN UPDATED");
             }
         }catch (Exception e){
             System.out.println("Error updating access token");
@@ -66,12 +68,19 @@ public class Credentials implements Runnable{
     public void setTimeExpire(int expire_in){
         Date now = new Date();
         time_to_expire = new Date(now.getTime() + expire_in*1000);
+        System.out.println("TIME EXPIRE: "+time_to_expire);
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void checkTokenExpiration() {
+        Date now = new Date();
+        if (((time_to_expire.getTime() / 1000) - (now.getTime() / 1000)) < 60) updateToken();
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
-        if(refresh) setRefreshToken();
-        else setTokens();
+        setTokens();
     }
 }
