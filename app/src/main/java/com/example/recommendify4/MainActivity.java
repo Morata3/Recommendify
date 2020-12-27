@@ -121,44 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        Data myData = new Data.Builder()
-                .putString(CONTENT, TopSongsAux.toString())
-                .build();
-        OneTimeWorkRequest recommendWork = new OneTimeWorkRequest.Builder(ContentWorker.class)
-                .setInputData(myData)
-                .build();
-        WorkManager.getInstance().enqueue(recommendWork);
-
-        WorkManager.getInstance().getWorkInfoByIdLiveData(recommendWork.getId())
-                .observe(this, info -> {
-                    if (info != null && info.getState().isFinished()) {
-                        myresult = info.getOutputData().getString(KEY_CONTENT);
-                        System.out.println("Recomendaciones Content: " + myresult);
-
-
-                    }
-                });
-
-        Data Colab = new Data.Builder()
-                .putString(COLAB, "")
-                .build();
-        OneTimeWorkRequest ColabWork = new OneTimeWorkRequest.Builder(ColabWorker.class)
-                .setInputData(Colab)
-                .build();
-        WorkManager.getInstance().enqueue(ColabWork);
-
-        WorkManager.getInstance().getWorkInfoByIdLiveData(ColabWork.getId())
-                .observe(this, info -> {
-                    if (info != null && info.getState().isFinished()) {
-                        myresult = info.getOutputData().getString(KEY_COLAB);
-                        System.out.println("Recomendaciones Colab: " + myresult);
-
-
-                    }
-                });
-
-
-
     }
 
     @Override
