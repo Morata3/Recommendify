@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi;
 import com.example.recommendify4.Login;
 import com.example.recommendify4.SpotifyItems.Song;
 import com.example.recommendify4.UserInfo.Credentials;
-import com.example.recommendify4.UserInfo.UserProfileBuilder;
+import com.example.recommendify4.ThreadLauncher;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
