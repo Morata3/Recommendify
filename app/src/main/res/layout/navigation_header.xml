@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="176dp"
@@ -9,18 +10,30 @@
     android:padding="16dp"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="97dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_foreground" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cardCornerRadius="60dp">
+
+        <ImageView
+            android:id="@+id/nav_header_user_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/textureView"
-        android:layout_width="119dp"
+        android:id="@+id/nav_header_user_id"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:text="User Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-    
-</LinearLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="0dp"
+        android:text="User ID"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+</RelativeLayout>

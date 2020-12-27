@@ -33,7 +33,6 @@ public class Credentials implements Runnable{
 
     public Date getTime_to_expire(){return time_to_expire; }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void setTokens() {
         try{
             String tokens_response = RequestSender.getTokens(token,CLIENT_ID,CLIENT_SECRET,REDIRECT_URI);
@@ -49,7 +48,6 @@ public class Credentials implements Runnable{
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void updateToken(){
         try{
             String tokens_response = RequestSender.getAccessToken(token,CLIENT_ID,CLIENT_SECRET);
@@ -71,14 +69,12 @@ public class Credentials implements Runnable{
         System.out.println("TIME EXPIRE: "+time_to_expire);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void checkTokenExpiration() {
         Date now = new Date();
         if (((time_to_expire.getTime() / 1000) - (now.getTime() / 1000)) < 60) updateToken();
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
         setTokens();

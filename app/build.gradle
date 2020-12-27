@@ -70,6 +70,8 @@ android {
 }
 
 repositories {
+    google()
+    jcenter()
     mavenCentral()
     flatDir {
         dirs 'libs'
@@ -78,6 +80,9 @@ repositories {
 
 dependencies {
     def nav_version = "2.3.2"
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

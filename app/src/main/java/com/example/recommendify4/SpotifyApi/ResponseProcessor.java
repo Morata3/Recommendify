@@ -1,5 +1,8 @@
 package com.example.recommendify4.SpotifyApi;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.example.recommendify4.SpotifyItems.Artist;
 import com.example.recommendify4.SpotifyItems.Song;
 import com.example.recommendify4.SpotifyItems.User;
@@ -7,6 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class ResponseProcessor {
@@ -15,7 +22,8 @@ public class ResponseProcessor {
         try{
             if(!response.equals("ERROR")){
                 JSONObject responseJSON = new JSONObject(response);
-                return new User(responseJSON);
+                JSONArray images_profile = responseJSON.getJSONArray("images");
+                return new User(responseJSON,processImagesJSON(images_profile));
             }
             else return null;
         }catch(Exception e){
@@ -101,6 +109,16 @@ public class ResponseProcessor {
 
     }
 
+    private static String processImagesJSON(JSONArray imagesJSON) throws JSONException {
+        String imageURL = null;
+
+        for(int index = 0; index < imagesJSON.length(); index ++){
+            JSONObject imageObject = imagesJSON.getJSONObject(index);
+            if(imageObject.has("url")) imageURL = imageObject.getString("url");
+        }
+
+        return imageURL;
+    }
 
 }
 

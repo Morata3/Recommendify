@@ -8,9 +8,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
+import com.example.recommendify4.Dialogs.DialogLoading;
 import com.example.recommendify4.SpotifyApi.RequestSender;
 import com.example.recommendify4.SpotifyItems.User;
 import com.example.recommendify4.UserInfo.Credentials;
@@ -41,17 +48,15 @@ public class Login extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onStart() {
         super.onStart();
+
         SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
         String userProfile = userPreferences.getString("UserProfile",null);
-
         if(userProfile != null ){
             goMain();
         }
-
     }
 
     protected void login(){
@@ -70,7 +75,6 @@ public class Login extends AppCompatActivity {
         AuthorizationClient.openLoginActivity(this,REQUEST_CODE,request);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected  void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode,resultCode,intent);
 

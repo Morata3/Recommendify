@@ -2,6 +2,8 @@ package com.example.recommendify4.SpotifyApi;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Base64;
 
@@ -15,6 +17,7 @@ import com.example.recommendify4.ThreadLauncher;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -38,7 +41,7 @@ public class RequestSender {
     private static final int LIMIT = 50;
     private static final int OFFSET = 0;
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     public static String getUserInfo(Credentials credentials){
         credentials.checkTokenExpiration();
         try {
@@ -53,7 +56,6 @@ public class RequestSender {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String createPlaylist(Credentials credentials, String playlistName, String user_id){
         credentials.checkTokenExpiration();
         try {
@@ -73,7 +75,6 @@ public class RequestSender {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String addSongsToPlaylist(Credentials credentials, ArrayList<Song> songs, String playlist_id){
         credentials.checkTokenExpiration();
         try {
@@ -100,7 +101,6 @@ public class RequestSender {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String searchArtistByName(String artistName, Credentials credentials) {
         credentials.checkTokenExpiration();
         String artistNameEncoded = artistName.replace(" ", "%20");
@@ -118,7 +118,6 @@ public class RequestSender {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getRecentlyPlayedSongs(Credentials credentials) {
         credentials.checkTokenExpiration();
         try {
@@ -135,7 +134,6 @@ public class RequestSender {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getTopSongs(Credentials credentials) {
         credentials.checkTokenExpiration();
         try {
@@ -152,7 +150,6 @@ public class RequestSender {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getTopArtists(Credentials credentials) {
         credentials.checkTokenExpiration();
         try {
@@ -196,13 +193,12 @@ public class RequestSender {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT) //Fai falta para o StandardCharset.UTF-8
     public static String getTokens(String AuthorizationCode, String cliend_id, String client_secret, String redirect_URL){
         try {
             String app_credentials = cliend_id + ":" + client_secret;
             byte[] toEncode = app_credentials.getBytes("UTF-8");
             String urlParameters = "grant_type=authorization_code&code=" + AuthorizationCode + "&redirect_uri=" + redirect_URL;
-            byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
+            byte[] postData = urlParameters.getBytes( "UTF-8" );
             int    postDataLength = postData.length;
 
             URL obj = new URL(TOKEN_ENDPOINT);
@@ -239,13 +235,12 @@ public class RequestSender {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getAccessToken(String refresh_token, String cliend_id, String client_secret){
         try {
             String app_credentials = cliend_id + ":" + client_secret;
             byte[] toEncode = app_credentials.getBytes("UTF-8");
             String urlParameters = "grant_type=refresh_token&refresh_token=" + refresh_token;
-            byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
+            byte[] postData = urlParameters.getBytes( "UTF-8" );
             int    postDataLength = postData.length;
 
             URL obj = new URL(TOKEN_ENDPOINT);

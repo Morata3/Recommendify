@@ -10,8 +10,8 @@
     <string name="title_activity_menu">Menu</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="dialog_information_message">"Shuffle song: recommends songs based on your tastes\n"
-                        "Soulmate song: recommends songs based on what people with your tastes listen to.</string>
+    <string name="shuffle_information_message">Shuffle song: recommends songs based on your tastes.</string>
+    <string name="soulmate_information_message">Soulmate song: recommends songs based on what people with your tastes listen to.</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

@@ -48,7 +48,7 @@ public class UserProfile implements Runnable{
         return topSongs;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     public void setUser() {
         String responseString = RequestSender.getUserInfo(credentials);
         User newUser = ResponseProcessor.processUserInfoResponse(responseString);
@@ -56,7 +56,6 @@ public class UserProfile implements Runnable{
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setRecentlyPlayedSongs() {
 
         String response = RequestSender.getRecentlyPlayedSongs(credentials);
@@ -77,7 +76,6 @@ public class UserProfile implements Runnable{
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setTopSongs() {
 
         String response = RequestSender.getTopSongs(credentials);
@@ -86,7 +84,6 @@ public class UserProfile implements Runnable{
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setTopArtists() {
 
         String response = RequestSender.getTopArtists(credentials);
@@ -95,9 +92,9 @@ public class UserProfile implements Runnable{
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
+        setUser();
         setRecentlyPlayedSongs();
         setRecentlyPlayedArtists();
         setTopSongs();
