@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ArtistRecommendation" />
+        <activity android:name=".ShuffleSongRecommendation" />
         <activity android:name=".Advanced" />
         <activity android:name=".History" />
         <activity

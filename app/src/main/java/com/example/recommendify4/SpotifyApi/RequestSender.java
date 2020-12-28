@@ -1,30 +1,16 @@
 package com.example.recommendify4.SpotifyApi;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.util.Base64;
-
-import androidx.annotation.RequiresApi;
-
-import com.example.recommendify4.Login;
 import com.example.recommendify4.SpotifyItems.Song;
 import com.example.recommendify4.UserInfo.Credentials;
-import com.example.recommendify4.ThreadLauncher;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RequestSender {
 
@@ -41,12 +27,11 @@ public class RequestSender {
     private static final int LIMIT = 50;
     private static final int OFFSET = 0;
 
-
     public static String getUserInfo(Credentials credentials){
         credentials.checkTokenExpiration();
         try {
             URL obj = new URL(USER_INFO_ENDPOINT);
-            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Search Artist By Name: Error receiving data from Spotify Api");
@@ -62,7 +47,7 @@ public class RequestSender {
             String payloadAsString = "{\"name\": \"" + playlistName + "\"}";
             byte[] payload = payloadAsString.getBytes("utf-8");
             URL obj = new URL(CREATE_PLAYLIST_ENDPOINT + user_id + "/playlists");
-            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "POST");
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "POST");
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
             os.write(payload);
@@ -87,7 +72,7 @@ public class RequestSender {
             String payloadAsString = payloadBuilder.toString();
             byte[] payload = payloadAsString.getBytes("utf-8");
             URL obj = new URL(ADD_SONGS_TO_PLAYLIST_ENDPOINT + playlist_id + "/tracks");
-            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "POST");
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "POST");
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
             os.write(payload);
@@ -106,7 +91,7 @@ public class RequestSender {
         String artistNameEncoded = artistName.replace(" ", "%20");
         try {
             URL obj = new URL(SEARCH_ENDPOINT + "?q=" + artistNameEncoded + "&type=artist");
-            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Search Artist By Name: Error receiving data from Spotify Api");
@@ -122,7 +107,7 @@ public class RequestSender {
         credentials.checkTokenExpiration();
         try {
             URL obj = new URL(RECENTLY_PLAYED_ENDPOINT + "?limit=" + RECOVERED_SONGS);
-            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Get Recently Played Songs: Error receiving data from Spotify Api");
@@ -138,7 +123,7 @@ public class RequestSender {
         credentials.checkTokenExpiration();
         try {
             URL obj = new URL(TOP_ARTISTS_AND_TRACKS_ENDPOINT + "/tracks?time_range=" + TIME_RANGE + "&limit=" + LIMIT + "&offset=" + OFFSET);
-            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Get Top Songs: Error receiving data from Spotify Api");
@@ -154,7 +139,7 @@ public class RequestSender {
         credentials.checkTokenExpiration();
         try {
             URL obj = new URL(TOP_ARTISTS_AND_TRACKS_ENDPOINT + "/artists?time_range=" + TIME_RANGE + "&limit=" + LIMIT + "&offset=" + OFFSET);
-            HttpURLConnection con = buildHttpRequest(credentials.getAcces_token(), obj, "GET");
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "GET");
             return getResponseFromApi(con);
         } catch (Exception e) {
             System.out.println("Get Top Artists: Error receiving data from Spotify Api");
@@ -196,7 +181,7 @@ public class RequestSender {
     public static String getTokens(String AuthorizationCode, String cliend_id, String client_secret, String redirect_URL){
         try {
             String app_credentials = cliend_id + ":" + client_secret;
-            byte[] toEncode = app_credentials.getBytes("UTF-8");
+            byte[] toEncode = app_credentials.getBytes("utf-8");
             String urlParameters = "grant_type=authorization_code&code=" + AuthorizationCode + "&redirect_uri=" + redirect_URL;
             byte[] postData = urlParameters.getBytes( "UTF-8" );
             int    postDataLength = postData.length;

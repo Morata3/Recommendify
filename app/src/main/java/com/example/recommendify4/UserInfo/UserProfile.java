@@ -1,7 +1,4 @@
 package com.example.recommendify4.UserInfo;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.recommendify4.SpotifyApi.RequestSender;
 import com.example.recommendify4.SpotifyApi.ResponseProcessor;
@@ -47,7 +44,6 @@ public class UserProfile implements Runnable{
     public ArrayList<Song> getTopSongs() {
         return topSongs;
     }
-
 
     public void setUser() {
         String responseString = RequestSender.getUserInfo(credentials);

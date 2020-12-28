@@ -1,5 +1,8 @@
 package com.example.recommendify4.SpotifyItems;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,13 +10,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Song {
+public class Song  implements Parcelable {
 
     private String name;
     private String album;
     private String id;
     private ArrayList<Artist> artists;
-    private String Artist;
+    //private String Artist;
     private int timesInList;
     private boolean recommended;
 
@@ -27,7 +30,7 @@ public class Song {
 
     public Song(String songName, String artistsList, String songId){
         this.name = songName;
-        this.Artist = artistsList;
+        this.artists = getArtistsFromString(artistsList);
         this.id = songId;
     }
 
@@ -74,9 +77,9 @@ public class Song {
         return id;
     }
 
-    public String getartists() {return Artist;}
+    //public String getartists() {return Artist;}
 
-    public void setArtists(String Artist){this.Artist = Artist;}
+    //public void setArtists(String Artist){this.Artist = Artist;}
 
     public void setId(String id) {
         this.id = id;
@@ -92,6 +95,16 @@ public class Song {
 
     public void setTimesInList(int timesInList) { this.timesInList = timesInList; }
 
+    private ArrayList<Artist> getArtistsFromString(String artistList){
+        ArrayList<Artist> list = new ArrayList<>();
+        String[] names = artistList.split(",");
+        for(String name : names){
+            Artist artist = new Artist(name);
+            list.add(artist);
+        }
+        return list;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return this.id.equals(((Song) obj).id);
@@ -106,5 +119,40 @@ public class Song {
                 ", artists=" + artists +
                 ", timesInList=" + timesInList +
                 '}';
+    }
+
+    //PARCELABLE IMPLEMENTATION
+    private Song(Parcel in) {
+        artists = new ArrayList<>();
+        name = in.readString();
+        album = in.readString();
+        id = in.readString();
+        in.readTypedList(artists, Artist.CREATOR);
+        timesInList = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Song> CREATOR
+            = new Parcelable.Creator<Song>() {
+        public Song createFromParcel(Parcel in) {
+            return new Song(in);
+        }
+
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(album);
+        dest.writeString(id);
+        dest.writeTypedList(artists);
+        dest.writeInt(timesInList);
     }
 }

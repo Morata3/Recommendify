@@ -1,16 +1,7 @@
 package com.example.recommendify4.UserInfo;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import com.example.recommendify4.Login;
 import com.example.recommendify4.SpotifyApi.RequestSender;
-
 import org.json.JSONObject;
-
 import java.util.Date;
 
 public class Credentials implements Runnable{
@@ -19,7 +10,7 @@ public class Credentials implements Runnable{
     private static final String CLIENT_SECRET = "9f3ed9fe6167487f8f129a5ef0ad4757";
     private static final String REDIRECT_URI = "recommendify://";
     private static Date time_to_expire;
-    private String acces_token;
+    private String access_token;
     private String refresh_token;
     private String token;
 
@@ -27,7 +18,7 @@ public class Credentials implements Runnable{
         this.token = token;
     }
 
-    public String getAcces_token() { return acces_token; }
+    public String getAccess_token() { return access_token; }
 
     public String getRefresh_token(){ return refresh_token; }
 
@@ -38,7 +29,7 @@ public class Credentials implements Runnable{
             String tokens_response = RequestSender.getTokens(token,CLIENT_ID,CLIENT_SECRET,REDIRECT_URI);
             if(!tokens_response.equals("ERROR")){
                 JSONObject jsonToken = new JSONObject(tokens_response);
-                this.acces_token = jsonToken.getString("access_token");
+                this.access_token = jsonToken.getString("access_token");
                 this.refresh_token = jsonToken.getString("refresh_token");
                 setTimeExpire(jsonToken.getInt("expires_in"));
             }
@@ -53,7 +44,7 @@ public class Credentials implements Runnable{
             String tokens_response = RequestSender.getAccessToken(token,CLIENT_ID,CLIENT_SECRET);
             if(!tokens_response.equals("ERROR")){
                 JSONObject jsonToken = new JSONObject(tokens_response);
-                this.acces_token = jsonToken.getString("access_token");
+                this.access_token = jsonToken.getString("access_token");
                 setTimeExpire(jsonToken.getInt("expires_in"));
                 System.out.println("TOKEN UPDATED");
             }

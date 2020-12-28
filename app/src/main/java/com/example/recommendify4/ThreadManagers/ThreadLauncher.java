@@ -1,4 +1,4 @@
-package com.example.recommendify4;
+package com.example.recommendify4.ThreadManagers;
 
 import java.util.concurrent.Executor;
 
@@ -16,3 +16,4 @@ public class ThreadLauncher implements Executor {
         }
     }
 }
+

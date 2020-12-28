@@ -1,5 +1,8 @@
 package com.example.recommendify4.SpotifyItems;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.json.JSONArray;
@@ -8,7 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Artist {
+public class Artist implements Parcelable{
 
     private String name;
     private String id;
@@ -28,6 +31,11 @@ public class Artist {
         this.genres = new ArrayList<>();
         this.id = artistId;
         this.songsInList = 1;
+    }
+
+    public Artist(String artistName){
+        this.name = artistName;
+        this.genres = new ArrayList<>();
     }
 
     public Artist(JSONObject artistJSON, int songsInList) throws JSONException {
@@ -90,5 +98,39 @@ public class Artist {
                 ", songsInList=" + songsInList +
                 '}';
     }
+
+    //PARCELABLE IMPLEMENTATION
+    private Artist(Parcel in) {
+        genres = new ArrayList<>();
+        name = in.readString();
+        id = in.readString();
+        genres = in.readArrayList(null);
+        songsInList = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Artist> CREATOR
+            = new Parcelable.Creator<Artist>() {
+        public Artist createFromParcel(Parcel in) {
+            return new Artist(in);
+        }
+
+        public Artist[] newArray(int size) {
+            return new Artist[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(id);
+        dest.writeList(genres);
+        dest.writeInt(songsInList);
+    }
+
 }
 

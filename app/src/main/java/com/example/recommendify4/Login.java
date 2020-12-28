@@ -1,34 +1,20 @@
 package com.example.recommendify4;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
-
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
-import com.example.recommendify4.Dialogs.DialogLoading;
-import com.example.recommendify4.SpotifyApi.RequestSender;
-import com.example.recommendify4.SpotifyItems.User;
+import com.example.recommendify4.ThreadManagers.ThreadLauncher;
 import com.example.recommendify4.UserInfo.Credentials;
 import com.example.recommendify4.UserInfo.UserProfile;
-import com.example.recommendify4.ThreadLauncher;
 import com.google.gson.Gson;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
-
-import java.util.Date;
 
 public class Login extends AppCompatActivity {
     private static final int REQUEST_CODE = 1337;
@@ -93,7 +79,7 @@ public class Login extends AppCompatActivity {
                     ThreadLauncher builder_profile = new ThreadLauncher();
                     builder_profile.execute(userProfile);
 
-                    System.out.println("TOKEN:" + credentials.getAcces_token());
+                    System.out.println("TOKEN:" + credentials.getAccess_token());
 
                     Gson gson = new Gson();
                     String userProfile_json = gson.toJson(userProfile);

@@ -5,18 +5,13 @@ import com.example.recommendify4.Dialogs.DialogCreatePlaylist;
 import com.example.recommendify4.Dialogs.DialogInformation;
 import com.example.recommendify4.Dialogs.DialogLoading;
 import com.example.recommendify4.Dialogs.DialogLogOut;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
+import com.example.recommendify4.RecomThreads.ContentCallback;
+import com.example.recommendify4.RecomThreads.ContentThread;
 import com.example.recommendify4.SpotifyItems.Song;
+import com.example.recommendify4.ThreadManagers.RecomThreadPool;
 import com.example.recommendify4.UserInfo.UserProfile;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,24 +19,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.core.content.res.TypedArrayUtils;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,11 +41,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private Button artistButton;
     private Button playlistButton;
+    private Button shuffleButton;
 
     public TextView text;
     public String myresult;
-    private UserProfile userProfile;
 
+    private UserProfile userProfile;
+    private ArrayList<Song> userRecommendations;
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -82,19 +71,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Gson gson = new Gson();
-        SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
-        userProfile = gson.fromJson(userPreferences.getString("UserProfile",null),UserProfile.class);
-        ArrayList<Song> TopSongs = userProfile.getTopSongs();
-        List<Song> TopSongsAux  = userProfile.getTopSongs().subList(0,10);
-        String user_id = userProfile.getUser().getId();
-        String user_image_url = userProfile.getUser().getPhoto();
+        userProfile = getUserProfile();
+        setupMenu(userProfile.getUser().getId(),userProfile.getUser().getPhoto());
 
-        setupMenu(user_id,user_image_url);
+        userRecommendations = getRecommendationsList();
+
+        if(userRecommendations.size() == 0) {
+            ArrayList<Song> userRecentlyPlayedSongs = userProfile.getRecentlyPlayedSongs();
+            ArrayList<Song> userTopSongs = userProfile.getTopSongs();
+            ThreadPoolExecutor executor = RecomThreadPool.getThreadPoolExecutor();
+            for (Song song : userRecentlyPlayedSongs)
+                executor.execute(
+                        new ContentThread(song, new ContentCallback() {
+                            @Override
+                            public synchronized void onComplete(ArrayList<Song> recommendations) {
+                                userRecommendations.addAll(recommendations);
+                            }
+                        })
+                );
+
+
+            for (Song song : userTopSongs)
+                executor.execute(
+                        new ContentThread(song, new ContentCallback() {
+                            @Override
+                            public synchronized void onComplete(ArrayList<Song> recommendations) {
+                                userRecommendations.addAll(recommendations);
+                            }
+                        }));
+        }
+
         artistButton = (Button) findViewById(R.id.buttonArtist);
         artistButton.setOnClickListener(v -> artistRecommendation());
         playlistButton = (Button) findViewById(R.id.buttonPlaylist);
         playlistButton.setOnClickListener(v -> openDialogCreatePlaylist());
+        shuffleButton = (Button) findViewById(R.id.buttonShuffle);
+        shuffleButton.setOnClickListener(v -> songRecommendation());
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
+                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
@@ -182,6 +205,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void artistRecommendation(){
         Intent intent = new Intent(this, ArtistRecommendation.class);
         startActivity(intent);
+    }
+
+    private void songRecommendation(){
+        Intent intent = new Intent(this, ShuffleSongRecommendation.class);
+        //intent.putExtra("songsToRecommend", userRecommendations);
+        if(userRecommendations != null && userRecommendations.size() > 0){
+            Song songToRecommend = userRecommendations.get(0);
+            intent.putExtra("songToRecommend", userRecommendations.get(0));
+            userRecommendations.remove(songToRecommend);
+
+        }
+        startActivity(intent);
+    }
+
+    private UserProfile getUserProfile(){
+        if(this.userProfile == null){
+            Gson gson = new Gson();
+            SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
+            return gson.fromJson(userPreferences.getString("UserProfile",null),UserProfile.class);
+        }
+        else return this.userProfile;
+    }
+
+    private ArrayList<Song> getRecommendationsList(){
+        if(this.userRecommendations == null || this.userRecommendations.size() == 0) return new ArrayList<>();
+        else return this.userRecommendations;
     }
 
     @Override

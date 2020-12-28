@@ -22,12 +22,15 @@ data = pd.read_csv(SpotifyFile)
 
 def rank_song_similarity_by_measure(song, genre_parameter):
 
+    #print("SONG: " + str(song))
     songslist = song.split("Song{")
+    #print("SONGSLIST: " + str(songslist))
+    songslist.pop(0)
+    
     wasted = []
 
-    for i in range(1,10):
-        print(i)
-        nsongaux= songslist[i].split('=')
+    for element in songslist:
+        nsongaux= element.split('=')
         nsongname = nsongaux[1].split(',')
         nsongartist =  nsongaux[5].split(',')
         nsongid =  nsongaux[3].split(',')
@@ -37,25 +40,28 @@ def rank_song_similarity_by_measure(song, genre_parameter):
         found = data[(data.id == nsongid)]
         if found.empty:
             wasted += nsongid + "/ /"
+            lista = ['Waste',''.join(wasted),'']
+            return lista
         if not found.empty:
             wasted += nsongid + "/ /"
             break
 
 
 
-    print("Songname: ", nsongname)
+    #print("Songname: ", nsongname)
 
     song_and_artist_data = data[(data.id == nsongid)].sort_values('Year')[0:1]
     song = nsongname
 
 
-    print("Encontró esto: ",song_and_artist_data)
+    #print("Encontró esto: ",song_and_artist_data)
 
     similarity_data = data.copy()
 
     data_values = similarity_data.loc[:,['acousticness', 'danceability',
            'energy', 'instrumentalness', 'key', 'liveness', 'loudness', 'mode',
            'speechiness', 'tempo', 'valence']]
+
 
     similarity_data['Similarity with song'] =cosine_similarity(data_values, data_values.to_numpy()[song_and_artist_data.index[0],None]).squeeze()
 
