@@ -125,27 +125,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }));
         }
 
-//        if(artistRecommendations.size() == 0) {
-//            ArrayList<Artist> userTopArtists = userProfile.getTopArtists();
-//            ThreadPoolExecutor executor = RecomThreadPool.getThreadPoolExecutor();
-//            for (Artist artist : userTopArtists)
-//                executor.execute(
-//                        new CollaborativeThread(artist, new CollaborativeCallback() {
-//                            @Override
-//                            public synchronized void onComplete(ArrayList<Artist> recommendations) {
-//                                artistRecommendations.addAll(recommendations);
-//                            }
-//                        }, userProfile)
-//                );
-//        }
+        if(artistRecommendations.size() == 0) {
+            ArrayList<Artist> userTopArtists = userProfile.getTopArtists();
+            ThreadPoolExecutor executor = RecomThreadPool.getThreadPoolExecutor();
+            for (Artist artist : userTopArtists)
+                executor.execute(
+                        new CollaborativeThread(artist, new CollaborativeCallback() {
+                            @Override
+                            public synchronized void onComplete(ArrayList<Artist> recommendations) {
+                                artistRecommendations.addAll(recommendations);
+                            }
+                        }, userProfile)
+                );
+        }
 
         artistButton = (Button) findViewById(R.id.buttonArtist);
         artistButton.setOnClickListener(v -> artistRecommendation());
         playlistButton = (Button) findViewById(R.id.buttonPlaylist);
         playlistButton.setOnClickListener(v -> openDialogCreatePlaylist());
-
-//        soulmateButton = (Button) findViewById(R.id.buttonSoulmate);
-//        soulmateButton.setOnClickListener(v -> soulmateArtistRecommendation());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
@@ -219,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }else System.out.println("Recommendations not yet ready ");
                 break;
             case R.id.buttonSoulmate:
+                soulmateArtistRecommendation();
                 break;
         }
         fragmentTransaction.commit();
@@ -260,17 +258,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
-//    private void soulmateArtistRecommendation(){
-//        Intent intent = new Intent(this, SoulmateArtistRecommendation.class);
-//        //intent.putExtra("songsToRecommend", userRecommendations);
-//        if(artistRecommendations != null && artistRecommendations.size() > 0){
-//            Artist artistToRecommend = artistRecommendations.get(0);
-//            intent.putExtra("artistToRecommend", artistRecommendations.get(0));
-//            artistRecommendations.remove(artistToRecommend);
-//
-//        }
-//        startActivity(intent);
-//    }
+    private void soulmateArtistRecommendation(){
+        Intent intent = new Intent(this, SoulmateArtistRecommendation.class);
+        //intent.putExtra("songsToRecommend", userRecommendations);
+        if(artistRecommendations != null && artistRecommendations.size() > 0){
+            Artist artistToRecommend = artistRecommendations.get(0);
+            intent.putExtra("artistToRecommend", artistRecommendations.get(0));
+            artistRecommendations.remove(artistToRecommend);
+
+        }
+        startActivity(intent);
+    }
 
     private UserProfile getUserProfile(){
         if(this.userProfile == null){
