@@ -16,22 +16,22 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".Login">
+        <activity android:name="com.app.recommendify4.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ArtistRecommendation" />
-        <activity android:name=".ShuffleSongRecommendation" />
-        <activity android:name=".SoulmateArtistRecommendation" />
-        <activity android:name=".Advanced" />
-        <activity android:name=".History" />
+        <activity android:name="com.app.recommendify4.ArtistRecommendation" />
+        <activity android:name="com.app.recommendify4.ShuffleSongRecommendation" />
+        <activity android:name="com.app.recommendify4.SoulmateArtistRecommendation" />
+        <activity android:name="com.app.recommendify4.Advanced" />
+        <activity android:name="com.app.recommendify4.History" />
         <activity
             android:name="com.spotify.sdk.android.auth.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.app.recommendify4.MainActivity" />
     </application>
 
 </manifest>
