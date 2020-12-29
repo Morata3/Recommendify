@@ -1,4 +1,4 @@
-package com.example.recommendify4;
+package com.app.recommendify4;
 
 import org.junit.Test;
 

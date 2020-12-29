@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 
-import com.example.recommendify4.R;
-
-import java.util.concurrent.Executor;
-import java.util.logging.Handler;
+import com.app.recommendify4.R;
 
 public class DialogLoading {
 

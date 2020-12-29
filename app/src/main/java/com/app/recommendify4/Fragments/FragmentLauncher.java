@@ -1,21 +1,23 @@
-package com.app.recommendify4;
+package com.app.recommendify4.Fragments;
+
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.recommendify4.R;
+import com.app.recommendify4.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentSong#newInstance} factory method to
+ * Use the {@link FragmentLauncher#newInstance} factory method to
  * create an instance of this fragment.
+ *
  */
-public class FragmentSong extends Fragment {
+public class FragmentLauncher extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,26 +28,26 @@ public class FragmentSong extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public FragmentSong() {
-        // Required empty public constructor
-    }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Song.
+     * @return A new instance of fragment FragmentLauncher.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentSong newInstance(String param1, String param2) {
-        FragmentSong fragment = new FragmentSong();
+    public static FragmentLauncher newInstance(String param1, String param2) {
+        FragmentLauncher fragment = new FragmentLauncher();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public FragmentLauncher() {
+        // Required empty public constructor
     }
 
     @Override
@@ -61,6 +63,13 @@ public class FragmentSong extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_song, container, false);
+        return inflater.inflate(R.layout.fragment_launcher, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
 }

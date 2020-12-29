@@ -17,7 +17,7 @@ public class ResponseProcessor {
             if(!response.equals("ERROR")){
                 JSONObject responseJSON = new JSONObject(response);
                 JSONArray images_profile = responseJSON.getJSONArray("images");
-                return new User(responseJSON,processImagesJSON(images_profile));
+                return new User(responseJSON,processUserImageJSON(images_profile));
             }
             else return null;
         }catch(Exception e){
@@ -74,6 +74,21 @@ public class ResponseProcessor {
         }
     }
 
+    public static void processTrackResponse(String response, Song song){
+        try{
+            if (!response.equals("ERROR")) {
+                JSONObject responseJson = new JSONObject(response);
+                processTrackJSON(responseJson,song);
+            }
+
+        }catch (Exception e){
+            System.out.println("Set track info: Error processing response");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+
+        }
+    }
+
     private static ArrayList<Artist> processArtistsJSON(JSONArray artistsJSON, ArrayList<Song> topSongs) throws JSONException{
         ArrayList<Artist> list = new ArrayList<>();
         for(int index = 0; index < artistsJSON.length(); index++){
@@ -103,14 +118,41 @@ public class ResponseProcessor {
 
     }
 
-    private static String processImagesJSON(JSONArray imagesJSON) throws JSONException {
-        String imageURL = null;
+    private static void processTrackJSON(JSONObject trackJSON, Song song) throws JSONException {
+        JSONObject albumInfo;
 
-        for(int index = 0; index < imagesJSON.length(); index ++){
-            JSONObject imageObject = imagesJSON.getJSONObject(index);
-            if(imageObject.has("url")) imageURL = imageObject.getString("url");
+        if(trackJSON.has("album")){
+            albumInfo = trackJSON.getJSONObject("album");
+            song.setCoverURL(processCoverAlbum(albumInfo));
+        }
+        if(trackJSON.has("preview_url")) song.setPrewviewURL(trackJSON.getString("preview_url"));
+        System.out.println("PREVIEW: " + song.getId());
+    }
+
+    private static String processCoverAlbum(JSONObject albumCoverJSON) throws JSONException{
+        String coverURL = null;
+
+        JSONArray images;
+        if(albumCoverJSON.has("images")){
+            images = albumCoverJSON.getJSONArray("images");
+            for(int index=0; index < images.length(); index ++){
+                JSONObject imageObject = images.getJSONObject(index);
+                if(imageObject.has("url")){
+                    if(imageObject.getInt("height") == 300) coverURL = imageObject.getString("url");
+                }
+            }
         }
 
+        return coverURL;
+    }
+
+    private static String processUserImageJSON(JSONArray userImagesJSON) throws JSONException {
+        String imageURL = null;
+
+        for(int index = 0; index < userImagesJSON.length(); index ++){
+            JSONObject imageObject = userImagesJSON.getJSONObject(index);
+            if(imageObject.has("url")) imageURL = imageObject.getString("url");
+        }
         return imageURL;
     }
 

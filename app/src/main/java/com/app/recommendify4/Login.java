@@ -1,7 +1,6 @@
 package com.app.recommendify4;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,19 +11,24 @@ import android.widget.Button;
 import com.app.recommendify4.ThreadManagers.ThreadLauncher;
 import com.app.recommendify4.UserInfo.Credentials;
 import com.app.recommendify4.UserInfo.UserProfile;
-import com.example.recommendify4.R;
+
 import com.google.gson.Gson;
+
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 public class Login extends AppCompatActivity {
     private static final int REQUEST_CODE = 1337;
-    private static final String CLIENT_ID = "4b1b0a636b8046a7b305efbf5745c09b";
-    private static final String REDIRECT_URI = "recommendify://";
+    protected static final String CLIENT_ID = "4b1b0a636b8046a7b305efbf5745c09b";
+    protected static final String REDIRECT_URI = "recommendify://";
     private Button login_button;
     private Credentials credentials;
     private static Context context;
+
+    public static final String PREFERENCES_NAME = "Login";
+    public static final String PREFERENCES_USER = "UserProfile";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,9 @@ public class Login extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        SharedPreferences userPreferences = getSharedPreferences("Login", MODE_PRIVATE);
-        String userProfile = userPreferences.getString("UserProfile",null);
+        SharedPreferences userPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        String userProfile = userPreferences.getString(PREFERENCES_USER,null);
+
         if(userProfile != null ){
             goMain();
         }
@@ -66,7 +71,7 @@ public class Login extends AppCompatActivity {
     protected  void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode,resultCode,intent);
 
-        SharedPreferences login = getSharedPreferences("Login", MODE_PRIVATE);
+        SharedPreferences login = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         SharedPreferences.Editor login_editor = login.edit();
 
         if (requestCode == REQUEST_CODE) {
@@ -86,8 +91,10 @@ public class Login extends AppCompatActivity {
 
                     Gson gson = new Gson();
                     String userProfile_json = gson.toJson(userProfile);
-                    login_editor.putString("UserProfile", userProfile_json);
+                    System.out.println("USER CREDENTIALS: " +userProfile_json);
+                    login_editor.putString(PREFERENCES_USER, userProfile_json);
                     login_editor.apply();
+
                     goMain();
                     break;
 

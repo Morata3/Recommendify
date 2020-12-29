@@ -6,7 +6,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.recommendify4.SpotifyItems.Artist;
-import com.example.recommendify4.R;
+import com.app.recommendify4.R;
 
 public class SoulmateArtistRecommendation extends AppCompatActivity {
     @Override

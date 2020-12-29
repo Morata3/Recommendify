@@ -1,7 +1,10 @@
 package com.app.recommendify4.SpotifyItems;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import org.json.JSONArray;
@@ -14,9 +17,11 @@ public class Song  implements Parcelable {
     private String album;
     private String id;
     private ArrayList<Artist> artists;
-    //private String Artist;
     private int timesInList;
     private boolean recommended;
+    private String coverURL;
+    private String prewviewURL;
+
 
     public Song(String songName, String albumName, ArrayList<Artist> artistsList, String songId, int timesInList){
         this.name = songName;
@@ -24,6 +29,8 @@ public class Song  implements Parcelable {
         this.artists = artistsList;
         this.id = songId;
         this.timesInList = timesInList;
+
+
     }
 
     public Song(String songName, String artistsList, String songId){
@@ -59,6 +66,18 @@ public class Song  implements Parcelable {
         return name;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getCoverURL(){return coverURL; }
+
+    public String getPrewviewURL(){ return prewviewURL; }
+
+    //public String getartists() {return Artist;}
+
+    //public void setArtists(String Artist){this.Artist = Artist;}
+
     public void setAlbum(String album) {
         this.album = album;
     }
@@ -71,13 +90,9 @@ public class Song  implements Parcelable {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
-    }
+    public void setCoverURL(String url) { this.coverURL = url; }
 
-    //public String getartists() {return Artist;}
-
-    //public void setArtists(String Artist){this.Artist = Artist;}
+    public void setPrewviewURL(String url)  {this.prewviewURL = url; }
 
     public void setId(String id) {
         this.id = id;
@@ -134,7 +149,6 @@ public class Song  implements Parcelable {
         public Song createFromParcel(Parcel in) {
             return new Song(in);
         }
-
         public Song[] newArray(int size) {
             return new Song[size];
         }

@@ -37,7 +37,7 @@ def recommend_artist(artist):
     # sort
     match_tuple = sorted(match_tuple, key=lambda x: x[2])[::-1]
     if not match_tuple:
-        print(f"The recommendation system could not find a match for {song}")
+        print(f"The recommendation system could not find a match for {artist}")
 
     recom_artist_id = match_tuple[0][1]
     # Start the recommendation process
