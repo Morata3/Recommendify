@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         songRecommendations = getRecommendationsList();
         artistRecommendations = getArtistRecommendationsList();
 
-        if(songRecommendations.size() == 0 && artistRecommendations.size() == 0) {
+        if(songRecommendations.size() == 0) {
 
             ArrayList<Song> userRecentlyPlayedSongs = userProfile.getRecentlyPlayedSongs();
             ArrayList<Song> userTopSongs = userProfile.getTopSongs();
