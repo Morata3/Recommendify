@@ -18,6 +18,7 @@ public class ContentThread implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("Content thread started");
         ArrayList<Song> recommendationsList = new ArrayList<>();
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("FinalRecomendator");
@@ -32,7 +33,9 @@ public class ContentThread implements Runnable{
             String title = Recoms[k].split(",")[0].substring(3,Recoms[k].split(",")[0].length()-1);
             String id =Recoms[k].split(",")[1].substring(2,Recoms[k].split(",")[1].length()-1);
             String artist = Recoms[k].split(",")[2].substring(2,Recoms[k].split(",")[2].length()-1);
-            recommendationsList.add(new Song(title, artist, id));
+            Song recommendedSong = new Song(title, artist, id);
+            recommendationsList.add(recommendedSong);
+            System.out.println("(***DEBUG_MESAGE) BASE SONG: "+baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString());
         }
         //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);
         callback.onComplete(recommendationsList);

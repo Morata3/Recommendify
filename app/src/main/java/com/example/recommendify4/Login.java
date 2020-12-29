@@ -80,6 +80,7 @@ public class Login extends AppCompatActivity {
                     builder_profile.execute(userProfile);
 
                     System.out.println("TOKEN:" + credentials.getAccess_token());
+                    System.out.println("TopPlayed: "+userProfile.getTopSongs().toString());
 
                     Gson gson = new Gson();
                     String userProfile_json = gson.toJson(userProfile);

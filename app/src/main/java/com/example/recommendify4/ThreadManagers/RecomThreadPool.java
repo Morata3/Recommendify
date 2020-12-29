@@ -19,7 +19,7 @@ public class RecomThreadPool {
                 NUMBER_OF_CORES*2,
                 KEEP_ALIVE_TIME,
                 KEEP_ALIVE_TIME_UNIT,
-                new LinkedBlockingDeque<Runnable>(100)
+                new LinkedBlockingDeque<Runnable>(200)
         );
     }
 

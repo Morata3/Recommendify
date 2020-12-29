@@ -5,8 +5,11 @@ import com.example.recommendify4.Dialogs.DialogCreatePlaylist;
 import com.example.recommendify4.Dialogs.DialogInformation;
 import com.example.recommendify4.Dialogs.DialogLoading;
 import com.example.recommendify4.Dialogs.DialogLogOut;
+import com.example.recommendify4.RecomThreads.CollaborativeCallback;
+import com.example.recommendify4.RecomThreads.CollaborativeThread;
 import com.example.recommendify4.RecomThreads.ContentCallback;
 import com.example.recommendify4.RecomThreads.ContentThread;
+import com.example.recommendify4.SpotifyItems.Artist;
 import com.example.recommendify4.SpotifyItems.Song;
 import com.example.recommendify4.ThreadManagers.RecomThreadPool;
 import com.example.recommendify4.UserInfo.UserProfile;
@@ -42,12 +45,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button artistButton;
     private Button playlistButton;
     private Button shuffleButton;
+    private Button soulmateButton;
 
     public TextView text;
     public String myresult;
 
     private UserProfile userProfile;
-    private ArrayList<Song> userRecommendations;
+    private ArrayList<Song> songRecommendations;
+    private ArrayList<Artist> artistRecommendations;
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -74,18 +80,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userProfile = getUserProfile();
         setupMenu(userProfile.getUser().getId(),userProfile.getUser().getPhoto());
 
-        userRecommendations = getRecommendationsList();
+        songRecommendations = getRecommendationsList();
+        artistRecommendations = getArtistRecommendationsList();
 
-        if(userRecommendations.size() == 0) {
+        if(songRecommendations.size() == 0 && artistRecommendations.size() == 0) {
+
             ArrayList<Song> userRecentlyPlayedSongs = userProfile.getRecentlyPlayedSongs();
             ArrayList<Song> userTopSongs = userProfile.getTopSongs();
+
             ThreadPoolExecutor executor = RecomThreadPool.getThreadPoolExecutor();
             for (Song song : userRecentlyPlayedSongs)
                 executor.execute(
                         new ContentThread(song, new ContentCallback() {
                             @Override
                             public synchronized void onComplete(ArrayList<Song> recommendations) {
-                                userRecommendations.addAll(recommendations);
+                                songRecommendations.addAll(recommendations);
                             }
                         })
                 );
@@ -96,10 +105,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ContentThread(song, new ContentCallback() {
                             @Override
                             public synchronized void onComplete(ArrayList<Song> recommendations) {
-                                userRecommendations.addAll(recommendations);
+                                songRecommendations.addAll(recommendations);
                             }
                         }));
         }
+
+        if(artistRecommendations.size() == 0) {
+
+            ArrayList<Artist> userTopArtists = userProfile.getTopArtists();
+
+            ThreadPoolExecutor executor = RecomThreadPool.getThreadPoolExecutor();
+
+            for (Artist artist : userTopArtists)
+                executor.execute(
+                        new CollaborativeThread(artist, new CollaborativeCallback() {
+                            @Override
+                            public synchronized void onComplete(ArrayList<Artist> recommendations) {
+                                artistRecommendations.addAll(recommendations);
+                            }
+                        }, userProfile)
+                );
+        }
+
+
+
+
 
         artistButton = (Button) findViewById(R.id.buttonArtist);
         artistButton.setOnClickListener(v -> artistRecommendation());
@@ -107,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         playlistButton.setOnClickListener(v -> openDialogCreatePlaylist());
         shuffleButton = (Button) findViewById(R.id.buttonShuffle);
         shuffleButton.setOnClickListener(v -> songRecommendation());
+        soulmateButton = (Button) findViewById(R.id.buttonSoulmate);
+        soulmateButton.setOnClickListener(v -> soulmateArtistRecommendation());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -210,10 +242,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void songRecommendation(){
         Intent intent = new Intent(this, ShuffleSongRecommendation.class);
         //intent.putExtra("songsToRecommend", userRecommendations);
-        if(userRecommendations != null && userRecommendations.size() > 0){
-            Song songToRecommend = userRecommendations.get(0);
-            intent.putExtra("songToRecommend", userRecommendations.get(0));
-            userRecommendations.remove(songToRecommend);
+        if(songRecommendations != null && songRecommendations.size() > 0){
+            Song songToRecommend = songRecommendations.get(0);
+            intent.putExtra("songToRecommend", songRecommendations.get(0));
+            songRecommendations.remove(songToRecommend);
+
+        }
+        startActivity(intent);
+    }
+
+    private void soulmateArtistRecommendation(){
+        Intent intent = new Intent(this, SoulmateArtistRecommendation.class);
+        //intent.putExtra("songsToRecommend", userRecommendations);
+        if(artistRecommendations != null && artistRecommendations.size() > 0){
+            Artist artistToRecommend = artistRecommendations.get(0);
+            intent.putExtra("artistToRecommend", artistRecommendations.get(0));
+            artistRecommendations.remove(artistToRecommend);
 
         }
         startActivity(intent);
@@ -229,8 +273,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private ArrayList<Song> getRecommendationsList(){
-        if(this.userRecommendations == null || this.userRecommendations.size() == 0) return new ArrayList<>();
-        else return this.userRecommendations;
+        if(this.songRecommendations == null || this.songRecommendations.size() == 0) return new ArrayList<>();
+        else return this.songRecommendations;
+    }
+
+    private ArrayList<Artist> getArtistRecommendationsList(){
+        if(this.artistRecommendations == null || this.artistRecommendations.size() == 0) return new ArrayList<>();
+        else return this.artistRecommendations;
     }
 
     @Override

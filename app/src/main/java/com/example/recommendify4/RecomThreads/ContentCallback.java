@@ -6,4 +6,5 @@ import java.util.ArrayList;
 
 public interface ContentCallback {
     void onComplete(ArrayList<Song> recommendations);
+
 }

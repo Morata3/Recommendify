@@ -56,4 +56,4 @@ def recommend_artist(artist):
 
     print(recommendations)
     
-    return ', '.join(recommendations)
+    return ','.join(recommendations)

@@ -9,7 +9,7 @@ public class Credentials implements Runnable{
     private static final String CLIENT_ID = "4b1b0a636b8046a7b305efbf5745c09b";
     private static final String CLIENT_SECRET = "9f3ed9fe6167487f8f129a5ef0ad4757";
     private static final String REDIRECT_URI = "recommendify://";
-    private static Date time_to_expire;
+    private  Date time_to_expire;
     private String access_token;
     private String refresh_token;
     private String token;

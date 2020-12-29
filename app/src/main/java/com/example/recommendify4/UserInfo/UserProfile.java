@@ -29,6 +29,10 @@ public class UserProfile implements Runnable{
 
     }
 
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
     public User getUser() { return user; }
 
     public ArrayList<Artist> getRecentlyPlayedArtists() { return recentlyPlayedArtists; }
