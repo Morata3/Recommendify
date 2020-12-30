@@ -34,27 +34,30 @@ public class CollaborativeThread implements Runnable{
         PyObject pyf = py.getModule("AndroidArtistRecommender");
         PyObject obj = pyf.callAttr("recommend_artist", baseForRecommendations.getName());
 
-        String recommendations = obj.toString();
+        String recommenderOutput = obj.toString();
 
+        if(!recommenderOutput.startsWith("(ERROR):")) {
 
-        String[] recommended_artists = recommendations.split(",");
+            String[] recommended_artists = recommenderOutput.split(",");
 
-        for(int k = 0; k < recommended_artists.length; k++){
+            for (int k = 0; k < recommended_artists.length; k++) {
 
-            //call the Spotify API to obtain data for the recommended artist
-            String recommendedArtistStr = RequestSender.searchArtistByName(recommended_artists[k], userProfile.getCredentials());
-            try {
-                JSONObject possibleArtistJSON = new JSONObject(recommendedArtistStr);
-                JSONObject artistInfo = possibleArtistJSON.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
-                Artist recommendedArtist = new Artist(artistInfo, 0);
-                recommendationsList.add(recommendedArtist);
-                System.out.println("BASE ARTIST: "+baseForRecommendations.getName()+"Recommended artist: "+recommendedArtist.getName());
-            } catch (JSONException e) {
-                e.printStackTrace();
+                //call the Spotify API to obtain data for the recommended artist
+                String recommendedArtistStr = RequestSender.searchArtistByName(recommended_artists[k], userProfile.getCredentials());
+                try {
+                    JSONObject possibleArtistJSON = new JSONObject(recommendedArtistStr);
+                    JSONObject artistInfo = possibleArtistJSON.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
+                    Artist recommendedArtist = new Artist(artistInfo, 0);
+                    recommendationsList.add(recommendedArtist);
+                    System.out.println("BASE ARTIST: " + baseForRecommendations.getName() + "Recommended artist: " + recommendedArtist.getName());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);
-        callback.onComplete(recommendationsList);
+            //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);
+            callback.onComplete(recommendationsList);
+        }else
+            System.out.println(recommenderOutput);
     }
 
 }
