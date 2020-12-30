@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.recommendify4.R;
+import com.app.recommendify4.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;

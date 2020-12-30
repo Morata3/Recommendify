@@ -30,11 +30,10 @@ public class UserProfile implements Runnable{
 
     }
 
-    public Credentials getCredentials() {
-        return credentials;
-    }
 
     public User getUser() { return user; }
+
+    public Credentials getCredentials(){return credentials; }
 
     public ArrayList<Artist> getRecentlyPlayedArtists() { return recentlyPlayedArtists; }
 
@@ -92,6 +91,7 @@ public class UserProfile implements Runnable{
         if(topArtistsList != null) topArtists = topArtistsList;
 
     }
+
 
     @Override
     public void run() {

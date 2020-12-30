@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.app.recommendify4.Login;
-import com.example.recommendify4.R;
+import com.app.recommendify4.R;
 
 public class DialogLogOut extends AppCompatDialogFragment {
     @NonNull

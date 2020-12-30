@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import com.example.recommendify4.R;
+import com.app.recommendify4.R;
 
 public class DialogInformation extends AppCompatDialogFragment {
     @NonNull

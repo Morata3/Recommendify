@@ -12,7 +12,7 @@ import com.app.recommendify4.Dialogs.DialogLoading;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-import com.example.recommendify4.R;
+import com.app.recommendify4.R;
 
 public class ArtistRecommendation extends AppCompatActivity {
 

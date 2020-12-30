@@ -14,7 +14,7 @@ public class User {
 
     private String id;
     private String name;
-    private String image;
+    private String imageURL;
 
     public User(){
 
@@ -30,7 +30,7 @@ public class User {
 
     public String getName() { return name; }
 
-    public String getPhoto() {return image; }
+    public String getImageURL() {return imageURL; }
 
     public void setId(String id) { this.id = id; }
 
@@ -40,7 +40,7 @@ public class User {
 
         if(url != null){
             System.out.println("Setting image");
-            this.image = url;
+            this.imageURL = url;
         }
     }
 

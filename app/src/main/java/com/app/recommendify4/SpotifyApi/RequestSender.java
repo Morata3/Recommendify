@@ -17,6 +17,7 @@ public class RequestSender {
 
     private static final String RECENTLY_PLAYED_ENDPOINT = "https://api.spotify.com/v1/me/player/recently-played";
     private static final String TOP_ARTISTS_AND_TRACKS_ENDPOINT = "https://api.spotify.com/v1/me/top";
+    private static final String TRACK_INFO_ENDPOINT = "https://api.spotify.com/v1/tracks/";
     private static final String SEARCH_ENDPOINT = "https://api.spotify.com/v1/search";
     private static final String USER_INFO_ENDPOINT = "https://api.spotify.com/v1/me";
     private static final String CREATE_PLAYLIST_ENDPOINT = "https://api.spotify.com/v1/users/";
@@ -149,6 +150,20 @@ public class RequestSender {
             return "ERROR";
         }
 
+    }
+
+    public static String getTrackInfo(Credentials credentials, String trackId){
+        credentials.checkTokenExpiration();
+        try {
+            URL obj = new URL(TRACK_INFO_ENDPOINT + trackId);
+            HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "GET");
+            return getResponseFromApi(con);
+        } catch (Exception e) {
+            System.out.println("Get Track: Error receiving data from Spotify Api");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return "ERROR";
+        }
     }
 
     private static HttpURLConnection buildHttpRequest(String accessToken, URL url, String method) throws IOException {
