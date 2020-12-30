@@ -35,7 +35,6 @@ public class FragmentSong extends Fragment {
     private static final String SONGRECOMMENDED = "RecommendedSong";
     private static final String CREDENTIALS = "Credentials";
     private ArrayList<Song> listOfRecommendations;
-    private UserRecommendations userRecommendations;
 
     private Song song;
     private Credentials credentials;
@@ -92,7 +91,6 @@ public class FragmentSong extends Fragment {
         song = listOfRecommendations.get(0);
         listOfRecommendations.remove(song);
 
-        userRecommendations = new UserRecommendations(credentials,song);
         ThreadLauncher builder_updateTrack = new ThreadLauncher();
         builder_updateTrack.execute(new Runnable() {
             @Override

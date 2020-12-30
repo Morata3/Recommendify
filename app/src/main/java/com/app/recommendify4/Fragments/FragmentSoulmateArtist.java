@@ -93,23 +93,15 @@ public class FragmentSoulmateArtist extends Fragment {
         builder_updateTrack.execute(new Runnable() {
             @Override
             public void run() {
-                String response = RequestSender.getTrackInfo(credentials, artist.getId());
-                ResponseProcessor.processTrackResponse(response, artist);
+//                String response = RequestSender.getTrackInfo(credentials, artist.getId());
+//                ResponseProcessor.processTrackResponse(response, artist);
             }
         });
 
-        System.out.println("IMAGEN: " + artist.getCoverURL());
-
         if(artist != null){
             artistNameView.setText(artist.getName());
-            Glide.with(this).load(artist.getCoverURL()).into(artistImage);
-            try {
-                if(artist.getPrewviewURL() != null) playSOng();
-                else System.out.println("Song without preview URL");
-            } catch (IOException e) {
-                System.out.println("Error trying to play song");
-                e.printStackTrace();
-            }
+//            Glide.with(this).load(artist.getCoverURL()).into(artistImage);
+
         }else{
             artistNameView.setText("No more songs");
         }

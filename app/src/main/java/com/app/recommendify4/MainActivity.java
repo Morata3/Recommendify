@@ -47,9 +47,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
-    private Button artistButton;
-    private Button playlistButton;
-    private Button soulmateButton;
 
     private FragmentTransaction fragmentTransaction;
     private Fragment fragmentLauncher;
@@ -139,11 +136,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 );
         }
 
-        artistButton = (Button) findViewById(R.id.buttonArtist);
-        artistButton.setOnClickListener(v -> artistRecommendation());
-        playlistButton = (Button) findViewById(R.id.buttonPlaylist);
-        playlistButton.setOnClickListener(v -> openDialogCreatePlaylist());
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -218,6 +210,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.buttonSoulmate:
                 soulmateArtistRecommendation();
                 break;
+            case R.id.buttonPlaylist:
+                openDialogCreatePlaylist();
+                break;
+            case R.id.buttonArtist:
+                artistRecommendation();
+                break;
+
         }
         fragmentTransaction.commit();
     }

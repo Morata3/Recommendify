@@ -17,12 +17,18 @@
         <TextView
             android:id="@+id/artistName"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="315dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="178dp"
             android:gravity="center"
             android:text="@string/noRecomendation"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="20sp"
-            tools:layout_editor_absoluteY="240dp" />
+            app:layout_constraintBottom_toTopOf="@+id/nextArtist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/artistImage"
@@ -37,10 +43,13 @@
         <ImageButton
             android:id="@+id/nextArtist"
             android:layout_width="125dp"
-            android:layout_height="53dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="298dp"
             android:src="@android:drawable/ic_media_next"
-            tools:layout_editor_absoluteX="143dp"
-            tools:layout_editor_absoluteY="463dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artistName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
