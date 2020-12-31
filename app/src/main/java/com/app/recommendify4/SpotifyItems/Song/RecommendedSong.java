@@ -4,23 +4,31 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class RecommendedSong extends Song implements Parcelable {
     private ArrayList<RecommendedArtist> artists;
     private int shown;
     private String coverURL;
+    private int Coincidence;
     private String previewURL;
+    private String ArtistString;
 
     public RecommendedSong(String songName, String albumName, String songId, ArrayList<RecommendedArtist> artists, int shown){
         super(songName, albumName, songId);
         this.artists = artists;
         this.shown = shown;
+        this.Coincidence = 0;
     }
 
     public RecommendedSong(String songName, String artistsList, String songId, int shown){
         super(songName, songId);
         this.artists = getArtistsFromString(artistsList);
         this.shown = shown;
+        this.Coincidence = 0;
+        this.ArtistString = artistsList;
+
+
     }
 
     public void setArtists(ArrayList<RecommendedArtist> artists) { this.artists = artists; }
@@ -34,6 +42,14 @@ public class RecommendedSong extends Song implements Parcelable {
     public void setCoverURL(String url) { this.coverURL = url; }
 
     public void setPreviewURL(String url)  {this.previewURL = url; }
+
+    public int getCoincidence(){return Coincidence; }
+
+    public String getartistsString() {return ArtistString;}
+
+    public void setArtists(String Artist){this.ArtistString = Artist;}
+
+    public void setCoincidence(int Coincidence){this.Coincidence = Coincidence;}
 
     public boolean wasShown() { return shown != 0; }
 
@@ -82,4 +98,16 @@ public class RecommendedSong extends Song implements Parcelable {
         dest.writeTypedList(artists);
         dest.writeInt(shown);
     }
+
+    public static Comparator<RecommendedSong> Coincidences = new Comparator<RecommendedSong>() {
+
+        public int compare(RecommendedSong s1, RecommendedSong s2) {
+
+            int song1 = s1.getCoincidence();
+            int song2 = s2.getCoincidence();
+
+            return song2-song1;
+
+        }};
+
 }

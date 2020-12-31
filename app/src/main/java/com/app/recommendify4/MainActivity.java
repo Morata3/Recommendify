@@ -8,26 +8,25 @@ import com.app.recommendify4.Fragments.FragmentHybrid;
 import com.app.recommendify4.RecomThreads.CollaborativeCallback;
 import com.app.recommendify4.RecomThreads.ContentCallback;
 import com.app.recommendify4.RecomThreads.ContentThread;
-import com.app.recommendify4.SpotifyItems.Artist;
-import com.app.recommendify4.SpotifyItems.Song;
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
+import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
+import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.ThreadManagers.RecomThreadPool;
+import com.app.recommendify4.ThreadManagers.ThreadLauncher;
 import com.app.recommendify4.UserInfo.UserProfile;
 import com.bumptech.glide.Glide;
-
 import com.app.recommendify4.RecomThreads.CollaborativeThread;
-
 import com.app.recommendify4.Fragments.FragmentLauncher;
 import com.app.recommendify4.Fragments.FragmentSong;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.app.recommendify4.UserInfo.Credentials;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -36,13 +35,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import com.app.recommendify4.UserInfo.UserRecommendations;
+import com.app.recommendify4.UserInfo.Recommendations;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -52,20 +50,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FragmentTransaction fragmentTransaction;
     private Fragment fragmentLauncher;
-    private Fragment fragmentSong;
-    private Fragment fragmentHybrid;
-
-
+    private FragmentSong fragmentSong;
+    private FragmentHybrid fragmentHybrid;
     public TextView text;
+    private int index = 0;
 
     private UserProfile userProfile;
-    private ArrayList<Song> songRecommendations;
-    private ArrayList<Artist> artistRecommendations;
-
-    private ArrayList<Song> songsRecommendations = new ArrayList<>();
-
-    private UserRecommendations profileRecommend;
     private Credentials credentials;
+
+    private Recommendations userRecommendations;
+    private int lastTopSongProcessed = 0;
+    private int lastTopArtistProcessed = 0;
+    private int lastRecentlySongProcessed = 0;
+    private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
+    private final ContentCallback contentThreadCallback = new ContentCallback() {
+        @Override
+        public synchronized void onComplete(ArrayList<RecommendedSong> recommendations) {
+            userRecommendations.addSongRecommendations(recommendations);
+        }
+    };
+    private final CollaborativeCallback collaborativeThreadCallback = new CollaborativeCallback() {
+        @Override
+        public void onComplete(ArrayList<RecommendedArtist> recommendations) {
+            userRecommendations.addArtistRecommendations(recommendations);
+        }
+    };
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_logout:
                 openDialogLogOut();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -89,79 +99,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        userProfile = getUserProfile();
-        credentials = userProfile.getCredentials();
-
-        songRecommendations = getRecommendationsList();
-        artistRecommendations = getArtistRecommendationsList();
-
+        setUpUserInfo();
         setupMenu(userProfile.getUser().getName(),userProfile.getUser().getImageURL());
         setupFragment();
-
-
-        if(songsRecommendations.size() == 0) {
-            ArrayList<Song> userRecentlyPlayedSongs = userProfile.getRecentlyPlayedSongs();
-            ArrayList<Song> userTopSongs = userProfile.getTopSongs();
-
-            ThreadPoolExecutor executor = RecomThreadPool.getThreadPoolExecutor();
-            for (Song song : userTopSongs)
-                executor.execute(
-                        new ContentThread(song, new ContentCallback() {
-                            @Override
-                            public synchronized void onComplete(ArrayList<Song> recommendations) {
-                                songRecommendations.addAll(recommendations);
-                                songsRecommendations.addAll(recommendations);
-                            }
-                        }));
-
-            for (Song song : userRecentlyPlayedSongs)
-                executor.execute(
-                        new ContentThread(song, new ContentCallback() {
-                            @Override
-                            public synchronized void onComplete(ArrayList<Song> recommendations) {
-                                songRecommendations.addAll(recommendations);
-                                songsRecommendations.addAll(recommendations);
-                            }
-                        })
-                );
-        }
-
-        if(artistRecommendations.size() == 0) {
-            ArrayList<Artist> userTopArtists = userProfile.getTopArtists();
-            ThreadPoolExecutor executor = RecomThreadPool.getThreadPoolExecutor();
-            for (Artist artist : userTopArtists)
-                executor.execute(
-                        new CollaborativeThread(artist, new CollaborativeCallback() {
-                            @Override
-                            public synchronized void onComplete(ArrayList<Artist> recommendations) {
-                                artistRecommendations.addAll(recommendations);
-                            }
-                        }, userProfile)
-                );
-        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-              switch (menuItem.getItemId()) {
+                switch (menuItem.getItemId()) {
 
-                case R.id.advanced:
-                    startActivity(new Intent(getApplicationContext()
-                            , Advanced.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                case R.id.home:
-                    return true;
-                case R.id.history:
-                    startActivity(new Intent(getApplicationContext()
-                            , History.class));
-                    overridePendingTransition(0, 0);
-                    return true;
+                    case R.id.advanced:
+                        startActivity(new Intent(getApplicationContext()
+                                , Advanced.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.home:
+                        return true;
+                    case R.id.history:
+                        System.out.println("HISTORIAL DE CANCIONS: ");
+                        for(RecommendedSong song : userRecommendations.getSongsShown()) System.out.println(song);
 
-              }
-            return false;
+                    /*startActivity(new Intent(getApplicationContext()
+                            , History.class));*/
+                        //overridePendingTransition(0, 0);
+                        return true;
+
+                }
+                return false;
             }
         });
 
@@ -179,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
+        setUpUserInfo();
     }
 
 
@@ -188,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void openDialogCreatePlaylist(){
         DialogCreatePlaylist dialogCreatePlaylist = new DialogCreatePlaylist();
+        Bundle arguments = new Bundle();
+        arguments.putString("userId", userProfile.getUser().getId());
+        arguments.putParcelableArrayList("playlistSongs", userRecommendations.getSongsRecommendations());
+        arguments.putParcelable("credentials", userProfile.getCredentials());
+        dialogCreatePlaylist.setArguments(arguments);
         dialogCreatePlaylist.show(getSupportFragmentManager(),"Create Playlist");
     }
     public void openDialogLogOut(){
@@ -205,8 +177,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction=getSupportFragmentManager().beginTransaction();
         switch (view.getId()){
             case R.id.buttonShuffle:
-                if(songsRecommendations != null && songsRecommendations.size() > 0){
-                    fragmentSong = FragmentSong.newInstance(songsRecommendations,credentials);
+                if(userRecommendations.getSongsRecommendations() != null && userRecommendations.getSongsRecommendations().size() > 0){
+                    fragmentSong = FragmentSong.newInstance(userRecommendations.getSongsRecommendations(),credentials);
                     fragmentTransaction.replace(R.id.fragmentMain,fragmentSong);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Recommendations not yet ready ");
@@ -221,16 +193,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 artistRecommendation();
                 break;
             case R.id.buttonHybrid:
+                System.out.println("Llego aqí ni que sea");
+                if(this.userRecommendations.getArtistRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0 ||
+                        this.userRecommendations.getSongsRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0){
 
-                if(songsRecommendations != null && songsRecommendations.size() > -1){
-                    fragmentHybrid = FragmentHybrid.newInstance(songsRecommendations,credentials);
-                    fragmentTransaction.replace(R.id.fragmentMain,fragmentSong);
+                    fragmentHybrid = FragmentHybrid.newInstance(getHybridSongs(),credentials);
+                    fragmentTransaction.replace(R.id.fragmentMain,fragmentHybrid);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Recommendations not yet ready ");
                 break;
 
         }
         fragmentTransaction.commit();
+    }
+
+    public ArrayList<RecommendedSong> getHybridSongs(){
+        if(this.userRecommendations.getArtistRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0 ||
+                this.userRecommendations.getSongsRecommendations() == null || this.userRecommendations.getSongsRecommendations().size() == 0)
+            return new ArrayList<>();
+        else{
+            ArrayList<RecommendedSong> HybridRecommendations =  this.userRecommendations.getSongsRecommendations();
+            for(RecommendedSong song : HybridRecommendations ){
+                for(RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()){
+
+                    if(song.getartistsString().equals(artist.getName())){
+
+                        song.setCoincidence(song.getCoincidence()+1);
+
+                    }
+                }
+            }
+            Collections.sort(HybridRecommendations, RecommendedSong.Coincidences);
+
+            return HybridRecommendations;
+        }
+
+
     }
 
     public void setupFragment(){
@@ -269,16 +267,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
+
     private void soulmateArtistRecommendation(){
         Intent intent = new Intent(this, SoulmateArtistRecommendation.class);
         //intent.putExtra("songsToRecommend", userRecommendations);
-        if(artistRecommendations != null && artistRecommendations.size() > 0){
-            Artist artistToRecommend = artistRecommendations.get(0);
-            intent.putExtra("artistToRecommend", artistRecommendations.get(0));
-            artistRecommendations.remove(artistToRecommend);
+        if(userRecommendations.getArtistRecommendations() != null && userRecommendations.getArtistRecommendations().size() > 0){
+            RecommendedArtist artistToRecommend = userRecommendations.getArtistRecommendations().get(0);
+            intent.putExtra("artistToRecommend", artistToRecommend);
+            userRecommendations.moveToHistory(artistToRecommend);
 
         }
         startActivity(intent);
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    private void setUpUserInfo(){
+        userProfile = getUserProfile();
+        credentials = userProfile.getCredentials();
+
+        if(userRecommendations == null) userRecommendations = new Recommendations();
+        else userRecommendations.updateLists();
+
+        if(userRecommendations.getSongsRecommendations().size() == 0) {
+            index++;
+            ArrayList<UserSong> userRecentlyPlayedSongs = userProfile.getRecentlyPlayedSongs();
+            ArrayList<UserSong> userTopSongs = userProfile.getTopSongs();
+
+            if(lastRecentlySongProcessed != userRecentlyPlayedSongs.size()){
+                int upLimitRecentlySongs = getLastIndexToProccess(lastRecentlySongProcessed, userRecentlyPlayedSongs.size());
+                for (UserSong song : userRecentlyPlayedSongs.subList(lastRecentlySongProcessed, upLimitRecentlySongs)) {
+                    threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback));
+                    lastRecentlySongProcessed = upLimitRecentlySongs;
+                }
+            }
+
+            if(lastTopSongProcessed != userTopSongs.size()){
+                int upLimitTopSongs = getLastIndexToProccess(lastTopSongProcessed, userTopSongs.size());
+                for (UserSong song : userTopSongs.subList(lastTopSongProcessed, upLimitTopSongs)) {
+                    threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback));
+                    lastTopSongProcessed = upLimitTopSongs;
+                }
+            }
+
+            if(lastRecentlySongProcessed == userRecentlyPlayedSongs.size() && lastTopSongProcessed == userTopSongs.size() - 40){
+                updateUserProfile();
+                lastRecentlySongProcessed = lastTopSongProcessed = lastTopArtistProcessed = 0;
+            }
+
+
+        }
+
+        if(userRecommendations.getArtistRecommendations().size() == 0) {
+            ArrayList<UserArtist> userTopArtists = userProfile.getTopArtists();
+            int upLimitTopArtists = getLastIndexToProccess(lastTopArtistProcessed, userTopArtists.size());
+
+            for (UserArtist artist : userTopArtists.subList(lastTopArtistProcessed, upLimitTopArtists)){
+                threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, userProfile));
+                lastTopArtistProcessed = upLimitTopArtists;
+            }
+
+            if(lastTopArtistProcessed == userTopArtists.size()){
+                updateUserProfile();
+                lastRecentlySongProcessed = lastTopSongProcessed = lastTopArtistProcessed = 0;
+            }
+        }
+
     }
 
     private UserProfile getUserProfile(){
@@ -291,45 +349,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else return this.userProfile;
     }
 
-    public ArrayList<Song> getHybridSongs(){
-        if(this.songRecommendations == null || this.songRecommendations.size() == 0 || this.artistRecommendations == null || this.artistRecommendations.size() == 0)
-            return new ArrayList<>();
-        else{
-            for(Song song : songRecommendations){
-                for(Artist artist : artistRecommendations){
 
-                    System.out.println(artist.getName());
-                    System.out.println(song.getartistsString());
-
-
-                    if(song.getartistsString().equals(artist.getName())){
-
-                        song.setCoincidence(song.getCoincidence()+1);
-
-                    }
-                }
-            }
-            Collections.sort(songRecommendations, Song.Coincidences);
-
-            return this.songsRecommendations;
-        }
-
-
+    private int getLastIndexToProccess(int currentIndex, int listSize){
+        if(currentIndex + 5 <= listSize) return currentIndex + 5;
+        else return listSize;
     }
 
-    private ArrayList<Song> getRecommendationsList(){
-        if(this.songRecommendations == null || this.songRecommendations.size() == 0) return new ArrayList<>();
-        else return this.songRecommendations;
-    }
-
-    private ArrayList<Artist> getArtistRecommendationsList(){
-        if(this.artistRecommendations == null || this.artistRecommendations.size() == 0) return new ArrayList<>();
-        else return this.artistRecommendations;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    private void updateUserProfile(){
+        SharedPreferences login = getSharedPreferences(Login.PREFERENCES_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor login_editor = login.edit();
+        UserProfile userProfile = new UserProfile(credentials);
+        ThreadLauncher builder_profile = new ThreadLauncher();
+        builder_profile.execute(userProfile);
+        Gson gson = new Gson();
+        String userProfile_json = gson.toJson(userProfile);
+        //System.out.println("USER CREDENTIALS: " +userProfile_json);
+        login_editor.putString(Login.PREFERENCES_USER, userProfile_json);
+        login_editor.apply();
     }
 
 }
