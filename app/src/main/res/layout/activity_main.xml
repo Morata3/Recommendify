@@ -24,66 +24,79 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonHybrid"
             app:menu="@menu/menu_navigation" />
 
         <Button
             android:id="@+id/buttonShuffle"
             android:layout_width="160dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="140dp"
-            android:text="Shuffle Song"
+            android:layout_marginTop="107dp"
+            android:layout_marginBottom="35dp"
             android:onClick="onClick"
-            app:layout_constraintBottom_toTopOf="@+id/buttonPlaylist"
+            android:text="Shuffle Song"
+            app:layout_constraintBottom_toTopOf="@+id/buttonSoulmate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/buttonSoulmate"
             android:layout_width="160dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="102dp"
-            android:layout_marginBottom="102dp"
-            android:text="Soulmate artist"
+            android:layout_marginBottom="35dp"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="@+id/buttonPlaylist"
+            android:text="Soulmate artist"
+            app:layout_constraintBottom_toTopOf="@+id/buttonPlaylist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buttonShuffle" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonShuffle" />
 
         <Button
             android:id="@+id/buttonPlaylist"
             android:layout_width="160dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="344dp"
-            android:text="Generate playlist"
+            android:layout_marginBottom="37dp"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Generate playlist"
+            app:layout_constraintBottom_toTopOf="@+id/buttonArtist"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonSoulmate" />
 
         <Button
             android:id="@+id/buttonArtist"
             android:layout_width="160dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="37dp"
-            android:text="Recommend artist"
+            android:layout_marginBottom="47dp"
             android:onClick="onClick"
+            android:text="Recommend artist"
+            app:layout_constraintBottom_toTopOf="@+id/buttonHybrid"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPlaylist" />
+
+        <Button
+            android:id="@+id/buttonHybrid"
+            android:layout_width="160dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="64dp"
+            android:text="hybrid"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonArtist" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

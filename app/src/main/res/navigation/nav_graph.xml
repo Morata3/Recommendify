@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_fragmentLauncher_to_fragmentSoulmateArtist"
             app:destination="@id/fragmentSoulmateArtist" />
+        <action
+            android:id="@+id/action_fragmentLauncher_to_fragmentHybrid"
+            app:destination="@id/fragmentHybrid" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSong"
@@ -32,6 +35,15 @@
         tools:layout="@layout/fragment_soulmate_artist">
         <action
             android:id="@+id/action_fragmentSoulmateArtist_to_fragmentLauncher"
+            app:destination="@id/fragmentLauncher" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentHybrid"
+        android:name="com.app.recommendify4.Fragments.FragmentHybrid"
+        android:label="fragment_hybrid"
+        tools:layout="@layout/fragment_hybrid" >
+        <action
+            android:id="@+id/action_fragmentHybrid_to_fragmentLauncher"
             app:destination="@id/fragmentLauncher" />
     </fragment>
 

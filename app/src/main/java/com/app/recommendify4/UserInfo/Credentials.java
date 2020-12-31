@@ -1,9 +1,9 @@
 package com.app.recommendify4.UserInfo;
 
-import com.app.recommendify4.SpotifyApi.RequestSender;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.app.recommendify4.SpotifyApi.RequestSender;
 
 import org.json.JSONObject;
 
