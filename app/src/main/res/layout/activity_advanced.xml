@@ -8,7 +8,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="1dp"
@@ -17,8 +17,8 @@
         app:itemTextColor="@drawable/selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:menu="@menu/menu_navigation" />
 
     <Switch
@@ -26,55 +26,74 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Positive"
+        android:textColor="#ffaa4841"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/negative"
-        app:layout_constraintStart_toStartOf="@+id/danceable"
-        app:layout_constraintTop_toBottomOf="@+id/danceable" />
+        app:layout_constraintStart_toStartOf="@+id/instru"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
     <Switch
         android:id="@+id/instru"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="254dp"
         android:text="Instrumental"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintStart_toStartOf="@+id/high"
-        app:layout_constraintTop_toBottomOf="@+id/high" />
+        android:textColor="#ffaa4841"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/live"
+        app:layout_constraintTop_toBottomOf="@+id/danceable" />
 
     <Switch
         android:id="@+id/danceable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginBottom="6dp"
         android:text="Danceable"
-        app:layout_constraintBottom_toTopOf="@+id/positive"
-        app:layout_constraintStart_toStartOf="@+id/live"
+        android:textColor="#ffaa4841"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintStart_toStartOf="@+id/instru"
         app:layout_constraintTop_toBottomOf="@+id/live" />
 
     <Switch
         android:id="@+id/low"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
         android:text="Low Energy"
+        android:textColor="#ffaa4841"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/high"
         app:layout_constraintStart_toStartOf="@+id/negative"
         app:layout_constraintTop_toBottomOf="@+id/negative" />
 
     <Switch
         android:id="@+id/live"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
-        android:layout_marginLeft="19dp"
+        android:layout_width="110dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginLeft="102dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginRight="101dp"
         android:text="Live"
+        android:textColor="#ffaa4841"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/danceable"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Switch
         android:id="@+id/high"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="59dp"
         android:text="High Energy"
-        app:layout_constraintBottom_toTopOf="@+id/instru"
+        android:textColor="#ffaa4841"
+        android:textColorLink="#ffaa4841"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/songs"
         app:layout_constraintStart_toStartOf="@+id/low"
         app:layout_constraintTop_toBottomOf="@+id/low" />
 
@@ -83,51 +102,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Negative"
+        android:textColor="#ffaa4841"
+        android:textColorLink="#A81F1F"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/low"
         app:layout_constraintStart_toStartOf="@+id/positive"
         app:layout_constraintTop_toBottomOf="@+id/positive" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="160dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="104dp"
-        android:layout_marginLeft="104dp"
-        android:layout_marginTop="128dp"
-        android:layout_marginBottom="45dp"
-        android:text="Filters to apply"
+        android:layout_width="221dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="73dp"
+        android:layout_marginBottom="80dp"
+        android:text="Filters"
+        android:textAllCaps="true"
+        android:textColor="#B32626"
+        android:textSize="55sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/live"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/songs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_width="162dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="37dp"
         android:text="Songs!"
-        app:layout_constraintEnd_toEndOf="@+id/instru"
-        app:layout_constraintTop_toBottomOf="@+id/instru" />
+        android:textColor="#ffaa4841"
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/high" />
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="376dp"
-        android:layout_height="112dp"
-        android:layout_marginTop="540dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="206dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/songs" />
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:layout_editor_absoluteX="315dp"
-        tools:layout_editor_absoluteY="258dp" />
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="21dp"
+        app:layout_constraintBottom_toTopOf="@+id/positive"
+        app:layout_constraintEnd_toEndOf="@+id/danceable"
+        app:layout_constraintStart_toEndOf="@+id/positive"
+        app:layout_constraintTop_toBottomOf="@+id/danceable" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
