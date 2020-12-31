@@ -1,7 +1,8 @@
 package com.app.recommendify4.RecomThreads;
 
 import com.app.recommendify4.SpotifyApi.RequestSender;
-import com.app.recommendify4.SpotifyItems.Artist;
+import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.UserInfo.UserProfile;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -13,11 +14,11 @@ import org.json.JSONObject;
 
 public class CollaborativeThread implements Runnable{
 
-    private final Artist baseForRecommendations;
+    private final UserArtist baseForRecommendations;
     private final CollaborativeCallback callback;
     private final UserProfile userProfile;
 
-    public CollaborativeThread(Artist baseForRecommendations, CollaborativeCallback callback, UserProfile userProfile){
+    public CollaborativeThread(UserArtist baseForRecommendations, CollaborativeCallback callback, UserProfile userProfile){
         this.baseForRecommendations = baseForRecommendations;
         this.callback = callback;
         this.userProfile= userProfile;
@@ -28,7 +29,7 @@ public class CollaborativeThread implements Runnable{
     public void run() {
         System.out.println("Collaborative thread started");
 
-        ArrayList<Artist> recommendationsList = new ArrayList<>();
+        ArrayList<RecommendedArtist> recommendationsList = new ArrayList<>();
 
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("AndroidArtistRecommender");
@@ -47,7 +48,7 @@ public class CollaborativeThread implements Runnable{
                 try {
                     JSONObject possibleArtistJSON = new JSONObject(recommendedArtistStr);
                     JSONObject artistInfo = possibleArtistJSON.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
-                    Artist recommendedArtist = new Artist(artistInfo, 0);
+                    RecommendedArtist recommendedArtist = new RecommendedArtist(artistInfo, 0);
                     recommendationsList.add(recommendedArtist);
                     System.out.println("BASE ARTIST: " + baseForRecommendations.getName() + "Recommended artist: " + recommendedArtist.getName());
                 } catch (JSONException e) {

@@ -1,6 +1,7 @@
 package com.app.recommendify4.RecomThreads;
 
-import com.app.recommendify4.SpotifyItems.Song;
+import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 
@@ -8,10 +9,10 @@ import java.util.ArrayList;
 
 public class ContentThread implements Runnable{
 
-    private final Song baseForRecommendations;
+    private final UserSong baseForRecommendations;
     private final ContentCallback callback;
 
-    public ContentThread(Song baseForRecommendations, ContentCallback callback){
+    public ContentThread(UserSong baseForRecommendations, ContentCallback callback){
         this.baseForRecommendations = baseForRecommendations;
         this.callback = callback;
     }
@@ -20,7 +21,8 @@ public class ContentThread implements Runnable{
     @Override
     public void run() {
         System.out.println("Content thread started");
-        ArrayList<Song> recommendationsList = new ArrayList<>();
+        System.out.println("BASE SONG: " + baseForRecommendations);
+        ArrayList<RecommendedSong> recommendationsList = new ArrayList<>();
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("FinalRecomendator");
 
@@ -34,7 +36,7 @@ public class ContentThread implements Runnable{
             String title = Recoms[k].split(",")[0].substring(3,Recoms[k].split(",")[0].length()-1);
             String id =Recoms[k].split(",")[1].substring(2,Recoms[k].split(",")[1].length()-1);
             String artist = Recoms[k].split(",")[2].substring(2,Recoms[k].split(",")[2].length()-1);
-            Song recommendedSong = new Song(title, artist, id);
+            RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0);
             recommendationsList.add(recommendedSong);
             System.out.println("(***DEBUG_MESAGE) BASE SONG: "+baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString());
         }

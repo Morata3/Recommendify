@@ -2,8 +2,10 @@ package com.app.recommendify4.UserInfo;
 
 import com.app.recommendify4.SpotifyApi.RequestSender;
 import com.app.recommendify4.SpotifyApi.ResponseProcessor;
-import com.app.recommendify4.SpotifyItems.Artist;
-import com.app.recommendify4.SpotifyItems.Song;
+import com.app.recommendify4.SpotifyItems.Artist.Artist;
+import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
+import com.app.recommendify4.SpotifyItems.Song.Song;
+import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.SpotifyItems.User;
 
 import java.util.ArrayList;
@@ -13,10 +15,10 @@ public class UserProfile implements Runnable{
 
     private Credentials credentials;
     private User user;
-    private ArrayList<Song> topSongs;
-    private ArrayList<Artist> topArtists;
-    private ArrayList<Song> recentlyPlayedSongs;
-    private ArrayList<Artist> recentlyPlayedArtists;
+    private ArrayList<UserSong> topSongs;
+    private ArrayList<UserArtist> topArtists;
+    private ArrayList<UserSong> recentlyPlayedSongs;
+    private ArrayList<UserArtist> recentlyPlayedArtists;
 
 
     public UserProfile(Credentials newCredentials){
@@ -35,17 +37,17 @@ public class UserProfile implements Runnable{
 
     public Credentials getCredentials(){return credentials; }
 
-    public ArrayList<Artist> getRecentlyPlayedArtists() { return recentlyPlayedArtists; }
+    public ArrayList<UserArtist> getRecentlyPlayedArtists() { return recentlyPlayedArtists; }
 
-    public ArrayList<Song> getRecentlyPlayedSongs() {
+    public ArrayList<UserSong> getRecentlyPlayedSongs() {
         return recentlyPlayedSongs;
     }
 
-    public ArrayList<Artist> getTopArtists() {
+    public ArrayList<UserArtist> getTopArtists() {
         return topArtists;
     }
 
-    public ArrayList<Song> getTopSongs() {
+    public ArrayList<UserSong> getTopSongs() {
         return topSongs;
     }
 
@@ -59,18 +61,18 @@ public class UserProfile implements Runnable{
     public void setRecentlyPlayedSongs() {
 
         String response = RequestSender.getRecentlyPlayedSongs(credentials);
-        ArrayList<Song> recentlyPlayedSongsList = ResponseProcessor.processRecentlyPlayedResponse(response);
+        ArrayList<UserSong> recentlyPlayedSongsList = ResponseProcessor.processRecentlyPlayedResponse(response);
         if(recentlyPlayedSongsList != null) recentlyPlayedSongs = recentlyPlayedSongsList;
 
     }
 
     public void setRecentlyPlayedArtists(){
 
-        for(Song song : recentlyPlayedSongs) {
-            ArrayList<Artist> artists = song.getArtists();
-            for (Artist artist : artists) {
+        for(UserSong song : recentlyPlayedSongs) {
+            ArrayList<UserArtist> artists = song.getArtists();
+            for (UserArtist artist : artists) {
                 if (!recentlyPlayedArtists.contains(artist)) recentlyPlayedArtists.add(artist);
-                else artist.addOneToSongsInList();
+                else artist.incrementSongsInList();
             }
         }
 
@@ -79,7 +81,7 @@ public class UserProfile implements Runnable{
     public void setTopSongs() {
 
         String response = RequestSender.getTopSongs(credentials);
-        ArrayList<Song> topSongsList = ResponseProcessor.processTopSongsResponse(response);
+        ArrayList<UserSong> topSongsList = ResponseProcessor.processTopSongsResponse(response);
         if(topSongsList != null) topSongs = topSongsList;
 
     }
@@ -87,7 +89,7 @@ public class UserProfile implements Runnable{
     public void setTopArtists() {
 
         String response = RequestSender.getTopArtists(credentials);
-        ArrayList<Artist> topArtistsList = ResponseProcessor.processTopArtistsResponse(response, topSongs);
+        ArrayList<UserArtist> topArtistsList = ResponseProcessor.processTopArtistsResponse(response, topSongs);
         if(topArtistsList != null) topArtists = topArtistsList;
 
     }

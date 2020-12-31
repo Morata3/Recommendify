@@ -60,7 +60,9 @@ public class Login extends AppCompatActivity {
                 "user-read-email",
                 "ugc-image-upload",
                 "user-read-recently-played",
-                "user-top-read"
+                "user-top-read",
+                "playlist-modify-public",
+                "playlist-modify-private"
         });
         builder.setShowDialog(true);
         AuthorizationRequest request = builder.build();

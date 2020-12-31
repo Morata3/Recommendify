@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.recommendify4"
+        applicationId "com.app.recommendify4"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
@@ -84,7 +84,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+
     implementation 'com.spotify.android:auth:1.2.3'
+
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'

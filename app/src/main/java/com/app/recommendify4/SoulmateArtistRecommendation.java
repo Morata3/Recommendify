@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.app.recommendify4.SpotifyItems.Artist;
-import com.app.recommendify4.R;
+import com.app.recommendify4.SpotifyItems.Artist.Artist;
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 
 public class SoulmateArtistRecommendation extends AppCompatActivity {
     @Override
@@ -14,20 +14,20 @@ public class SoulmateArtistRecommendation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_soulmate_artist_racommendation);
 
-        TextView songRecommendedView = (TextView) findViewById(R.id.artistRecommend);
-        Artist recommendation = getRecommendationsList();
+        TextView artistRecommendedView = (TextView) findViewById(R.id.artistRecommend);
+        RecommendedArtist recommendation = getRecommendation();
 
         if(recommendation != null)
-            songRecommendedView.setText(recommendation.toString());
+            artistRecommendedView.setText(recommendation.toString());
         else
-            songRecommendedView.setText("Building artist recommendations.");
+            artistRecommendedView.setText("Building artist recommendations.");
     }
 
-    private Artist getRecommendationsList(){
+    private RecommendedArtist getRecommendation(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
         if(parameters != null && parameters.containsKey("artistToRecommend"))
-            return (Artist)parameters.get("artistToRecommend");
+            return (RecommendedArtist)parameters.get("artistToRecommend");
         else
             return null;
     }

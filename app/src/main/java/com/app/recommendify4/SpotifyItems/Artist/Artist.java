@@ -1,4 +1,4 @@
-package com.app.recommendify4.SpotifyItems;
+package com.app.recommendify4.SpotifyItems.Artist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,26 +11,29 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Artist implements Parcelable{
+public class Artist/* implements Parcelable*/{
 
     private String name;
     private String id;
     private ArrayList<String> genres;
-    private int songsInList;
-    private boolean recommended;
+    /*private int songsInList;
+    private boolean recommended;*/
 
+    public Artist(){
+
+    }
     public Artist(String artistName, ArrayList<String> artistGenres, String artistId){
         this.name = artistName;
         this.genres = artistGenres;
         this.id = artistId;
-        this.songsInList = 1;
+        //this.songsInList = 1;
     }
 
     public Artist(String artistName, String artistId){
         this.name = artistName;
         this.genres = new ArrayList<>();
         this.id = artistId;
-        this.songsInList = 1;
+        //this.songsInList = 1;
     }
 
     public Artist(String artistName){
@@ -38,14 +41,14 @@ public class Artist implements Parcelable{
         this.genres = new ArrayList<>();
     }
 
-    public Artist(JSONObject artistJSON, int songsInList) throws JSONException {
+    public Artist(JSONObject artistJSON/*, int songsInList*/) throws JSONException {
 
         this.genres =  new ArrayList<>();
         this.name = artistJSON.getString("name");
         this.id = artistJSON.getString("id");
         JSONArray genres = artistJSON.getJSONArray("genres");
         for(int index = 0; index < genres.length(); index++) this.genres.add(genres.getString(index));
-        this.songsInList = songsInList;
+        //this.songsInList = songsInList;
 
     }
 
@@ -73,15 +76,16 @@ public class Artist implements Parcelable{
         this.id = id;
     }
 
-    public int getSongsInList() { return songsInList; }
 
-    public void setSongsInList(int songsInList) { this.songsInList = songsInList; }
+    //public int getSongsInList() { return songsInList; }
 
-    public void setRecommended(boolean recommended) { this.recommended = recommended; }
+    //public void setSongsInList(int songsInList) { this.songsInList = songsInList; }
 
-    public boolean isRecommended() { return recommended; }
+    //public void setRecommended(boolean recommended) { this.recommended = recommended; }
 
-    public void addOneToSongsInList(){ this.songsInList++; }
+    //public boolean isRecommended() { return recommended; }
+
+    //public void addOneToSongsInList(){ this.songsInList++; }
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -95,17 +99,17 @@ public class Artist implements Parcelable{
                 "name='" + name + '\'' +
                 ", id='" + id + '\'' +
                 ", genres=" + genres +
-                ", songsInList=" + songsInList +
+                //", songsInList=" + songsInList +
                 '}';
     }
 
-    //PARCELABLE IMPLEMENTATION
+    /*//PARCELABLE IMPLEMENTATION
     private Artist(Parcel in) {
         genres = new ArrayList<>();
         name = in.readString();
         id = in.readString();
         genres = in.readArrayList(null);
-        songsInList = in.readInt();
+        //songsInList = in.readInt();
     }
 
     public static final Parcelable.Creator<Artist> CREATOR
@@ -129,8 +133,8 @@ public class Artist implements Parcelable{
         dest.writeString(name);
         dest.writeString(id);
         dest.writeList(genres);
-        dest.writeInt(songsInList);
-    }
+        //dest.writeInt(songsInList);
+    }*/
 
 }
 

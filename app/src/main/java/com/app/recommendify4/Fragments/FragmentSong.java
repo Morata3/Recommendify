@@ -3,40 +3,33 @@ package com.app.recommendify4.Fragments;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.bumptech.glide.Glide;
 import com.app.recommendify4.R;
 import com.app.recommendify4.SpotifyApi.RequestSender;
 import com.app.recommendify4.SpotifyApi.ResponseProcessor;
-import com.app.recommendify4.SpotifyItems.Song;
-
 import java.io.IOException;
 import java.util.ArrayList;
-
 import com.app.recommendify4.ThreadManagers.ThreadLauncher;
 import com.app.recommendify4.UserInfo.Credentials;
-import com.app.recommendify4.UserInfo.UserRecommendations;
-
-
 
 public class FragmentSong extends Fragment {
 
     private static final String SONGRECOMMENDED = "RecommendedSong";
     private static final String CREDENTIALS = "Credentials";
-    private ArrayList<Song> listOfRecommendations;
+    private ArrayList<RecommendedSong> listOfRecommendations;
 
-    private Song song;
+    private RecommendedSong song;
+    private int currentSong = 0;
     private Credentials credentials;
     private MediaPlayer mediaPlayer = new MediaPlayer();
 
@@ -49,7 +42,7 @@ public class FragmentSong extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentSong newInstance(ArrayList<Song> songsToRecommend, Credentials credentials) {
+    public static FragmentSong newInstance(ArrayList<RecommendedSong> songsToRecommend, Credentials credentials) {
         FragmentSong fragment = new FragmentSong();
         Bundle args = new Bundle();
         args.putParcelableArrayList(SONGRECOMMENDED, songsToRecommend);
@@ -87,11 +80,12 @@ public class FragmentSong extends Fragment {
     }
 
     public void setNextSong() {
-        if(mediaPlayer.isPlaying()) mediaPlayer.stop();
-        song = listOfRecommendations.get(0);
-        listOfRecommendations.remove(song);
-
-        ThreadLauncher builder_updateTrack = new ThreadLauncher();
+        //if(mediaPlayer.isPlaying()) mediaPlayer.stop();
+        //song = listOfRecommendations.get(0);
+        //song = listOfRecommendations.get(currentSong++);
+        //listOfRecommendations.remove(song);
+        //song.setShown(1);
+        /*ThreadLauncher builder_updateTrack = new ThreadLauncher();
         builder_updateTrack.execute(new Runnable() {
             @Override
             public void run() {
@@ -100,31 +94,47 @@ public class FragmentSong extends Fragment {
             }
         });
 
-        System.out.println("IMAGEN: " + song.getCoverURL());
+        System.out.println("IMAGEN: " + song.getCoverURL());*/
 
-        if(song != null){
+        //if(song != null){
+        if(currentSong < listOfRecommendations.size()){
+            if(mediaPlayer.isPlaying()) mediaPlayer.stop();
+            song = listOfRecommendations.get(currentSong++);
+            song.setShown(1);
+            ThreadLauncher builder_updateTrack = new ThreadLauncher();
+            builder_updateTrack.execute(new Runnable() {
+                @Override
+                public void run() {
+                    String response = RequestSender.getTrackInfo(credentials,song.getId());
+                    ResponseProcessor.processTrackResponse(response,song);
+                }
+            });
+
+            System.out.println("IMAGEN: " + song.getCoverURL());
+
             songNameView.setText(song.getName());
             songArtistView.setText(song.getArtists().get(0).getName());
             Glide.with(this).load(song.getCoverURL()).into(coverAlbum);
             try {
-                if(song.getPrewviewURL() != null) playSOng();
+                if(song.getPreviewURL() != null) playSong();
                 else System.out.println("Song without preview URL");
             } catch (IOException e) {
                 System.out.println("Error trying to play song");
                 e.printStackTrace();
             }
         }
-        else{
-            songNameView.setText("No more songs");
-        }
+        else songNameView.setText("No more songs");
+
     }
 
-    public void playSOng() throws IOException {
+    public void playSong() throws IOException {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setDataSource(song.getPrewviewURL());
+        mediaPlayer.setDataSource(song.getPreviewURL());
         mediaPlayer.prepare();
         mediaPlayer.start();
     }
+
+
 
 }

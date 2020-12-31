@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.app.recommendify4.SpotifyItems.Song;
-import com.app.recommendify4.R;
+import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.SpotifyItems.Song.Song;
 
 public class ShuffleSongRecommendation extends AppCompatActivity {
     @Override
@@ -15,16 +15,16 @@ public class ShuffleSongRecommendation extends AppCompatActivity {
         setContentView(R.layout.activity_shufflesong_recommendation);
 
         TextView songRecommendedView = (TextView) findViewById(R.id.songRecommended);
-        Song recommendation = getRecommendationsList();
+        RecommendedSong recommendation = getRecommendation();
 
         if(recommendation != null) songRecommendedView.setText(recommendation.toString());
         else songRecommendedView.setText("No recommendations yet.");
     }
 
-    private Song getRecommendationsList(){
+    private RecommendedSong getRecommendation(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("songToRecommend")) return (Song)parameters.get("songToRecommend");
+        if(parameters != null && parameters.containsKey("songToRecommend")) return (RecommendedSong)parameters.get("songToRecommend");
         else return null;
     }
 

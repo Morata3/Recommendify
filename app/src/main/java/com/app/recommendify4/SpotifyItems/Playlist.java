@@ -1,19 +1,21 @@
 package com.app.recommendify4.SpotifyItems;
 
+import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+
 import java.util.ArrayList;
 
 public class Playlist {
 
     String name;
     String id;
-    ArrayList<Song> songs;
+    ArrayList<RecommendedSong> songs;
 
-    public Playlist(String name, ArrayList<Song> songs){
+    public Playlist(String name, ArrayList<RecommendedSong> songs){
         this.name = name;
         this.songs = songs;
     }
 
-    public ArrayList<Song> getSongs() { return songs; }
+    public ArrayList<RecommendedSong> getSongs() { return songs; }
 
     public String getName() { return name; }
 
@@ -21,7 +23,7 @@ public class Playlist {
 
     public void setName(String name) { this.name = name; }
 
-    public void setSongs(ArrayList<Song> songs) { this.songs = songs; }
+    public void setSongs(ArrayList<RecommendedSong> songs) { this.songs = songs; }
 
     public void setId(String id) { this.id = id; }
 

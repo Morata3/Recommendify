@@ -2,7 +2,8 @@ package com.app.recommendify4.SpotifyApi;
 
 import android.util.Base64;
 
-import com.app.recommendify4.SpotifyItems.Song;
+import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.SpotifyItems.Song.Song;
 import com.app.recommendify4.UserInfo.Credentials;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -62,7 +63,7 @@ public class RequestSender {
         }
     }
 
-    public static String addSongsToPlaylist(Credentials credentials, ArrayList<Song> songs, String playlist_id){
+    public static String addSongsToPlaylist(Credentials credentials, ArrayList<RecommendedSong> songs, String playlist_id){
         credentials.checkTokenExpiration();
         try {
             StringBuilder payloadBuilder = new StringBuilder();

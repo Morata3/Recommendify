@@ -9,6 +9,7 @@ public class ThreadLauncher implements Executor {
         Thread userProfileThread = new Thread(command);
         try {
             userProfileThread.start();
+            //POÑER O JOIN PARA QUE ESPERE X SEGUNDOS E NON INFINITO
             userProfileThread.join();
         } catch (InterruptedException e) {
             System.out.println("Error building profile");

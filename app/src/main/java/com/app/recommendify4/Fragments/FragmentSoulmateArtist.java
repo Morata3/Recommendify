@@ -13,29 +13,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.recommendify4.SpotifyItems.Artist;
-import com.bumptech.glide.Glide;
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.R;
-import com.app.recommendify4.SpotifyApi.RequestSender;
-import com.app.recommendify4.SpotifyApi.ResponseProcessor;
-import com.app.recommendify4.SpotifyItems.Song;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.app.recommendify4.ThreadManagers.ThreadLauncher;
 import com.app.recommendify4.UserInfo.Credentials;
-import com.app.recommendify4.UserInfo.UserRecommendations;
-
 
 
 public class FragmentSoulmateArtist extends Fragment {
 
     private static final String ARTISTRECOMMENDED = "RecommendedSong";
     private static final String CREDENTIALS = "Credentials";
-    private ArrayList<Artist> listOfRecommendations;
+    private ArrayList<RecommendedArtist> listOfRecommendations;
 
-    private Artist artist;
+    private RecommendedArtist artist;
     private Credentials credentials;
 
     private TextView artistNameView;
@@ -46,7 +38,7 @@ public class FragmentSoulmateArtist extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentSoulmateArtist newInstance(ArrayList<Artist> artistsToRecommend, Credentials credentials) {
+    public static FragmentSoulmateArtist newInstance(ArrayList<RecommendedArtist> artistsToRecommend, Credentials credentials) {
         FragmentSoulmateArtist fragment = new FragmentSoulmateArtist();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARTISTRECOMMENDED, artistsToRecommend);
