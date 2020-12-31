@@ -363,7 +363,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder_profile.execute(userProfile);
         Gson gson = new Gson();
         String userProfile_json = gson.toJson(userProfile);
-        //System.out.println("USER CREDENTIALS: " +userProfile_json);
         login_editor.putString(Login.PREFERENCES_USER, userProfile_json);
         login_editor.apply();
     }
