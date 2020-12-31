@@ -215,9 +215,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ArrayList<RecommendedSong> HybridRecommendations =  this.userRecommendations.getSongsRecommendations();
             for(RecommendedSong song : HybridRecommendations ){
                 for(RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()){
-
+                    //System.out.println("Match? " + song.getartistsString() + "       " + artist.getName());
                     if(song.getartistsString().equals(artist.getName())){
-
+                        //System.out.println("COINCIDENCIAS: " + artist.getName());
                         song.setCoincidence(song.getCoincidence()+1);
 
                     }
