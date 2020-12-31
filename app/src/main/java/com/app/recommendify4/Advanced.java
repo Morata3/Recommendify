@@ -52,6 +52,10 @@ public class Advanced extends AppCompatActivity {
         songs = (Button) findViewById(R.id.songs);
         songs.setOnClickListener(v -> FilteredSongs());
 
+        low.setOnClickListener(v -> ChangeSwitch());
+        high.setOnClickListener(v -> ChangeSwitch());
+        positive.setOnClickListener(v -> ChangeSwitch());
+        negative.setOnClickListener(v -> ChangeSwitch());
 
         //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -91,6 +95,27 @@ public class Advanced extends AppCompatActivity {
         text.setText(obj.toString());
 
 
+
+    }
+
+    private void ChangeSwitch(){
+
+    if(positive.isChecked()){
+
+
+    }
+
+    if(negative.isChecked()){
+
+    }
+
+    if(low.isChecked()){
+
+    }
+
+    if(high.isChecked()){
+
+    }
 
     }
 }

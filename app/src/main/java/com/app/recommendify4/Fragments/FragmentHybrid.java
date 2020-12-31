@@ -73,32 +73,16 @@ public class FragmentHybrid extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageButton nextSong = (ImageButton) view.findViewById(R.id.nextSong);
+        ImageButton nextSong = (ImageButton) view.findViewById(R.id.nextSongHybrid);
         nextSong.setOnClickListener(v -> setNextSong());
-        coverAlbum = (ImageView) view.findViewById(R.id.playSong);
-        songNameView = (TextView) view.findViewById(R.id.songName);
-        songArtistView = (TextView) view.findViewById(R.id.songArtist);
+        coverAlbum = (ImageView) view.findViewById(R.id.playSongHybrid);
+        songNameView = (TextView) view.findViewById(R.id.songNameHybrid);
+        songArtistView = (TextView) view.findViewById(R.id.songArtistHybrid);
         setNextSong();
     }
 
     public void setNextSong() {
-        //if(mediaPlayer.isPlaying()) mediaPlayer.stop();
-        //song = listOfRecommendations.get(0);
-        //song = listOfRecommendations.get(currentSong++);
-        //listOfRecommendations.remove(song);
-        //song.setShown(1);
-        /*ThreadLauncher builder_updateTrack = new ThreadLauncher();
-        builder_updateTrack.execute(new Runnable() {
-            @Override
-            public void run() {
-                String response = RequestSender.getTrackInfo(credentials,song.getId());
-                ResponseProcessor.processTrackResponse(response,song);
-            }
-        });
 
-        System.out.println("IMAGEN: " + song.getCoverURL());*/
-
-        //if(song != null){
         if(currentSong < listOfRecommendations.size()){
             if(mediaPlayer.isPlaying()) mediaPlayer.stop();
             song = listOfRecommendations.get(currentSong++);

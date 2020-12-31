@@ -194,8 +194,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.buttonHybrid:
                 System.out.println("Llego aqí ni que sea");
-                if(this.userRecommendations.getArtistRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0 ||
-                        this.userRecommendations.getSongsRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0){
+                if(this.userRecommendations.getArtistRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0 &&
+                        this.userRecommendations.getSongsRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0){
 
                     fragmentHybrid = FragmentHybrid.newInstance(getHybridSongs(),credentials);
                     fragmentTransaction.replace(R.id.fragmentMain,fragmentHybrid);
