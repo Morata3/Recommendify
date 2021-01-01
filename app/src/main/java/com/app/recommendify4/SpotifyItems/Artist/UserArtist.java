@@ -6,13 +6,15 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.app.recommendify4.SpotifyItems.User;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class UserArtist extends Artist{
+public class UserArtist extends Artist implements Parcelable{
     private int songsInList;
 
     public UserArtist(String artistName, ArrayList<String> artistGenres, String artistId){
@@ -48,26 +50,23 @@ public class UserArtist extends Artist{
                 '}';
     }
 
-}
-/*
-
     //PARCELABLE IMPLEMENTATION
-    private Artist(Parcel in) {
-        genres = new ArrayList<>();
-        name = in.readString();
-        id = in.readString();
-        genres = in.readArrayList(null);
-        //songsInList = in.readInt();
+    private UserArtist(Parcel in) {
+        this.setGenres(new ArrayList<>());
+        this.setName(in.readString());
+        this.setId(in.readString());
+        this.setGenres(in.readArrayList(null));
+        songsInList = in.readInt();
     }
 
-    public static final Parcelable.Creator<Artist> CREATOR
-            = new Parcelable.Creator<Artist>() {
-        public Artist createFromParcel(Parcel in) {
-            return new Artist(in);
+    public static final Parcelable.Creator<UserArtist> CREATOR
+            = new Parcelable.Creator<UserArtist>() {
+        public UserArtist createFromParcel(Parcel in) {
+            return new UserArtist(in);
         }
 
-        public Artist[] newArray(int size) {
-            return new Artist[size];
+        public UserArtist[] newArray(int size) {
+            return new UserArtist[size];
         }
     };
 
@@ -78,9 +77,11 @@ public class UserArtist extends Artist{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(id);
-        dest.writeList(genres);
-        //dest.writeInt(songsInList);
+        dest.writeString(this.getName());
+        dest.writeString(this.getId());
+        dest.writeList(this.getGenres());
+        dest.writeInt(songsInList);
     }
-*/
+
+
+}

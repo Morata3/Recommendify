@@ -1,6 +1,12 @@
 package com.app.recommendify4.SpotifyItems.Song;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
+import com.app.recommendify4.SpotifyItems.User;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class UserSong extends Song{
+public class UserSong extends Song implements Parcelable{
 
     private ArrayList<UserArtist> artists;
     private int timesInList;
@@ -49,6 +55,40 @@ public class UserSong extends Song{
                 ", artists=" + artists +
                 ", timesInList=" + timesInList +
                 '}';
+    }
+
+    //PARCELABLE IMPLEMENTATION
+    private UserSong(Parcel in) {
+        artists = new ArrayList<>();
+        this.setName(in.readString());
+        this.setAlbum(in.readString());
+        this.setId(in.readString());
+        in.readTypedList(artists, UserArtist.CREATOR);
+        timesInList = in.readInt();
+    }
+
+    public static final Parcelable.Creator<UserSong> CREATOR
+            = new Parcelable.Creator<UserSong>() {
+        public UserSong createFromParcel(Parcel in) {
+            return new UserSong(in);
+        }
+        public UserSong[] newArray(int size) {
+            return new UserSong[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.getName());
+        dest.writeString(this.getAlbum());
+        dest.writeString(this.getAlbum());
+        dest.writeTypedList(artists);
+        dest.writeInt(timesInList);
     }
 
 
