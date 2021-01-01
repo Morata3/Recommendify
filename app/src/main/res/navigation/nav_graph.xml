@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_fragmentLauncher_to_fragmentHybrid"
             app:destination="@id/fragmentHybrid" />
+        <action
+            android:id="@+id/action_fragmentLauncher_to_fragmentAdvanced"
+            app:destination="@id/fragmentAdvanced" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSong"
@@ -44,6 +47,15 @@
         tools:layout="@layout/fragment_hybrid" >
         <action
             android:id="@+id/action_fragmentHybrid_to_fragmentLauncher"
+            app:destination="@id/fragmentLauncher" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAdvanced"
+        android:name="com.app.recommendify4.Fragments.FragmentAdvanced"
+        android:label="fragment_advanced">
+        tools:layout="@layout/fragment_advanced" >
+        <action
+            android:id="@+id/action_fragmentAdvanced_to_fragmentLauncher"
             app:destination="@id/fragmentLauncher" />
     </fragment>
 

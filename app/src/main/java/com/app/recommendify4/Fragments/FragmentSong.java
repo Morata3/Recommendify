@@ -150,8 +150,8 @@ public class FragmentSong extends Fragment {
         if(lastIndexProcessed != userSongs.size()){
             int indexToProccessLast = getLastIndexToProccess(lastIndexProcessed, userSongs.size());
             for (UserSong song : userSongs.subList(lastIndexProcessed, indexToProccessLast)) {
-                    threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
-                    lastIndexProcessed = indexToProccessLast;
+                threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
+                lastIndexProcessed = indexToProccessLast;
             }
         }
         else {
