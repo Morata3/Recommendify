@@ -41,6 +41,7 @@ def recommend_artist(artist1, artist2, artist3):
         match_tuple = sorted(match_tuple, key=lambda x: x[2])[::-1]
         if not match_tuple:
             print(f"The recommendation system could not find a match for {artist}")
+            return
 
         recom_artist_id = match_tuple[0][1]
         # Start the recommendation process
@@ -61,6 +62,3 @@ def recommend_artist(artist1, artist2, artist3):
     #print(recommendations)
     
     return ', '.join(recommendations)
-
-
-print(recommend_artist("Feng Suave", "Boy Pablo", "Arctic Monkeys"))
