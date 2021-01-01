@@ -1,7 +1,12 @@
 package com.app.recommendify4.RecomThreads;
 
+import com.app.recommendify4.SpotifyApi.RequestSender;
+import com.app.recommendify4.SpotifyApi.ResponseProcessor;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
+import com.app.recommendify4.ThreadManagers.ThreadLauncher;
+import com.app.recommendify4.UserInfo.Credentials;
+import com.app.recommendify4.UserInfo.UserProfile;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 
@@ -11,10 +16,12 @@ public class ContentThread implements Runnable{
 
     private final UserSong baseForRecommendations;
     private final ContentCallback callback;
+    private final Credentials credentials;
 
-    public ContentThread(UserSong baseForRecommendations, ContentCallback callback){
+    public ContentThread(UserSong baseForRecommendations, ContentCallback callback, Credentials credentials){
         this.baseForRecommendations = baseForRecommendations;
         this.callback = callback;
+        this.credentials = credentials;
     }
 
 
@@ -37,6 +44,14 @@ public class ContentThread implements Runnable{
             String id =Recoms[k].split(",")[1].substring(2,Recoms[k].split(",")[1].length()-1);
             String artist = Recoms[k].split(",")[2].substring(2,Recoms[k].split(",")[2].length()-1);
             RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0);
+            ThreadLauncher builder_updateTrack = new ThreadLauncher();
+            builder_updateTrack.execute(new Runnable() {
+                @Override
+                public void run() {
+                    String response = RequestSender.getTrackInfo(credentials,recommendedSong.getId());
+                    ResponseProcessor.processTrackResponse(response,recommendedSong);
+                }
+            });
             recommendationsList.add(recommendedSong);
             System.out.println("(***DEBUG_MESAGE) BASE SONG: "+ baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString());
         }

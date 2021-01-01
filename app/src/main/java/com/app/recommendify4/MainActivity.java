@@ -40,7 +40,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -59,9 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Credentials credentials;
 
     private Recommendations userRecommendations;
-    private int lastTopSongProcessed = 0;
-    private int lastTopArtistProcessed = 0;
-    private int lastRecentlySongProcessed = 0;
+    private int lastSongProcessed = 0;
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
     private final ContentCallback contentThreadCallback = new ContentCallback() {
         @Override
@@ -145,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        setUpUserInfo();
+        //setUpUserInfo();
     }
 
 
@@ -178,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (view.getId()){
             case R.id.buttonShuffle:
                 if(userRecommendations.getSongsRecommendations() != null && userRecommendations.getSongsRecommendations().size() > 0){
-                    fragmentSong = FragmentSong.newInstance(userRecommendations.getSongsRecommendations(),credentials);
+                    fragmentSong = FragmentSong.newInstance(userRecommendations.getSongsRecommendations(), userRecommendations.getSongsShown(), userProfile.getTopSongs(),credentials, lastSongProcessed);
                     fragmentTransaction.replace(R.id.fragmentMain,fragmentSong);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Recommendations not yet ready ");
@@ -216,8 +213,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             for(RecommendedSong song : HybridRecommendations ){
                 for(RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()){
 
-                    if(song.getartistsString().equals(artist.getName())){
-
+                    //if(song.getartistsString().equals(artist.getName())){
+                    //COMO ESTA AHORA AS CANCIONS QUE SALEN DE FinalRecommendator solo teñen un artista (os artistas que colaboran aparecen no titulo
+                    if(song.getArtists().get(0).getName().equals(artist.getName())){
                         song.setCoincidence(song.getCoincidence()+1);
 
                     }
@@ -290,52 +288,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userProfile = getUserProfile();
         credentials = userProfile.getCredentials();
 
-        if(userRecommendations == null) userRecommendations = new Recommendations();
-        else userRecommendations.updateLists();
-
-        if(userRecommendations.getSongsRecommendations().size() == 0) {
-            index++;
-            ArrayList<UserSong> userRecentlyPlayedSongs = userProfile.getRecentlyPlayedSongs();
+        if(userRecommendations == null){
+            userRecommendations = new Recommendations();
             ArrayList<UserSong> userTopSongs = userProfile.getTopSongs();
-
-            if(lastRecentlySongProcessed != userRecentlyPlayedSongs.size()){
-                int upLimitRecentlySongs = getLastIndexToProccess(lastRecentlySongProcessed, userRecentlyPlayedSongs.size());
-                for (UserSong song : userRecentlyPlayedSongs.subList(lastRecentlySongProcessed, upLimitRecentlySongs)) {
-                    threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback));
-                    lastRecentlySongProcessed = upLimitRecentlySongs;
-                }
-            }
-
-            if(lastTopSongProcessed != userTopSongs.size()){
-                int upLimitTopSongs = getLastIndexToProccess(lastTopSongProcessed, userTopSongs.size());
-                for (UserSong song : userTopSongs.subList(lastTopSongProcessed, upLimitTopSongs)) {
-                    threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback));
-                    lastTopSongProcessed = upLimitTopSongs;
-                }
-            }
-
-            if(lastRecentlySongProcessed == userRecentlyPlayedSongs.size() && lastTopSongProcessed == userTopSongs.size() - 40){
-                updateUserProfile();
-                lastRecentlySongProcessed = lastTopSongProcessed = lastTopArtistProcessed = 0;
-            }
-
-
-        }
-
-        if(userRecommendations.getArtistRecommendations().size() == 0) {
             ArrayList<UserArtist> userTopArtists = userProfile.getTopArtists();
-            int upLimitTopArtists = getLastIndexToProccess(lastTopArtistProcessed, userTopArtists.size());
 
-            for (UserArtist artist : userTopArtists.subList(lastTopArtistProcessed, upLimitTopArtists)){
-                threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, userProfile));
-                lastTopArtistProcessed = upLimitTopArtists;
-            }
+            for (UserSong song : userTopSongs.subList(lastSongProcessed, lastSongProcessed + 5)) threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
+            for (UserArtist artist: userTopArtists.subList(0, 5)) threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, userProfile));
 
-            if(lastTopArtistProcessed == userTopArtists.size()){
-                updateUserProfile();
-                lastRecentlySongProcessed = lastTopSongProcessed = lastTopArtistProcessed = 0;
-            }
+            lastSongProcessed = lastSongProcessed + 5;
+
         }
+
 
     }
 
@@ -349,22 +313,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else return this.userProfile;
     }
 
-
-    private int getLastIndexToProccess(int currentIndex, int listSize){
-        if(currentIndex + 5 <= listSize) return currentIndex + 5;
-        else return listSize;
-    }
-
-    private void updateUserProfile(){
-        SharedPreferences login = getSharedPreferences(Login.PREFERENCES_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor login_editor = login.edit();
-        UserProfile userProfile = new UserProfile(credentials);
-        ThreadLauncher builder_profile = new ThreadLauncher();
-        builder_profile.execute(userProfile);
-        Gson gson = new Gson();
-        String userProfile_json = gson.toJson(userProfile);
-        login_editor.putString(Login.PREFERENCES_USER, userProfile_json);
-        login_editor.apply();
-    }
 
 }

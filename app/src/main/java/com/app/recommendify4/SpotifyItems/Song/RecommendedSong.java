@@ -12,7 +12,7 @@ public class RecommendedSong extends Song implements Parcelable {
     private String coverURL;
     private int Coincidence;
     private String previewURL;
-    private String ArtistString;
+    //private String ArtistString;
 
     public RecommendedSong(String songName, String albumName, String songId, ArrayList<RecommendedArtist> artists, int shown){
         super(songName, albumName, songId);
@@ -26,7 +26,7 @@ public class RecommendedSong extends Song implements Parcelable {
         this.artists = getArtistsFromString(artistsList);
         this.shown = shown;
         this.Coincidence = 0;
-        this.ArtistString = artistsList;
+        //this.ArtistString = artistsList;
 
 
     }
@@ -45,9 +45,9 @@ public class RecommendedSong extends Song implements Parcelable {
 
     public int getCoincidence(){return Coincidence; }
 
-    public String getartistsString() {return ArtistString;}
+    //public String getartistsString() {return ArtistString;}
 
-    public void setArtists(String Artist){this.ArtistString = Artist;}
+    //public void setArtists(String Artist){this.ArtistString = Artist;}
 
     public void setCoincidence(int Coincidence){this.Coincidence = Coincidence;}
 
@@ -75,8 +75,8 @@ public class RecommendedSong extends Song implements Parcelable {
         shown = in.readInt();
     }
 
-    public static final Parcelable.Creator<Song> CREATOR
-            = new Parcelable.Creator<Song>() {
+    public static final Parcelable.Creator<RecommendedSong> CREATOR
+            = new Parcelable.Creator<RecommendedSong>() {
         public RecommendedSong createFromParcel(Parcel in) {
             return new RecommendedSong(in);
         }
@@ -108,6 +108,7 @@ public class RecommendedSong extends Song implements Parcelable {
 
             return song2-song1;
 
-        }};
+        }
+    };
 
 }
