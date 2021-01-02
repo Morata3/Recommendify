@@ -85,10 +85,10 @@ def rank_song_similarity_by_measure(song, genre_parameter):
 
     similarity_data = similarity_data.drop_duplicates(subset=[f'Similar Song to {song}'], keep='first')
 
-    lista = similarity_data.head(4)[[f'Similar Song to {song}','id','Artist']]
+    lista = similarity_data.head(4)[[f'Similar Song to {song}','id','Artist','Genres']]
     #lista.loc[17] = ['Waste',''.join(wasted),'']
     lista = lista.values.tolist()
-    lista.append(['Waste',''.join(wasted),''])
+    lista.append(['Waste',''.join(wasted),'',''])
 
     #lista = [dict(zip([f'Similar Song to {song}','id','artist'], l)) for l in lista]
 
