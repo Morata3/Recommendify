@@ -1,18 +1,16 @@
 package com.app.recommendify4.UserInfo;
 
-import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
-import com.app.recommendify4.SpotifyItems.Song.Song;
 
 import java.util.ArrayList;
 
 public class Recommendations {
 
     private ArrayList<RecommendedSong> songsRecommendations;
-    private ArrayList<RecommendedArtist> artistRecommendations;
+    private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artistRecommendations;
 
     private ArrayList<RecommendedSong> songsShown;
-    private ArrayList<RecommendedArtist> artistsShown;
+    private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artistsShown;
 
     public Recommendations(){
         this.songsRecommendations = new ArrayList<>();
@@ -21,9 +19,9 @@ public class Recommendations {
         this.artistsShown = new ArrayList<>();
     }
 
-    public ArrayList<RecommendedArtist> getArtistRecommendations() { return artistRecommendations; }
+    public ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtistRecommendations() { return artistRecommendations; }
 
-    public ArrayList<RecommendedArtist> getArtistsShown() { return artistsShown; }
+    public ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtistsShown() { return artistsShown; }
 
     public ArrayList<RecommendedSong> getSongsRecommendations() { return songsRecommendations; }
 
@@ -33,7 +31,7 @@ public class Recommendations {
         this.songsRecommendations.addAll(newRecommendations);
     }
 
-    public void addArtistRecommendations(ArrayList<RecommendedArtist> newRecommendations){
+    public void addArtistRecommendations(ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> newRecommendations){
         this.artistRecommendations.addAll(newRecommendations);
     }
 
@@ -42,7 +40,7 @@ public class Recommendations {
         this.songsShown.add(song);
     }
 
-    public void moveToHistory(RecommendedArtist artist){
+    public void moveToHistory(com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist){
         this.artistRecommendations.remove(artist);
         this.artistsShown.add(artist);
     }
@@ -63,8 +61,8 @@ public class Recommendations {
     }
 
     private void updateArtistsList(){
-        ArrayList<RecommendedArtist> newList = new ArrayList<>();
-        for(RecommendedArtist artist: artistRecommendations) {
+        ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> newList = new ArrayList<>();
+        for(com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist: artistRecommendations) {
             if (artist.wasShown()) this.artistsShown.add(artist);
             else newList.add(artist);
         }

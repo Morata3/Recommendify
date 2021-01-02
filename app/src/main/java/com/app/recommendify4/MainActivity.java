@@ -5,15 +5,14 @@ import com.app.recommendify4.Dialogs.DialogInformation;
 import com.app.recommendify4.Dialogs.DialogLoading;
 import com.app.recommendify4.Dialogs.DialogLogOut;
 import com.app.recommendify4.Fragments.FragmentHybrid;
+import com.app.recommendify4.Fragments.FragmentSoulmateArtist;
 import com.app.recommendify4.RecomThreads.CollaborativeCallback;
 import com.app.recommendify4.RecomThreads.ContentCallback;
 import com.app.recommendify4.RecomThreads.ContentThread;
-import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.ThreadManagers.RecomThreadPool;
-import com.app.recommendify4.ThreadManagers.ThreadLauncher;
 import com.app.recommendify4.UserInfo.UserProfile;
 import com.bumptech.glide.Glide;
 import com.app.recommendify4.RecomThreads.CollaborativeThread;
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment fragmentLauncher;
     private FragmentSong fragmentSong;
     private FragmentHybrid fragmentHybrid;
+    private FragmentSoulmateArtist fragmentSoulmateArtist;
     public TextView text;
     private int index = 0;
 
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Recommendations userRecommendations;
     private int lastSongProcessed = 0;
+    private int lastArtistProcessed = 0;
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
     private final ContentCallback contentThreadCallback = new ContentCallback() {
         @Override
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     };
     private final CollaborativeCallback collaborativeThreadCallback = new CollaborativeCallback() {
         @Override
-        public void onComplete(ArrayList<RecommendedArtist> recommendations) {
+        public void onComplete(ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> recommendations) {
             userRecommendations.addArtistRecommendations(recommendations);
         }
     };
@@ -183,7 +184,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }else System.out.println("Recommendations not yet ready ");
                 break;
             case R.id.buttonSoulmate:
-                soulmateArtistRecommendation();
+                //soulmateArtistRecommendation();
+                if(userRecommendations.getArtistRecommendations() != null && userRecommendations.getArtistRecommendations().size() > 0){
+                    fragmentSoulmateArtist = FragmentSoulmateArtist.newInstance(userRecommendations.getArtistRecommendations(), userRecommendations.getArtistsShown(), userProfile.getTopArtists(),credentials, lastArtistProcessed);
+                    fragmentTransaction.replace(R.id.fragmentMain, fragmentSoulmateArtist);
+                    fragmentTransaction.addToBackStack(null);
+                }else System.out.println("Artist recommendations not yet ready");
                 break;
             case R.id.buttonPlaylist:
                 System.out.println(credentials);
@@ -214,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else{
             ArrayList<RecommendedSong> HybridRecommendations =  this.userRecommendations.getSongsRecommendations();
             for(RecommendedSong song : HybridRecommendations ){
-                for(RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()){
+                for(com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()){
 
                     //if(song.getartistsString().equals(artist.getName())){
                     //COMO ESTA AHORA AS CANCIONS QUE SALEN DE FinalRecommendator solo teñen un artista (os artistas que colaboran aparecen no titulo
@@ -235,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setupFragment(){
         fragmentLauncher = new FragmentLauncher();
         fragmentSong = new FragmentSong();
+        fragmentSoulmateArtist = new FragmentSoulmateArtist();
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentMain,fragmentLauncher).commit();
     }
 
@@ -273,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(this, SoulmateArtistRecommendation.class);
         //intent.putExtra("songsToRecommend", userRecommendations);
         if(userRecommendations.getArtistRecommendations() != null && userRecommendations.getArtistRecommendations().size() > 0){
-            RecommendedArtist artistToRecommend = userRecommendations.getArtistRecommendations().get(0);
+            com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artistToRecommend = userRecommendations.getArtistRecommendations().get(0);
             intent.putExtra("artistToRecommend", artistToRecommend);
             userRecommendations.moveToHistory(artistToRecommend);
 
@@ -297,10 +304,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ArrayList<UserArtist> userTopArtists = userProfile.getTopArtists();
 
             for (UserSong song : userTopSongs.subList(lastSongProcessed, lastSongProcessed + 5)) threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
-            for (UserArtist artist: userTopArtists.subList(0, 5)) threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, userProfile));
+            for (UserArtist artist: userTopArtists.subList(lastArtistProcessed, lastArtistProcessed + 5)) threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
 
             lastSongProcessed = lastSongProcessed + 5;
-
+            lastArtistProcessed+=  5;
         }
 
 

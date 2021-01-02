@@ -2,19 +2,19 @@ package com.app.recommendify4.SpotifyItems.Song;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
 public class RecommendedSong extends Song implements Parcelable {
-    private ArrayList<RecommendedArtist> artists;
+    private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artists;
     private int shown;
     private String coverURL;
     private int Coincidence;
     private String previewURL;
     //private String ArtistString;
 
-    public RecommendedSong(String songName, String albumName, String songId, ArrayList<RecommendedArtist> artists, int shown){
+    public RecommendedSong(String songName, String albumName, String songId, ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artists, int shown){
         super(songName, albumName, songId);
         this.artists = artists;
         this.shown = shown;
@@ -31,9 +31,9 @@ public class RecommendedSong extends Song implements Parcelable {
 
     }
 
-    public void setArtists(ArrayList<RecommendedArtist> artists) { this.artists = artists; }
+    public void setArtists(ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artists) { this.artists = artists; }
 
-    public ArrayList<RecommendedArtist> getArtists() { return artists; }
+    public ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtists() { return artists; }
 
     public String getCoverURL(){return coverURL; }
 
@@ -55,11 +55,11 @@ public class RecommendedSong extends Song implements Parcelable {
 
     public void setShown(int shown) { this.shown = shown; }
 
-    private ArrayList<RecommendedArtist> getArtistsFromString(String artistList){
-        ArrayList<RecommendedArtist> list = new ArrayList<>();
+    private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtistsFromString(String artistList){
+        ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> list = new ArrayList<>();
         String[] names = artistList.split(",");
         for(String name : names){
-            RecommendedArtist artist = new RecommendedArtist(name);
+            com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist = new com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist(name);
             list.add(artist);
         }
         return list;
@@ -71,7 +71,7 @@ public class RecommendedSong extends Song implements Parcelable {
         this.setName(in.readString());
         this.setAlbum(in.readString());
         this.setId(in.readString());
-        in.readTypedList(artists, RecommendedArtist.CREATOR);
+        in.readTypedList(artists, com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist.CREATOR);
         shown = in.readInt();
     }
 

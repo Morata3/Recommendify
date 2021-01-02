@@ -54,6 +54,7 @@ public class RecommendedArtist extends Artist implements Parcelable {
             return new RecommendedArtist[size];
         }
     };
+    public void setShown(int shown) { this.shown = shown; }
 
     @Override
     public int describeContents() {
@@ -76,6 +77,7 @@ public class RecommendedArtist extends Artist implements Parcelable {
                 ", id='" + this.getId() + '\'' +
                 ", genres=" + this.getGenres() +
                 ", shown=" + shown +
+                ", image="+this.getImage()+
                 '}';
     }
 

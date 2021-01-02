@@ -18,6 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="#1"
             app:itemBackground="@color/white"
             app:itemIconTint="@drawable/selector"
             app:itemTextColor="@drawable/selector"
@@ -37,6 +38,7 @@
             android:layout_marginBottom="35dp"
             android:onClick="onClick"
             android:text="Shuffle Song"
+            android:background="@drawable/custom_main_button"
             app:layout_constraintBottom_toTopOf="@+id/buttonSoulmate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,6 +54,7 @@
             android:layout_marginBottom="35dp"
             android:onClick="onClick"
             android:text="Soulmate artist"
+            android:background="@drawable/custom_main_button"
             app:layout_constraintBottom_toTopOf="@+id/buttonPlaylist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +70,7 @@
             android:layout_marginBottom="37dp"
             android:onClick="onClick"
             android:text="Generate playlist"
+            android:background="@drawable/custom_main_button"
             app:layout_constraintBottom_toTopOf="@+id/buttonArtist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,6 +86,7 @@
             android:layout_marginBottom="47dp"
             android:onClick="onClick"
             android:text="Recommend artist"
+            android:background="@drawable/custom_main_button"
             app:layout_constraintBottom_toTopOf="@+id/buttonHybrid"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +99,7 @@
             android:layout_marginBottom="64dp"
             android:onClick="onClick"
             android:text="hybrid"
+            android:background="@drawable/custom_main_button"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +123,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/teal_200"
+            android:background="#1DB954"
             android:id="@+id/toolbar">
         </androidx.appcompat.widget.Toolbar>
 
@@ -128,6 +134,7 @@
         android:layout_height="match_parent"
         android:id="@+id/navigation_view"
         android:layout_gravity = "start"
+        android:background="#1DB954"
         app:headerLayout="@layout/navigation_header"
         app:menu="@menu/navigation_bar">
 

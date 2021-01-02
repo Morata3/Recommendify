@@ -6,7 +6,6 @@ import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.ThreadManagers.ThreadLauncher;
 import com.app.recommendify4.UserInfo.Credentials;
-import com.app.recommendify4.UserInfo.UserProfile;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 

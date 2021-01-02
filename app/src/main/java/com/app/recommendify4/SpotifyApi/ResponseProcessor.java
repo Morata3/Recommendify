@@ -145,6 +145,23 @@ public class ResponseProcessor {
         return coverURL;
     }
 
+    public static String processArtistImage(JSONObject artistImageJSON) throws JSONException{
+        String artistImageURL = null;
+
+        JSONArray images;
+        if(artistImageJSON.has("images")){
+            images = artistImageJSON.getJSONArray("images");
+            for(int index=0; index < images.length(); index ++){
+                JSONObject imageObject = images.getJSONObject(index);
+                if(imageObject.has("url")){
+                    if(imageObject.getInt("height") >= 250) artistImageURL = imageObject.getString("url");
+                }
+            }
+        }
+
+        return artistImageURL;
+    }
+
     private static String processUserImageJSON(JSONArray userImagesJSON) throws JSONException {
         String imageURL = null;
 

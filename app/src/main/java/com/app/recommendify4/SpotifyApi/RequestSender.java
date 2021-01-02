@@ -3,7 +3,6 @@ package com.app.recommendify4.SpotifyApi;
 import android.util.Base64;
 
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
-import com.app.recommendify4.SpotifyItems.Song.Song;
 import com.app.recommendify4.UserInfo.Credentials;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

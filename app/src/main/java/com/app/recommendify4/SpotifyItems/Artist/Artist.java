@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.app.recommendify4.SpotifyApi.ResponseProcessor;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +19,8 @@ public class Artist/* implements Parcelable*/{
     private String name;
     private String id;
     private ArrayList<String> genres;
+    private String image;
+
 
     public Artist(){
 
@@ -45,6 +50,7 @@ public class Artist/* implements Parcelable*/{
         this.name = artistJSON.getString("name");
         this.id = artistJSON.getString("id");
         JSONArray genres = artistJSON.getJSONArray("genres");
+        this.image = ResponseProcessor.processArtistImage(artistJSON);
         for(int index = 0; index < genres.length(); index++) this.genres.add(genres.getString(index));
 
     }
@@ -71,6 +77,10 @@ public class Artist/* implements Parcelable*/{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getImage(){
+        return image;
     }
 
     @Override

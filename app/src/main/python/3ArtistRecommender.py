@@ -10,7 +10,7 @@ import json
 
 def recommend_artist(artist1, artist2, artist3):
     
-    artist_array= [artist1,artist2,artist3]
+    artist_array= [artist1.lower(),artist2.lower(),artist3.lower()]
     
     wide_artist_data_filename = join(dirname(__file__), "lastfm_sparse_artist_matrix.npz")
     wide_artist_data_sparse = scipy.sparse.load_npz(wide_artist_data_filename)
@@ -55,10 +55,11 @@ def recommend_artist(artist1, artist2, artist3):
         recommendations_map = {artist_id: artist_name for artist_name, artist_id in decode_id_artist.items()}
         # Translate this recommendations into the ranking of song titles recommended
         for i, (idx, dist) in enumerate(recommendation_ids):
-            if recommendations_map[idx] not in recommendations and recommendations_map[idx] not in artist_array:
+            if (recommendations_map[idx]) not in recommendations and (recommendations_map[idx]) not in artist_array:
               recommendations.append(recommendations_map[idx])
 
 
     #print(recommendations)
     
     return ', '.join(recommendations)
+

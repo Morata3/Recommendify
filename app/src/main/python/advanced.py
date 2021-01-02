@@ -57,16 +57,16 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
     if instrumental == 1: #puro instrumento
         music3 = music3.drop(music3[music3.instrumentalness < lim_instru].index)
         music3 = music3.drop(music3[music3.speechiness > lim_speechiness].index)
-        music = music3.reset_index(drop=True)
+        music  = music3.reset_index(drop=True)
 
-    music3 = music3.head(15)[['Song Name','id','Artist']].values.tolist()
+    music3 = music3.head(2)[['Song Name','id','Artist']].values.tolist()
     music3 = [dict(zip(['song_name','id','artist'], l)) for l in music3]
-
+    
     return music3
 
-""" music = filter_songs(music_aux)
-
-while music['Song Name'].count() <= 15:
+music = filter_songs(1,0,1,0,1,0,0)
+print(music)
+'''while music['Song Name'].count() <= 15:
     lim_dance = lim_dance - 0.05
     lim_liveness = lim_liveness - 0.03
     lim_instru = lim_instru - 0.05
@@ -75,7 +75,7 @@ while music['Song Name'].count() <= 15:
     lim_positive = lim_positive - 0.05
     lim_negative = lim_negative + 0.05
     lim_speechiness = lim_speechiness + 0.01
-    music = filter_songs(music_aux) """
+    music = filter_songs(music_aux) '''
 
     
     
