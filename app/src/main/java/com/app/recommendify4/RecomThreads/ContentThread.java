@@ -37,6 +37,9 @@ public class ContentThread implements Runnable{
         String recommendations = obj.toString();
 
         recommendations = recommendations.substring(1,recommendations.length() - 1);
+
+        System.out.println("Recomendations: " + recommendations);
+
         String[] Recoms = recommendations.split("],");
 
         for(int k = 1; k < Recoms.length - 1; k++){

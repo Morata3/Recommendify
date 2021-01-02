@@ -108,8 +108,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (menuItem.getItemId()) {
 
                     case R.id.advanced:
-                        startActivity(new Intent(getApplicationContext()
-                                , Advanced.class));
+                        Intent intent = new Intent(getApplicationContext(), Advanced.class);
+                        intent.putExtra("credentials", credentials);
+                        startActivity(intent);
+
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.home:
@@ -184,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 soulmateArtistRecommendation();
                 break;
             case R.id.buttonPlaylist:
+                System.out.println(credentials);
                 openDialogCreatePlaylist();
                 break;
             case R.id.buttonArtist:

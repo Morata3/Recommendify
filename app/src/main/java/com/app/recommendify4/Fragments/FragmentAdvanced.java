@@ -73,11 +73,11 @@ public class FragmentAdvanced extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageButton nextSong = (ImageButton) view.findViewById(R.id.nextSongHybrid);
+        ImageButton nextSong = (ImageButton) view.findViewById(R.id.nextSongAdvanced);
         nextSong.setOnClickListener(v -> setNextSong());
-        coverAlbum = (ImageView) view.findViewById(R.id.playSongHybrid);
-        songNameView = (TextView) view.findViewById(R.id.songNameHybrid);
-        songArtistView = (TextView) view.findViewById(R.id.songArtistHybrid);
+        coverAlbum = (ImageView) view.findViewById(R.id.playSongAdvanced);
+        songNameView = (TextView) view.findViewById(R.id.songNameAdvanced);
+        songArtistView = (TextView) view.findViewById(R.id.songArtistAdvanced);
         setNextSong();
     }
 

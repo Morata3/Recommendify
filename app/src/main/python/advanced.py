@@ -59,8 +59,10 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
         music3 = music3.drop(music3[music3.speechiness > lim_speechiness].index)
         music = music3.reset_index(drop=True)
 
-        
-    return music3['Song Name']
+    music3 = music3.head(15)[['Song Name','id','Artist']].values.tolist()
+    music3 = [dict(zip(['song_name','id','artist'], l)) for l in music3]
+
+    return music3
 
 """ music = filter_songs(music_aux)
 

@@ -52,7 +52,7 @@
     <fragment
         android:id="@+id/fragmentAdvanced"
         android:name="com.app.recommendify4.Fragments.FragmentAdvanced"
-        android:label="fragment_advanced">
+        android:label="fragment_advanced"
         tools:layout="@layout/fragment_advanced" >
         <action
             android:id="@+id/action_fragmentAdvanced_to_fragmentLauncher"

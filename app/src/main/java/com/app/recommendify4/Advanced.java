@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.view.MenuItem;
 
 import com.app.recommendify4.Fragments.FragmentHybrid;
@@ -16,8 +17,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.app.recommendify4.R;
+import com.app.recommendify4.SpotifyItems.Artist.Artist;
 import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
+import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.UserInfo.Credentials;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.chaquo.python.PyObject;
@@ -28,6 +32,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -55,12 +63,6 @@ public class Advanced extends AppCompatActivity {
         setContentView(R.layout.activity_advanced);
         setupFragment();
         //Initializa and Assign variable
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-
-        //Set home selected
-        bottomNavigationView.setSelectedItemId(R.id.advanced);
-        text = (TextView) findViewById(R.id.textView6);
         live = (Switch) findViewById(R.id.live);
         danceable = (Switch) findViewById(R.id.danceable);
         positive = (Switch) findViewById(R.id.positive);
@@ -71,9 +73,14 @@ public class Advanced extends AppCompatActivity {
 
 
         credentials = getCredentials();
-
         songs = (Button) findViewById(R.id.songs);
-        songs.setOnClickListener(v -> FilteredSongs());
+      /*  songs.setOnClickListener(v -> {
+            try {
+                FilteredSongs();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });*/
 
         low.setOnClickListener(v -> ChangeLowSwitch());
         high.setOnClickListener(v -> ChangeHighSwitch());
@@ -81,7 +88,9 @@ public class Advanced extends AppCompatActivity {
         negative.setOnClickListener(v -> ChangeNegativeSwitch());
 
         //Perform ItemSelectedListener
-        System.out.println("o por aqui?");
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.advanced);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -112,22 +121,29 @@ public class Advanced extends AppCompatActivity {
         });
     }
 
-    public void onClick(View view){
+    public void onClick(View view) throws JSONException {
         fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        switch (view.getId()) {
-            case R.id.songs:
 
-                if(1==1){
+        switch (view.getId()) {
+
+            case R.id.songs:
+                if(recommendationsList!=null){
+
                     fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs(),credentials);
-                    fragmentTransaction.replace(R.id.fragmentMain,fragmentAdvanced);
+                    fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
                     fragmentTransaction.addToBackStack(null);
-                }else System.out.println("Recommendations not yet ready ");
+                }
+                else System.out.println("Recommendations not yet ready ");
                 break;
 
             }
-        }
 
-    private ArrayList<RecommendedSong> FilteredSongs() {
+        fragmentTransaction.commit();
+
+
+    }
+
+    private ArrayList<RecommendedSong> FilteredSongs() throws JSONException {
 
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
@@ -138,25 +154,32 @@ public class Advanced extends AppCompatActivity {
         PyObject obj= pyf.callAttr("filter_songs",live.isChecked(),danceable.isChecked(),positive.isChecked(),negative.isChecked(),low.isChecked(),high.isChecked(),instru.isChecked());
         String recommendations = obj.toString();
 
-        recommendations = recommendations.substring(1,recommendations.length() - 1);
-        String[] Recoms = recommendations.split("],");
 
-        for(int k = 1; k < Recoms.length - 1; k++){
-            String title = Recoms[k].split(",")[0].substring(3,Recoms[k].split(",")[0].length()-1);
-            String id =Recoms[k].split(",")[1].substring(2,Recoms[k].split(",")[1].length()-1);
-            String artist = Recoms[k].split(",")[2].substring(2,Recoms[k].split(",")[2].length()-1);
+        JSONArray jsonrecom = null;
+
+        jsonrecom = new JSONArray(recommendations);
+
+
+        for(int index = 0; index < jsonrecom.length(); index++){
+            String title = jsonrecom.getJSONObject(index).getString("song_name");
+            String artist = jsonrecom.getJSONObject(index).getString("artist");
+            String id = jsonrecom.getJSONObject(index).getString("id");
             RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0);
             recommendationsList.add(recommendedSong);
+
         }
+
+        System.out.println("Recoooommmm");
 
         return recommendationsList;
 
     }
 
     public void setupFragment(){
+
         fragmentLauncher = new FragmentLauncher();
         fragmentAdvanced = new FragmentAdvanced();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentMain,fragmentLauncher).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentMainAdvanced,fragmentLauncher).commit();
 
     }
 
@@ -199,9 +222,8 @@ public class Advanced extends AppCompatActivity {
     private Credentials getCredentials(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
-        System.out.println("Byndle: " + parameters);
-        if(parameters != null && parameters.containsKey("credentials"))
-            return (Credentials) parameters.get("credentials");
+        if(parameters != null && parameters.containsKey("credentials")){
+            return (Credentials) parameters.get("credentials");}
         else
             return null;
     }

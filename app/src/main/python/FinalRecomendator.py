@@ -90,4 +90,6 @@ def rank_song_similarity_by_measure(song, genre_parameter):
     lista = lista.values.tolist()
     lista.append(['Waste',''.join(wasted),''])
 
+    #lista = [dict(zip([f'Similar Song to {song}','id','artist'], l)) for l in lista]
+
     return lista

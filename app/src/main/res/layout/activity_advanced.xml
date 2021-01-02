@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,8 +20,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/songs"
         app:menu="@menu/menu_navigation" />
+
 
     <Switch
         android:id="@+id/positive"
@@ -28,39 +31,39 @@
         android:text="Positive"
         android:textColor="#ffaa4841"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/negative"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/instru"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.484" />
 
     <Switch
         android:id="@+id/instru"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="39dp"
         android:text="Instrumental"
         android:textColor="#ffaa4841"
         android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="@+id/live"
+        app:layout_constraintBottom_toTopOf="@+id/negative"
+        app:layout_constraintEnd_toEndOf="@+id/live"
+        app:layout_constraintStart_toEndOf="@+id/live"
         app:layout_constraintTop_toBottomOf="@+id/danceable" />
 
     <Switch
         android:id="@+id/danceable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginBottom="6dp"
         android:text="Danceable"
         android:textColor="#ffaa4841"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
-        app:layout_constraintStart_toStartOf="@+id/instru"
+        app:layout_constraintBottom_toTopOf="@+id/instru"
+        app:layout_constraintStart_toStartOf="@+id/live"
         app:layout_constraintTop_toBottomOf="@+id/live" />
 
     <Switch
         android:id="@+id/low"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
         android:text="Low Energy"
         android:textColor="#ffaa4841"
         android:textSize="30sp"
@@ -71,24 +74,21 @@
     <Switch
         android:id="@+id/live"
         android:layout_width="108dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="102dp"
-        android:layout_marginLeft="102dp"
-        android:layout_marginEnd="101dp"
-        android:layout_marginRight="101dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:text="Live"
         android:textColor="#ffaa4841"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/danceable"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Switch
         android:id="@+id/high"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="59dp"
+        android:layout_marginBottom="62dp"
         android:text="High Energy"
         android:textColor="#ffaa4841"
         android:textColorLink="#ffaa4841"
@@ -107,14 +107,14 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/low"
         app:layout_constraintStart_toStartOf="@+id/positive"
-        app:layout_constraintTop_toBottomOf="@+id/positive" />
+        app:layout_constraintTop_toBottomOf="@+id/instru" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="221dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="73dp"
-        android:layout_marginBottom="80dp"
+        android:layout_width="222dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginBottom="58dp"
         android:fontFamily="casual"
         android:text="Filters"
         android:textAllCaps="true"
@@ -123,45 +123,31 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/live"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/songs"
         android:layout_width="162dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="37dp"
-        android:text="Songs!"
-        android:onClick="onClick"
-        android:textColor="#ffaa4841"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/high" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="206dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:text="TextView"
+        android:layout_marginBottom="73dp"
+        android:onClick="onClick"
+        android:text="Songs!"
+        android:textColor="#ffaa4841"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/songs" />
+        app:layout_constraintTop_toBottomOf="@+id/high" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginRight="21dp"
-        app:layout_constraintBottom_toTopOf="@+id/positive"
-        app:layout_constraintEnd_toEndOf="@+id/danceable"
-        app:layout_constraintStart_toEndOf="@+id/positive"
-        app:layout_constraintTop_toBottomOf="@+id/danceable" />
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
