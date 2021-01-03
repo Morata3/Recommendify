@@ -109,7 +109,6 @@ public class FragmentSoulmateArtist extends Fragment {
             listOfRecommendations.remove(artist);
             artistsShown.add(artist);
 
-
             artistNameView.setText(artist.getName());
             Glide.with(this).load(artist.getImage()).into(artistImage);
 

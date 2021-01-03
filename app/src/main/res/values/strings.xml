@@ -25,5 +25,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="three_artist_recommender">Please type 3 band that you already like</string>
 
 </resources>

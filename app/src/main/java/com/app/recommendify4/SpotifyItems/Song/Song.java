@@ -3,7 +3,7 @@ package com.app.recommendify4.SpotifyItems.Song;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Song {
+public class Song{
 
     private String name;
     private String album;

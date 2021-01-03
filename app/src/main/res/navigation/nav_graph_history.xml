@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_history"
+    app:startDestination="@id/fragmentLauncher_History">
+
+    <fragment
+        android:id="@+id/fragmentLauncher_History"
+        android:name="com.app.recommendify4.Fragments.FragmentLauncher_History"
+        android:label="fragment_launcher_history"
+        tools:layout="@layout/fragment_launcher_history" >
+        <action
+            android:id="@+id/action_fragmentLauncher_History_to_fragmentHistorySong2"
+            app:destination="@id/fragmentHistorySong" />
+        <action
+            android:id="@+id/action_fragmentLauncher_History_to_fragmentHistoryArtist"
+            app:destination="@id/fragmentHistoryArtist" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentHistorySong"
+        android:name="com.app.recommendify4.Fragments.FragmentHistorySong"
+        android:label="fragment_history_song"
+        tools:layout="@layout/fragment_history_song" >
+        <action
+            android:id="@+id/action_fragmentHistorySong2_to_fragmentLauncher_History"
+            app:destination="@id/fragmentLauncher_History" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentHistoryArtist"
+        android:name="com.app.recommendify4.Fragments.FragmentHistoryArtist"
+        android:label="fragment_history_artist"
+        tools:layout="@layout/fragment_history_artist" >
+        <action
+            android:id="@+id/action_fragmentHistoryArtist_to_fragmentLauncher_History"
+            app:destination="@id/fragmentLauncher_History" />
+    </fragment>
+</navigation>

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
 
     private FragmentTransaction fragmentTransaction;
-    private Fragment fragmentLauncher;
+    private FragmentLauncher fragmentLauncher;
     private FragmentSong fragmentSong;
     private FragmentHybrid fragmentHybrid;
     private FragmentSoulmateArtist fragmentSoulmateArtist;
@@ -108,10 +108,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Intent intent;
                 switch (menuItem.getItemId()) {
-
                     case R.id.advanced:
-                        Intent intent = new Intent(getApplicationContext(), Advanced.class);
+                        intent = new Intent(getApplicationContext(), Advanced.class);
                         intent.putExtra("credentials", credentials);
                         startActivity(intent);
 
@@ -120,12 +120,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.home:
                         return true;
                     case R.id.history:
-                        System.out.println("HISTORIAL DE CANCIONS: ");
-                        for(RecommendedSong song : userRecommendations.getSongsShown()) System.out.println(song);
-
-                    /*startActivity(new Intent(getApplicationContext()
-                            , History.class));*/
-                        //overridePendingTransition(0, 0);
+//                        System.out.println("HISTORIAL DE CANCIONS: ");
+//                        for(RecommendedSong song : userRecommendations.getSongsShown()) System.out.println(song);
+//                    startActivity(new Intent(getApplicationContext()
+//                            , History.class));
+//                        overridePendingTransition(0, 0);
+                        intent = new Intent(getApplicationContext(), History.class);
+                        intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
+                        intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
+                        startActivity(intent);
                         return true;
 
                 }
@@ -194,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }else System.out.println("Artist recommendations not yet ready");
                 break;
             case R.id.buttonPlaylist:
-                System.out.println(credentials);
                 openDialogCreatePlaylist();
                 break;
             case R.id.buttonArtist:
@@ -273,19 +275,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void artistRecommendation(){
         Intent intent = new Intent(this, ArtistRecommendation.class);
-        startActivity(intent);
-    }
-
-
-    private void soulmateArtistRecommendation(){
-        Intent intent = new Intent(this, SoulmateArtistRecommendation.class);
-        //intent.putExtra("songsToRecommend", userRecommendations);
-        if(userRecommendations.getArtistRecommendations() != null && userRecommendations.getArtistRecommendations().size() > 0){
-            com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artistToRecommend = userRecommendations.getArtistRecommendations().get(0);
-            intent.putExtra("artistToRecommend", artistToRecommend);
-            userRecommendations.moveToHistory(artistToRecommend);
-
-        }
+        intent.putExtra("Credentials",credentials);
+        intent.putParcelableArrayListExtra("artistShown",userRecommendations.getArtistsShown());
         startActivity(intent);
     }
 

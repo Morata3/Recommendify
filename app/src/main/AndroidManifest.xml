@@ -24,7 +24,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.app.recommendify4.ArtistRecommendation" />
-        <activity android:name="com.app.recommendify4.SoulmateArtistRecommendation" />
         <activity android:name="com.app.recommendify4.Advanced" />
         <activity android:name="com.app.recommendify4.History" />
         <activity

@@ -87,11 +87,8 @@ public class Advanced extends AppCompatActivity {
         positive.setOnClickListener(v -> ChangePositiveSwitch());
         negative.setOnClickListener(v -> ChangeNegativeSwitch());
 
-        //Perform ItemSelectedListener
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.advanced);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -130,7 +127,7 @@ public class Advanced extends AppCompatActivity {
                 if(recommendationsList!=null){
 
                     fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs(),credentials);
-                    fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
+//                    fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
                     fragmentTransaction.addToBackStack(null);
                 }
                 else System.out.println("Recommendations not yet ready ");
@@ -179,7 +176,7 @@ public class Advanced extends AppCompatActivity {
 
         fragmentLauncher = new FragmentLauncher();
         fragmentAdvanced = new FragmentAdvanced();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentMainAdvanced,fragmentLauncher).commit();
+//        getSupportFragmentManager().beginTransaction().add(R.id.fragmentMainAdvanced,fragmentLauncher).commit();
 
     }
 
@@ -228,5 +225,5 @@ public class Advanced extends AppCompatActivity {
             return null;
     }
 
-    }
+}
 

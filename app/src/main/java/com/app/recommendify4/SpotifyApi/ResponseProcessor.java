@@ -125,7 +125,6 @@ public class ResponseProcessor {
             song.setCoverURL(processCoverAlbum(albumInfo));
         }
         if(trackJSON.has("preview_url")) song.setPreviewURL(trackJSON.getString("preview_url"));
-        System.out.println("PREVIEW: " + song.getId());
     }
 
     private static String processCoverAlbum(JSONObject albumCoverJSON) throws JSONException{
@@ -137,7 +136,7 @@ public class ResponseProcessor {
             for(int index=0; index < images.length(); index ++){
                 JSONObject imageObject = images.getJSONObject(index);
                 if(imageObject.has("url")){
-                    if(imageObject.getInt("height") == 300) coverURL = imageObject.getString("url");
+                    if(imageObject.getInt("height") >= 250) coverURL = imageObject.getString("url");
                 }
             }
         }

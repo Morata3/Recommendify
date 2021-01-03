@@ -96,13 +96,11 @@ public class FragmentAdvanced extends Fragment {
                 }
             });
 
-            System.out.println("IMAGEN: " + song.getCoverURL());
-
             songNameView.setText(song.getName());
             songArtistView.setText(song.getArtists().get(0).getName());
             Glide.with(this).load(song.getCoverURL()).into(coverAlbum);
             try {
-                if(song.getPreviewURL() != null) playSong();
+                if(!song.getPreviewURL().equals("null")) playSong();
                 else System.out.println("Song without preview URL");
             } catch (IOException e) {
                 System.out.println("Error trying to play song");
@@ -121,6 +119,9 @@ public class FragmentAdvanced extends Fragment {
         mediaPlayer.start();
     }
 
-
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+    }
 }

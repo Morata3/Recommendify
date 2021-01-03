@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/artistImage"
-            android:layout_width="228dp"
-            android:layout_height="173dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:layout_marginBottom="77dp"
             android:src="@drawable/ic_menu_gallery"
             app:layout_constraintBottom_toTopOf="@+id/nextArtist"
@@ -34,7 +34,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artistImage" />
+            app:layout_constraintTop_toBottomOf="@+id/artistImage"
+            android:background="@drawable/custom_main_button" />
 
         <TextView
             android:id="@+id/artistName"

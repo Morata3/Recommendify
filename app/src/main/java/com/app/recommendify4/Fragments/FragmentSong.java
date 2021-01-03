@@ -7,6 +7,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +102,6 @@ public class FragmentSong extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         ImageButton nextSong = (ImageButton) view.findViewById(R.id.nextSong);
         nextSong.setOnClickListener(v -> setNextSong());
         coverAlbum = (ImageView) view.findViewById(R.id.playSong);
@@ -115,13 +117,11 @@ public class FragmentSong extends Fragment {
             listOfRecommendations.remove(song);
             songsShown.add(song);
 
-            System.out.println("IMAGEN: " + song.getCoverURL());
-
             songNameView.setText(song.getName());
             songArtistView.setText(song.getArtists().get(0).getName());
             Glide.with(this).load(song.getCoverURL()).into(coverAlbum);
             try {
-                if(song.getPreviewURL() != null) playSong(song);
+                if(!song.getPreviewURL().equals("null")) playSong(song);
                 else System.out.println("Song without preview URL");
             } catch (IOException e) {
                 System.out.println("Error trying to play song");
@@ -181,6 +181,9 @@ public class FragmentSong extends Fragment {
         else return listSize;
     }
 
-
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+    }
 }

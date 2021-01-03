@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".Fragments.Fragment3Artists">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/artist1"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/noRecomendation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/coverArtist1"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/coverArtist1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/ic_menu_gallery"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/artist2"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/noRecomendation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/coverArtist2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/coverArtist2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_menu_gallery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/artist3"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/noRecomendation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/coverArtist3"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/coverArtist3"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/ic_menu_gallery"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coverArtist1" />
+
+        <TextView
+            android:id="@+id/artist4"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/noRecomendation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/coverArtist4"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/coverArtist4"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_menu_gallery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coverArtist2" />
+
+        <TextView
+            android:id="@+id/artist5"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/noRecomendation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/coverArtist5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/coverArtist5"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/ic_menu_gallery"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coverArtist3" />
+
+        <TextView
+            android:id="@+id/artist6"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/noRecomendation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/coverArtist6"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/coverArtist6"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_menu_gallery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coverArtist4" />
+
+        <Button
+            android:id="@+id/tryAgainButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="650dp"
+            android:text="Try again!"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:background="@drawable/custom_main_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

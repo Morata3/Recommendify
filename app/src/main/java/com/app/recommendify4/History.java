@@ -1,42 +1,43 @@
 package com.app.recommendify4;
 
+import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
-import com.app.recommendify4.R;
+import com.app.recommendify4.Fragments.FragmentHistoryArtist;
+import com.app.recommendify4.Fragments.FragmentHistorySong;
+import com.app.recommendify4.Fragments.FragmentLauncher;
+import com.app.recommendify4.Fragments.FragmentLauncher_History;
+import com.app.recommendify4.Fragments.FragmentSong;
+import com.app.recommendify4.Fragments.FragmentSoulmateArtist;
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
+import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.UserInfo.Credentials;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class History extends AppCompatActivity {
+
+    private FragmentLauncher_History fragmentLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        //Initializa and Assign variable
+        setupFragment();
+        changeFragment();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        //Set home selected
         bottomNavigationView.setSelectedItemId(R.id.history);
-
-        TextView text = (TextView) findViewById(R.id.textView5);
-
-
-        if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
-        Python py= Python.getInstance();
-        PyObject pyf = py.getModule("FinalRecomendator");
-
-        //Perform ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -58,7 +59,38 @@ public class History extends AppCompatActivity {
 
             }
         });
-
-
     }
+
+    private ArrayList<RecommendedSong> getSongs(){
+        Intent intent = getIntent();
+        Bundle parameters = intent.getExtras();
+        if(parameters != null && parameters.containsKey("Songs")){
+            return parameters.getParcelableArrayList("Songs");}
+        else
+            return null;
+    }
+
+    private ArrayList<RecommendedArtist> getArtists(){
+        Intent intent = getIntent();
+        Bundle parameters = intent.getExtras();
+        if(parameters != null && parameters.containsKey("Artists")){
+            return parameters.getParcelableArrayList("Artists");}
+        else
+            return null;
+    }
+
+
+    public void setupFragment(){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentLauncher = new FragmentLauncher_History();
+
+        fragmentTransaction.add(R.id.fragmentHistory,fragmentLauncher).commit();
+    }
+
+    public void changeFragment(){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentLauncher = FragmentLauncher_History.newInstance(getSongs(), getArtists());
+        fragmentTransaction.replace(R.id.fragmentHistory,fragmentLauncher).commit();
+    }
+
 }

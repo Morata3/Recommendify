@@ -4,24 +4,31 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-
-    <ProgressBar
-        style="@android:style/Widget.ProgressBar.Large"
-        android:id="@+id/progress_circular"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:indeterminate="true" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/progress_circular"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Loading..."
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="25dp">
 
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Large"
+            android:id="@+id/progress_circular"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_circular"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="Loading..."
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </RelativeLayout>

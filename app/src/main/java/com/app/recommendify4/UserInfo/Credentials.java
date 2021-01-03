@@ -62,7 +62,7 @@ public class Credentials implements Runnable, Parcelable{
     public void setTimeExpire(int expire_in){
         Date now = new Date();
         time_to_expire = new Date(now.getTime() + expire_in*1000);
-        System.out.println("TIME EXPIRE: "+time_to_expire);
+        System.out.println("TIME EXPIRE: " + time_to_expire);
     }
 
     public void checkTokenExpiration() {

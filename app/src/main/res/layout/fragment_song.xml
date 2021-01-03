@@ -17,25 +17,29 @@
         <TextView
             android:id="@+id/songName"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/noRecomendation"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/songArtist" />
 
         <TextView
             android:id="@+id/songArtist"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:text="@string/noRecomendation"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintBottom_toTopOf="@+id/playSong" />
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/playSong"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/playSong"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:src="@drawable/ic_menu_gallery"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,12 +49,13 @@
         <ImageButton
             android:id="@+id/nextSong"
             android:layout_width="125dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
             android:src="@android:drawable/ic_media_next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playSong" />
+            app:layout_constraintTop_toBottomOf="@+id/playSong"
+            android:background="@drawable/custom_main_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

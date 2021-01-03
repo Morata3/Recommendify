@@ -15,12 +15,12 @@
         android:layout_height="match_parent">
 
 
-
         <TextView
             android:id="@+id/songNameAdvanced"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="40dp"
             android:gravity="center"
+            android:textSize="18sp"
             android:text="@string/noRecomendation"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:layout_constraintBottom_toTopOf="@+id/songArtistAdvanced" />
@@ -28,16 +28,17 @@
         <TextView
             android:id="@+id/songArtistAdvanced"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="40dp"
             android:gravity="center"
+            android:textSize="14sp"
             android:text="@string/noRecomendation"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintBottom_toTopOf="@+id/playSongAdvanced" />
 
         <ImageView
             android:id="@+id/playSongAdvanced"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="300sp"
+            android:layout_height="300sp"
             android:src="@drawable/ic_menu_gallery"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,13 +47,14 @@
 
         <ImageButton
             android:id="@+id/nextSongAdvanced"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:src="@android:drawable/ic_media_next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playSongAdvanced" />
+            app:layout_constraintTop_toBottomOf="@+id/playSongAdvanced"
+            android:background="@drawable/custom_main_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
