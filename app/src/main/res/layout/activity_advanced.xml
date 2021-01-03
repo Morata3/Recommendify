@@ -12,164 +12,133 @@
         android:layout_height="match_parent"
         tools:context="com.app.recommendify4.Advanced">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="1dp"
-        app:itemBackground="@color/white"
-        app:itemIconTint="@drawable/selector"
-        app:itemTextColor="@drawable/selector"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/songs"
-        app:menu="@menu/menu_navigation" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="411dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:itemBackground="@color/white"
+            app:itemIconTint="@drawable/selector"
+            app:itemTextColor="@drawable/selector"
+            app:menu="@menu/menu_navigation"
+            tools:layout_editor_absoluteY="674dp" />
 
 
-    <Switch
-        android:id="@+id/positive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="9dp"
-        android:text="Positive"
-        android:textColor="#1DB954"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/negative"
-        app:layout_constraintStart_toStartOf="@+id/instru"
-        app:layout_constraintTop_toBottomOf="@+id/instru" />
+        <Switch
+            android:id="@+id/positive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Positive"
+            android:textColor="#1DB954"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.493"
+            tools:layout_editor_absoluteX="113dp" />
 
-    <Switch
-        android:id="@+id/instru"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="74dp"
-        android:layout_marginRight="74dp"
-        android:text="Instrumental"
-        android:textColor="#1DB954"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/positive"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/live" />
+        <Switch
+            android:id="@+id/instru"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instrumental"
+            android:textColor="#1DB954"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="112dp"
+            tools:layout_editor_absoluteY="301dp" />
 
-    <Switch
-        android:id="@+id/danceable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="38dp"
-        android:layout_marginRight="38dp"
-        android:layout_marginBottom="39dp"
-        android:text="Danceable"
-        android:textColor="#1DB954"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/instru"
-        app:layout_constraintEnd_toEndOf="@+id/instru" />
+        <Switch
+            android:id="@+id/danceable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danceable"
+            android:textColor="#1DB954"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="112dp"
+            tools:layout_editor_absoluteY="261dp" />
 
-    <Switch
-        android:id="@+id/low"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="16dp"
-        android:text="Low Energy"
-        android:textColor="#1DB954"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/high"
-        app:layout_constraintEnd_toEndOf="@+id/high"
-        app:layout_constraintTop_toBottomOf="@+id/negative" />
+        <Switch
+            android:id="@+id/low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Low Energy"
+            android:textColor="#1DB954"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="113dp"
+            tools:layout_editor_absoluteY="421dp" />
 
-    <Switch
-        android:id="@+id/live"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="26dp"
-        android:layout_marginBottom="59dp"
-        android:text="Live"
-        android:textColor="#1DB954"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/instru"
-        app:layout_constraintEnd_toEndOf="@+id/songs"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        <Switch
+            android:id="@+id/live"
+            android:layout_width="141dp"
+            android:layout_height="47dp"
+            android:text="Live"
+            android:textColor="#1DB954"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="113dp"
+            tools:layout_editor_absoluteY="214dp" />
 
-    <Switch
-        android:id="@+id/high"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginBottom="20dp"
-        android:text="High Energy"
-        android:textColor="#1DB954"
-        android:textColorLink="#1DB954"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/songs"
-        app:layout_constraintStart_toStartOf="@+id/songs"
-        app:layout_constraintTop_toBottomOf="@+id/low" />
+        <Switch
+            android:id="@+id/high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="High Energy"
+            android:textColor="#1DB954"
+            android:textColorLink="#1DB954"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="112dp"
+            tools:layout_editor_absoluteY="461dp" />
 
-    <Switch
-        android:id="@+id/negative"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginBottom="7dp"
-        android:text="Negative"
-        android:textColor="#1DB954"
-        android:textColorLink="#A81F1F"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/low"
-        app:layout_constraintStart_toStartOf="@+id/low"
-        app:layout_constraintTop_toBottomOf="@+id/positive" />
+        <Switch
+            android:id="@+id/negative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Negative"
+            android:textColor="#1DB954"
+            android:textColorLink="#A81F1F"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="113dp"
+            tools:layout_editor_absoluteY="381dp" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="198dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginBottom="30dp"
-        android:fontFamily="@font/love_ya_like_a_sister"
-        android:text="Filters"
-        android:textAllCaps="true"
-        android:textColor="#1DB954"
-        android:textSize="55sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/live"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="198dp"
+            android:layout_height="68dp"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:text="Filters"
+            android:textAllCaps="true"
+            android:textColor="#1DB954"
+            android:textSize="55sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="107dp"
+            tools:layout_editor_absoluteY="96dp" />
 
-    <Button
-        android:id="@+id/songs"
-        android:layout_width="188dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="73dp"
-        android:onClick="onClick"
-        android:text="Songs!"
-        android:background="@drawable/custom_main_button"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/high" />
+        <Button
+            android:id="@+id/songs"
+            android:layout_width="188dp"
+            android:layout_height="47dp"
+            android:background="@drawable/custom_main_button"
+            android:onClick="onClick"
+            android:text="Songs!"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="543dp" />
+
+        <fragment
+            android:id="@+id/fragmentMainAdvanced"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:navGraph="@navigation/nav_graph" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <fragment
-        android:id="@+id/fragmentMainAdvanced"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph" />
 
 </RelativeLayout>
 
