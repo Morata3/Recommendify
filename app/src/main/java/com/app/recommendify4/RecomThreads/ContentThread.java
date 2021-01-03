@@ -37,7 +37,6 @@ public class ContentThread implements Runnable{
 
         recommendations = recommendations.substring(1,recommendations.length() - 1);
 
-        System.out.println("Recomendations: " + recommendations);
 
         String[] Recoms = recommendations.split("],");
 
@@ -45,7 +44,10 @@ public class ContentThread implements Runnable{
             String title = Recoms[k].split(",")[0].substring(3,Recoms[k].split(",")[0].length()-1);
             String id =Recoms[k].split(",")[1].substring(2,Recoms[k].split(",")[1].length()-1);
             String artist = Recoms[k].split(",")[2].substring(2,Recoms[k].split(",")[2].length()-1);
-            RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0);
+            String Genres = Recoms[k].split(" '")[3].substring(0,Recoms[k].split(" '")[3].length()-2);
+
+
+            RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0,Genres);
             ThreadLauncher builder_updateTrack = new ThreadLauncher();
             builder_updateTrack.execute(new Runnable() {
                 @Override
@@ -55,7 +57,7 @@ public class ContentThread implements Runnable{
                 }
             });
             recommendationsList.add(recommendedSong);
-            System.out.println("(***DEBUG_MESAGE) BASE SONG: "+ baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString());
+            System.out.println("(***DEBUG_MESAGE) BASE SONG: "+ baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString() +" - Genres:"+recommendedSong.getGenres());
         }
         //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);
         callback.onComplete(recommendationsList);

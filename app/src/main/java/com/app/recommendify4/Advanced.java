@@ -164,7 +164,7 @@ public class Advanced extends AppCompatActivity {
             String title = jsonrecom.getJSONObject(index).getString("song_name");
             String artist = jsonrecom.getJSONObject(index).getString("artist");
             String id = jsonrecom.getJSONObject(index).getString("id");
-            RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0);
+            RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0,"");
             recommendationsList.add(recommendedSong);
 
         }

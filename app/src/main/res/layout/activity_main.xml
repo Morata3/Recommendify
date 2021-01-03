@@ -18,7 +18,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="#1"
             app:itemBackground="@color/white"
             app:itemIconTint="@drawable/selector"
             app:itemTextColor="@drawable/selector"

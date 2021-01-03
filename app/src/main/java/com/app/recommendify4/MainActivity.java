@@ -9,8 +9,10 @@ import com.app.recommendify4.Fragments.FragmentSoulmateArtist;
 import com.app.recommendify4.RecomThreads.CollaborativeCallback;
 import com.app.recommendify4.RecomThreads.ContentCallback;
 import com.app.recommendify4.RecomThreads.ContentThread;
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.SpotifyItems.Song.Song;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.ThreadManagers.RecomThreadPool;
 import com.app.recommendify4.UserInfo.UserProfile;
@@ -199,11 +201,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 artistRecommendation();
                 break;
             case R.id.buttonHybrid:
-                System.out.println("Llego aqí ni que sea");
                 if(this.userRecommendations.getArtistRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0 &&
                         this.userRecommendations.getSongsRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0){
 
-                    fragmentHybrid = FragmentHybrid.newInstance(getHybridSongs(),credentials);
+                    fragmentHybrid = FragmentHybrid.newInstance(getHybridSongs_bygenre(),credentials);
                     fragmentTransaction.replace(R.id.fragmentMain,fragmentHybrid);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Recommendations not yet ready ");
@@ -323,5 +324,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else return this.userProfile;
     }
 
+    public ArrayList<RecommendedSong> getHybridSongs_bygenre() {
 
-}
+        if (this.userRecommendations.getArtistRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0 ||
+                this.userRecommendations.getSongsRecommendations() == null || this.userRecommendations.getSongsRecommendations().size() == 0)
+            return new ArrayList<>();
+        else {
+            ArrayList<RecommendedSong> HybridRecommendations = this.userRecommendations.getSongsRecommendations();
+            for (RecommendedSong song : HybridRecommendations) {
+                for (com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()) {
+                  String[] SongGenres = getSongGenres(song);
+                  ArrayList<String> ArtistGenres = artist.getGenres();
+                    for(int i = 0; i < SongGenres.length; i++){
+                        for(String artistgenre : ArtistGenres){
+                            //System.out.println("SG: " + SongGenres[i] + "AG: " + artistgenre);
+                            if(SongGenres[i].equals(artistgenre)){
+                               // System.out.println("Coincidence " + HybridRecommendations.size() + " " + this.userRecommendations.getArtistRecommendations().size() );
+                                song.setCoincidence(song.getCoincidence()+1);
+                            }
+
+
+                        }
+
+
+                    }
+
+
+
+                }
+            }
+            Collections.sort(HybridRecommendations, RecommendedSong.Coincidences);
+
+            return HybridRecommendations;
+        }
+    }
+    
+    public String[] getSongGenres(RecommendedSong Song){
+        String[] SongGenres = Song.getGenres().split(",");
+
+        for(int i = 0; i< SongGenres.length; i++) {
+
+            SongGenres[i] = SongGenres[i].substring(4,SongGenres[i].length()-3);
+        }
+        return SongGenres;
+    }
+
+    }

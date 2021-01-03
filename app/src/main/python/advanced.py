@@ -11,7 +11,7 @@ from os.path import dirname,join
 
 # import numpy as np
 # from sklearn.neighbors import NearestNeighbors
-lim_dance = 0.6
+lim_dance = 0.7
 lim_liveness = 0.60
 lim_instru = 0.80
 lim_lowenergy = 0.40
@@ -59,7 +59,8 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
         music3 = music3.drop(music3[music3.speechiness > lim_speechiness].index)
         music  = music3.reset_index(drop=True)
 
-    music3 = music3.head(2)[['Song Name','id','Artist']].values.tolist()
+    music3 = music3.sort_values(by= 'Song Popularity', ascending = False)
+    music3 = music3.head(10)[['Song Name','id','Artist']].values.tolist()
     music3 = [dict(zip(['song_name','id','artist'], l)) for l in music3]
     
     return music3

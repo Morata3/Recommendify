@@ -9,6 +9,7 @@ import java.util.Comparator;
 public class RecommendedSong extends Song implements Parcelable {
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artists;
     private int shown;
+    private String genres;
     private String coverURL;
     private int Coincidence;
     private String previewURL;
@@ -21,11 +22,12 @@ public class RecommendedSong extends Song implements Parcelable {
         this.Coincidence = 0;
     }
 
-    public RecommendedSong(String songName, String artistsList, String songId, int shown){
+    public RecommendedSong(String songName, String artistsList, String songId, int shown, String Genres){
         super(songName, songId);
         this.artists = getArtistsFromString(artistsList);
         this.shown = shown;
         this.Coincidence = 0;
+        this.genres = Genres;
         //this.ArtistString = artistsList;
 
 
@@ -44,6 +46,10 @@ public class RecommendedSong extends Song implements Parcelable {
     public void setPreviewURL(String url)  {this.previewURL = url; }
 
     public int getCoincidence(){return Coincidence; }
+
+    public void setGenres(String genres){this.genres = genres;}
+
+    public String getGenres(){return this.genres;}
 
     //public String getartistsString() {return ArtistString;}
 
@@ -98,6 +104,17 @@ public class RecommendedSong extends Song implements Parcelable {
         dest.writeTypedList(artists);
         dest.writeInt(shown);
     }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "name='" + getName() + '\'' +
+                ", album='" + getAlbum() + '\'' +
+                ", id='" + getId() + '\'' +
+                ", coincidences='" + Coincidence + '\'' +
+                '}';
+    }
+
 
     public static Comparator<RecommendedSong> Coincidences = new Comparator<RecommendedSong>() {
 
