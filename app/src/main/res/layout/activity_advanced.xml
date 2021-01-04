@@ -35,23 +35,20 @@
             android:text="Positive"
             android:textColor="#1DB954"
             android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/negative"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.483" />
+            app:layout_constraintBottom_toTopOf="@+id/negative"
+            app:layout_constraintStart_toStartOf="@+id/loud"
+            app:layout_constraintTop_toBottomOf="@+id/loud" />
 
         <Switch
             android:id="@+id/instru"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="83dp"
-            android:layout_marginRight="83dp"
-            android:layout_marginBottom="40dp"
             android:text="Instrumental"
             android:textColor="#1DB954"
             android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/negative"
+            app:layout_constraintBottom_toTopOf="@+id/quiet"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/danceable" />
 
         <Switch
@@ -69,21 +66,17 @@
             android:id="@+id/low"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginLeft="1dp"
             android:text="Low Energy"
             android:textColor="#1DB954"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/high"
-            app:layout_constraintStart_toStartOf="@+id/high"
+            app:layout_constraintStart_toStartOf="@+id/negative"
             app:layout_constraintTop_toBottomOf="@+id/negative" />
 
         <Switch
             android:id="@+id/live"
-            android:layout_width="141dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginLeft="1dp"
+            android:layout_width="136dp"
+            android:layout_height="38dp"
             android:text="Live"
             android:textColor="#1DB954"
             android:textSize="30sp"
@@ -95,13 +88,13 @@
             android:id="@+id/high"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="42dp"
+            android:layout_marginBottom="66dp"
             android:text="High Energy"
             android:textColor="#1DB954"
             android:textColorLink="#1DB954"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/songs"
-            app:layout_constraintStart_toStartOf="@+id/songs"
+            app:layout_constraintStart_toStartOf="@+id/low"
             app:layout_constraintTop_toBottomOf="@+id/low" />
 
         <Switch
@@ -113,15 +106,38 @@
             android:textColorLink="#A81F1F"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/low"
-            app:layout_constraintStart_toStartOf="@+id/low"
+            app:layout_constraintStart_toStartOf="@+id/positive"
+            app:layout_constraintTop_toBottomOf="@+id/positive" />
+
+        <Switch
+            android:id="@+id/loud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loud"
+            android:textColor="#1DB954"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/positive"
+            app:layout_constraintStart_toStartOf="@+id/quiet"
+            app:layout_constraintTop_toBottomOf="@+id/quiet" />
+
+        <Switch
+            android:id="@+id/quiet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:text="Quiet"
+            android:textColor="#1DB954"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/loud"
+            app:layout_constraintStart_toStartOf="@+id/instru"
             app:layout_constraintTop_toBottomOf="@+id/instru" />
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="198dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="96dp"
-            android:layout_marginBottom="50dp"
+            android:layout_width="200dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="38dp"
+            android:layout_marginBottom="40dp"
             android:fontFamily="@font/love_ya_like_a_sister"
             android:text="Filters"
             android:textAllCaps="true"
@@ -137,7 +153,7 @@
             android:id="@+id/songs"
             android:layout_width="188dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="84dp"
+            android:layout_marginBottom="60dp"
             android:background="@drawable/custom_main_button"
             android:onClick="onClick"
             android:text="Songs!"
@@ -148,21 +164,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/high" />
 
-        <fragment
-            android:id="@+id/fragmentMainAdvanced"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            app:defaultNavHost="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:navGraph="@navigation/nav_graph" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <fragment
+        android:id="@+id/fragmentMainAdvanced"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
 
 </RelativeLayout>
 

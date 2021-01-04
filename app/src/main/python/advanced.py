@@ -12,13 +12,15 @@ from os.path import dirname,join
 # import numpy as np
 # from sklearn.neighbors import NearestNeighbors
 lim_dance = 0.7
-lim_liveness = 0.60
+lim_liveness = 0.65
 lim_instru = 0.80
 lim_lowenergy = 0.40
 lim_highenergy = 0.70
 lim_positive = 0.70
 lim_negative = 0.40
 lim_speechiness = 0.2
+lim_loudness = 0.7
+lim_quiet = 0.3
 
 SpotifyFile = join(dirname(__file__),"spotify2.csv")
 music = pd.read_csv(SpotifyFile)
@@ -28,7 +30,7 @@ music = music.reset_index(drop=True)
 
 ## Canciones bailables, con energía alta,media baja, alegres, tristes en directo
 
-def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrumental):
+def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrumental,loudness,quiet):
 
     #print(directo,bailable,positive,negative,lowenergy,highenergy,instrumental)
     music3 = music_aux
@@ -46,9 +48,17 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
     if positive == 1: #canciones positivas
         music3 = music3.drop(music3[music3.valence < lim_positive].index)
         music3 = music3.reset_index(drop=True)
-    elif positive == 1: #canciones tristes
-        music3 = music3.drop(music3[music3.valence > lim_positive].index)
+    elif negative == 1: #canciones tristes
+        music3 = music3.drop(music3[music3.valence > negative].index)
         music3 = music3.reset_index(drop=True)
+        
+    if loudness == 1: #canciones loud
+        music3 = music3.drop(music3[music3.valence < lim_loudness].index)
+        music3 = music3.reset_index(drop=True)
+    elif quiet == 1: #canciones suaves
+        music3 = music3.drop(music3[music3.valence > lim_quiet].index)
+        music3 = music3.reset_index(drop=True)
+        
     
     if directo == 1: #canciones en directo
         music3 = music3.drop(music3[music3.liveness < lim_liveness].index)
@@ -59,13 +69,14 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
         music3 = music3.drop(music3[music3.speechiness > lim_speechiness].index)
         music  = music3.reset_index(drop=True)
 
+
     music3 = music3.sort_values(by= 'Song Popularity', ascending = False)
     music3 = music3.head(10)[['Song Name','id','Artist']].values.tolist()
     music3 = [dict(zip(['song_name','id','artist'], l)) for l in music3]
     
     return music3
 
-music = filter_songs(1,0,1,0,1,0,0)
+music = filter_songs(1,1,0,1,0,0,1,1,1)
 print(music)
 '''while music['Song Name'].count() <= 15:
     lim_dance = lim_dance - 0.05

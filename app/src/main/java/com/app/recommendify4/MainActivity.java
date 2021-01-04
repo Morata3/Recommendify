@@ -42,6 +42,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -126,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                            , History.class));
 //                        overridePendingTransition(0, 0);
                         intent = new Intent(getApplicationContext(), History.class);
-                        System.out.println("(MainActivity)"+userRecommendations.getSongsShown().get(0));
                         intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
                         intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
                         startActivity(intent);
@@ -295,6 +295,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             userRecommendations = new Recommendations();
             ArrayList<UserSong> userTopSongs = userProfile.getTopSongs();
             ArrayList<UserArtist> userTopArtists = userProfile.getTopArtists();
+            long seed = System.nanoTime();
+            Collections.shuffle(userTopSongs,new Random(seed));
+            Collections.shuffle(userTopArtists, new Random(seed));
 
             for (UserSong song : userTopSongs.subList(lastSongProcessed, lastSongProcessed + 5)) threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
             for (UserArtist artist: userTopArtists.subList(lastArtistProcessed, lastArtistProcessed + 5)) threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
@@ -325,13 +328,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ArrayList<RecommendedSong> HybridRecommendations = this.userRecommendations.getSongsRecommendations();
             for (RecommendedSong song : HybridRecommendations) {
                 for (com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()) {
-                  String[] SongGenres = getSongGenres(song);
-                  ArrayList<String> ArtistGenres = artist.getGenres();
+                    String[] SongGenres = getSongGenres(song);
+                    ArrayList<String> ArtistGenres = artist.getGenres();
                     for(int i = 0; i < SongGenres.length; i++){
                         for(String artistgenre : ArtistGenres){
                             //System.out.println("SG: " + SongGenres[i] + "AG: " + artistgenre);
                             if(SongGenres[i].equals(artistgenre)){
-                               // System.out.println("Coincidence " + HybridRecommendations.size() + " " + this.userRecommendations.getArtistRecommendations().size() );
+                                // System.out.println("Coincidence " + HybridRecommendations.size() + " " + this.userRecommendations.getArtistRecommendations().size() );
                                 song.setCoincidence(song.getCoincidence()+1);
                             }
 
@@ -350,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return HybridRecommendations;
         }
     }
-    
+
     public String[] getSongGenres(RecommendedSong Song){
         String[] SongGenres = Song.getGenres().split(",");
 
@@ -361,4 +364,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return SongGenres;
     }
 
-    }
+}

@@ -49,6 +49,8 @@ public class Advanced extends AppCompatActivity {
     private Switch positive;
     private Switch negative;
     private Switch danceable;
+    private Switch loud;
+    private Switch quiet;
     private Credentials credentials;
 
     private FragmentTransaction fragmentTransaction;
@@ -70,6 +72,8 @@ public class Advanced extends AppCompatActivity {
         low = (Switch) findViewById(R.id.low);
         high = (Switch) findViewById(R.id.high);
         instru = (Switch) findViewById(R.id.instru);
+        quiet = (Switch) findViewById(R.id.quiet);
+        loud = (Switch) findViewById(R.id.loud);
 
 
         credentials = getCredentials();
@@ -82,6 +86,8 @@ public class Advanced extends AppCompatActivity {
             }
         });*/
 
+        quiet.setOnClickListener(v -> ChangeQuietSwitch());
+        loud.setOnClickListener(v -> ChangeLoudSwitch());
         low.setOnClickListener(v -> ChangeLowSwitch());
         high.setOnClickListener(v -> ChangeHighSwitch());
         positive.setOnClickListener(v -> ChangePositiveSwitch());
@@ -127,7 +133,7 @@ public class Advanced extends AppCompatActivity {
                 if(recommendationsList!=null){
 
                     fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs(),credentials);
-//                    fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
+                    fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
                     fragmentTransaction.addToBackStack(null);
                 }
                 else System.out.println("Recommendations not yet ready ");
@@ -148,7 +154,8 @@ public class Advanced extends AppCompatActivity {
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("advanced");
         //System.out.println("Live: " + live.isChecked() + " danceable: " + danceable.isChecked() + " positive: " + positive.isChecked() + " low: " + low.isChecked() + "high: " + high.isChecked() + " instru: " + instru.isChecked());
-        PyObject obj= pyf.callAttr("filter_songs",live.isChecked(),danceable.isChecked(),positive.isChecked(),negative.isChecked(),low.isChecked(),high.isChecked(),instru.isChecked());
+        PyObject obj= pyf.callAttr("filter_songs",live.isChecked(),danceable.isChecked(),positive.isChecked(),negative.isChecked(),low.isChecked(),
+                high.isChecked(),instru.isChecked(),loud.isChecked(),quiet.isChecked());
         String recommendations = obj.toString();
 
 
@@ -165,8 +172,6 @@ public class Advanced extends AppCompatActivity {
             recommendationsList.add(recommendedSong);
 
         }
-
-        System.out.println("Recoooommmm");
 
         return recommendationsList;
 
@@ -212,6 +217,24 @@ public class Advanced extends AppCompatActivity {
         if (low.isChecked()) {
 
             low.toggle();
+
+        }
+    }
+
+    private void ChangeLoudSwitch() {
+
+        if (quiet.isChecked()) {
+
+            quiet.toggle();
+
+        }
+    }
+
+    private void ChangeQuietSwitch() {
+
+        if (loud.isChecked()) {
+
+            loud.toggle();
 
         }
     }
