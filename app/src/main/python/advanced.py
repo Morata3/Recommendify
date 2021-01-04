@@ -41,22 +41,22 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
     if lowenergy == 1: ## 0 -> deja solo canciones con poca energia
         music3 = music3.drop(music3[music3.energy > lim_lowenergy].index)
         music3 = music3.reset_index(drop=True)
-    elif highenergy == 1: ## 2 -> deja solo canciones con mucha energia
+    if highenergy == 1: ## 2 -> deja solo canciones con mucha energia
         music3 = music3.drop(music3[music3.energy < lim_highenergy].index)
         music3 = music3.reset_index(drop=True)
         
     if positive == 1: #canciones positivas
         music3 = music3.drop(music3[music3.valence < lim_positive].index)
         music3 = music3.reset_index(drop=True)
-    elif negative == 1: #canciones tristes
+    if negative == 1: #canciones tristes
         music3 = music3.drop(music3[music3.valence > negative].index)
         music3 = music3.reset_index(drop=True)
         
     if loudness == 1: #canciones loud
-        music3 = music3.drop(music3[music3.valence < lim_loudness].index)
+        music3 = music3.drop(music3[music3.loudness < lim_loudness].index)
         music3 = music3.reset_index(drop=True)
-    elif quiet == 1: #canciones suaves
-        music3 = music3.drop(music3[music3.valence > lim_quiet].index)
+    if quiet == 1: #canciones suaves
+        music3 = music3.drop(music3[music3.loudness > lim_quiet].index)
         music3 = music3.reset_index(drop=True)
         
     
@@ -73,6 +73,8 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
     music3 = music3.sort_values(by= 'Song Popularity', ascending = False)
     music3 = music3.head(10)[['Song Name','id','Artist']].values.tolist()
     music3 = [dict(zip(['song_name','id','artist'], l)) for l in music3]
+
+    print(music3)
     
     return music3
 

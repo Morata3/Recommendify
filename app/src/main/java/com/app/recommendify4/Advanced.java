@@ -130,13 +130,10 @@ public class Advanced extends AppCompatActivity {
         switch (view.getId()) {
 
             case R.id.songs:
-                if(recommendationsList!=null){
-
                     fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs(),credentials);
                     fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
                     fragmentTransaction.addToBackStack(null);
-                }
-                else System.out.println("Recommendations not yet ready ");
+
                 break;
 
             }
@@ -147,6 +144,8 @@ public class Advanced extends AppCompatActivity {
     }
 
     private ArrayList<RecommendedSong> FilteredSongs() throws JSONException {
+
+        recommendationsList = new ArrayList<>();
 
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
@@ -172,6 +171,8 @@ public class Advanced extends AppCompatActivity {
             recommendationsList.add(recommendedSong);
 
         }
+
+        System.out.println(recommendationsList);
 
         return recommendationsList;
 
