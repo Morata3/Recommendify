@@ -39,7 +39,8 @@ public class SongAdapter extends ArrayAdapter<RecommendedSong> {
         ImageView songImage = (ImageView) convertView.findViewById(R.id.songImage);
 
         songName.setText(song.getName());
-//        songArtist.setText(song.);
+        songArtist.setText(song.getArtistNameList(song.getArtists()));
+        System.out.println("Song image URL in history: "+ song.getCoverURL());
         Glide.with(convertView).load(song.getCoverURL()).into(songImage);
 
         return convertView;

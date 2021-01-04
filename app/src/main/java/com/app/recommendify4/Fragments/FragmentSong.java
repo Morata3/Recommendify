@@ -121,7 +121,7 @@ public class FragmentSong extends Fragment {
             songArtistView.setText(song.getArtists().get(0).getName());
             Glide.with(this).load(song.getCoverURL()).into(coverAlbum);
             try {
-                if(!song.getPreviewURL().equals("null")) playSong(song);
+                if(!song.getPreviewURL().equals("null") || song.getPreviewURL() == null) playSong(song);
                 else System.out.println("Song without preview URL");
             } catch (IOException e) {
                 System.out.println("Error trying to play song");
@@ -133,7 +133,9 @@ public class FragmentSong extends Fragment {
         else{
             songNameView.setText("No more recommendations for now");
             songArtistView.setText("But stay calms. More are being generated");
-            Glide.with(this).clear(coverAlbum);
+            Glide.with(this).load("https://memegenerator.net/img/instances/74848295/please-wait-while-im-doing-my-magic.jpg").into(coverAlbum);
+
+          //  Glide.with(this).clear(coverAlbum);
         }
 
     }

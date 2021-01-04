@@ -6,6 +6,7 @@
 
     <ImageView
         android:id="@+id/songImage"
+        android:src="@drawable/ic_menu_gallery"
         android:layout_width="50dp"
         android:layout_height="50dp" />
 

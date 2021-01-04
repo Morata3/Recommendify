@@ -98,5 +98,4 @@ public class Artist/* implements Parcelable*/{
                 '}';
     }
 
-
 }

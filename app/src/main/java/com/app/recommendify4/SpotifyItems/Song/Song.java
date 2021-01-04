@@ -1,7 +1,12 @@
 package com.app.recommendify4.SpotifyItems.Song;
 
+import com.app.recommendify4.SpotifyItems.Artist.Artist;
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class Song{
 
@@ -31,7 +36,17 @@ public class Song{
 
     }
 
+    public String getArtistNameList(ArrayList<RecommendedArtist> artists){
+        String artistNames="";
 
+        for (Artist a : artists){
+            artistNames+=a.getName()+", ";
+        }
+        if (artistNames.length() > 0)
+            artistNames = artistNames.substring(
+                    0, artistNames.length() - 2);
+        return artistNames;
+    }
 
     public String getAlbum() {
         return album;
