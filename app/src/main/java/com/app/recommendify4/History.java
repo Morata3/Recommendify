@@ -89,7 +89,6 @@ public class History extends AppCompatActivity {
 
     public void changeFragment(){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        System.out.println("(History):"+ getSongs().get(0));
         fragmentLauncher = FragmentLauncher_History.newInstance(getSongs(), getArtists());
         fragmentTransaction.replace(R.id.fragmentHistory,fragmentLauncher).commit();
     }

@@ -56,7 +56,6 @@ public class FragmentHistorySong extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if(songs != null ){
-            System.out.println("(FragmentHistorySong): "+songs.get(0));
             SongAdapter adapter = new SongAdapter(getActivity(),R.layout.item_song,songs);
             listView = view.findViewById(R.id.listSongView);
             listView.setAdapter(adapter);
