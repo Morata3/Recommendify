@@ -74,8 +74,8 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
     music3 = music3.head(10)[['Song Name','id','Artist']].values.tolist()
     music3 = [dict(zip(['song_name','id','artist'], l)) for l in music3]
 
-    print(music3)
-    
+
+
     return music3
 
 music = filter_songs(1,1,0,1,0,0,1,1,1)

@@ -172,8 +172,6 @@ public class Advanced extends AppCompatActivity {
 
         }
 
-        System.out.println(recommendationsList);
-
         return recommendationsList;
 
     }

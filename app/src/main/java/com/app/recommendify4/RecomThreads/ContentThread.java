@@ -9,6 +9,9 @@ import com.app.recommendify4.UserInfo.Credentials;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class ContentThread implements Runnable{
@@ -34,30 +37,40 @@ public class ContentThread implements Runnable{
 
         PyObject obj = pyf.callAttr("rank_song_similarity_by_measure", baseForRecommendations.toString(), 2);
         String recommendations = obj.toString();
+        JSONArray jsonrecom = null;
+        String title = null;
+        String artist = null;
+        String id = null;
+        String Genres = null;
 
-        recommendations = recommendations.substring(1,recommendations.length() - 1);
+        for(int index = 0; index < jsonrecom.length(); index++){
 
+            try {
+                if(!(jsonrecom.getJSONObject(index).getString("song_name").length() == 1))
+                {
 
-        String[] Recoms = recommendations.split("],");
-
-        for(int k = 1; k < Recoms.length - 1; k++){
-            String title = Recoms[k].split(",")[0].substring(3,Recoms[k].split(",")[0].length()-1);
-            String id =Recoms[k].split(",")[1].substring(2,Recoms[k].split(",")[1].length()-1);
-            String artist = Recoms[k].split(",")[2].substring(2,Recoms[k].split(",")[2].length()-1);
-            String Genres = Recoms[k].split(" '")[3].substring(0,Recoms[k].split(" '")[3].length()-2);
-
-
-            RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0,Genres);
-            ThreadLauncher builder_updateTrack = new ThreadLauncher();
-            builder_updateTrack.execute(new Runnable() {
-                @Override
-                public void run() {
-                    String response = RequestSender.getTrackInfo(credentials,recommendedSong.getId());
-                    ResponseProcessor.processTrackResponse(response,recommendedSong);
+                    title = jsonrecom.getJSONObject(index).getString("song_name");
+                    artist = jsonrecom.getJSONObject(index).getString("artist");
+                    id = jsonrecom.getJSONObject(index).getString("id");
+                    Genres = jsonrecom.getJSONObject(index).getString("genres");
+                    RecommendedSong recommendedSong = new RecommendedSong(title, artist, id, 0,Genres);
+                    ThreadLauncher builder_updateTrack = new ThreadLauncher();
+                    builder_updateTrack.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            String response = RequestSender.getTrackInfo(credentials,recommendedSong.getId());
+                            ResponseProcessor.processTrackResponse(response,recommendedSong);
+                        }
+                    });
+                    recommendationsList.add(recommendedSong);
+                    System.out.println("(***DEBUG_MESAGE) BASE SONG: "+ baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString() +" - Genres:"+recommendedSong.getGenres());
                 }
-            });
-            recommendationsList.add(recommendedSong);
-            System.out.println("(***DEBUG_MESAGE) BASE SONG: "+ baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString() +" - Genres:"+recommendedSong.getGenres());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
         }
         //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);
         callback.onComplete(recommendationsList);

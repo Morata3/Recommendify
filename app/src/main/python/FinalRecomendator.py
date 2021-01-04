@@ -40,7 +40,8 @@ def rank_song_similarity_by_measure(song, genre_parameter):
         found = data[(data.id == nsongid)]
         if found.empty:
             wasted += nsongid + "/ /"
-            lista = ['Waste',''.join(wasted),'']
+            lista = ['Waste',''.join(wasted),'x','x']
+            lista = [dict(zip(['song_name','id','artist','genres'], l)) for l in lista]
             return lista
         if not found.empty:
             wasted += nsongid + "/ /"
@@ -75,23 +76,23 @@ def rank_song_similarity_by_measure(song, genre_parameter):
 
     similarity_data = similarity_data[similarity_data['Song Decade'] == song_and_artist_data['Song Decade'].values[0]]
 
-    similarity_data.rename(columns={'Song Name': f'Similar Song to {song}'}, inplace=True)
-
     similarity_data = similarity_data.sort_values(by= 'Similarity with song', ascending = False)
 
-    similarity_data = similarity_data[['Artist', f'Similar Song to {song}',
+    similarity_data = similarity_data[['Artist','Song Name',
            'Song Popularity', 'Year', 'Genres', 'Artist Popularity', 'Song Decade', 'Similarity with song',
            'acousticness', 'danceability', 'energy', 'instrumentalness', 'key',
            'liveness', 'loudness', 'mode', 'speechiness', 'tempo', 'valence','id']]
 
     similarity_data['Genres'] = GenresAux
-    similarity_data = similarity_data.drop_duplicates(subset=[f'Similar Song to {song}'], keep='first')
+    similarity_data = similarity_data.drop_duplicates(subset=['Song Name'], keep='first')
 
-    lista = similarity_data.head(4)[[f'Similar Song to {song}','id','Artist','Genres']]
+    lista = similarity_data.head(4)[['Song Name','id','Artist','Genres']]
     #lista.loc[17] = ['Waste',''.join(wasted),'']
     lista = lista.values.tolist()
-    lista.append(['Waste',''.join(wasted),'',''])
+    #lista.append(['Waste',''.join(wasted),'',''])
 
-    #lista = [dict(zip([f'Similar Song to {song}','id','artist'], l)) for l in lista]
+    print("LISTA",lista)
+
+    lista = [dict(zip(['song_name','id','artist','genres'], l)) for l in lista]
 
     return lista
