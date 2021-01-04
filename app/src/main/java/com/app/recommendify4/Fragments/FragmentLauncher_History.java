@@ -72,8 +72,6 @@ public class FragmentLauncher_History extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle args_song = new Bundle();
-        args_song.putParcelableArrayList("Songs",songs);
 
         tabLayout = (TabLayout) view.findViewById(R.id.tab_history);
         viewPager = (ViewPager2) view.findViewById(R.id.view_paper_hisotry);

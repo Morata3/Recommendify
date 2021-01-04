@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                            , History.class));
 //                        overridePendingTransition(0, 0);
                         intent = new Intent(getApplicationContext(), History.class);
+                        System.out.println("(MainActivity)"+userRecommendations.getSongsShown().get(0));
                         intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
                         intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
                         startActivity(intent);

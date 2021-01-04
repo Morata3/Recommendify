@@ -41,6 +41,7 @@ public class RecommendedArtist extends Artist implements Parcelable {
         this.setName(in.readString());
         this.setId(in.readString());
         this.setGenres(in.readArrayList(null));
+        this.setImage(in.readString());
         shown = in.readInt();
     }
 
@@ -66,6 +67,7 @@ public class RecommendedArtist extends Artist implements Parcelable {
         dest.writeString(this.getName());
         dest.writeString(this.getId());
         dest.writeList(this.getGenres());
+        dest.writeString(this.getImage());
         dest.writeInt(shown);
     }
 

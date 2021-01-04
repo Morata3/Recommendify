@@ -77,6 +77,10 @@ public class RecommendedSong extends Song implements Parcelable {
         this.setName(in.readString());
         this.setAlbum(in.readString());
         this.setId(in.readString());
+        this.setCoverURL(in.readString());
+        this.setGenres(in.readString());
+        this.setPreviewURL(in.readString());
+
         in.readTypedList(artists, com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist.CREATOR);
         shown = in.readInt();
     }
@@ -100,7 +104,11 @@ public class RecommendedSong extends Song implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.getName());
         dest.writeString(this.getAlbum());
-        dest.writeString(this.getAlbum());
+        dest.writeString(this.getId());
+        dest.writeString(this.getCoverURL());
+        dest.writeString(this.getGenres());
+        dest.writeString(this.getPreviewURL());
+
         dest.writeTypedList(artists);
         dest.writeInt(shown);
     }
@@ -112,7 +120,9 @@ public class RecommendedSong extends Song implements Parcelable {
                 ", album='" + getAlbum() + '\'' +
                 ", id='" + getId() + '\'' +
                 ", coincidences='" + Coincidence + '\'' +
-                '}';
+                ", image="+ coverURL+
+
+        '}';
     }
 
 

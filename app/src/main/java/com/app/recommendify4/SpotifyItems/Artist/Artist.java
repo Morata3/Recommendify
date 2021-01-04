@@ -82,6 +82,10 @@ public class Artist/* implements Parcelable*/{
     public String getImage(){
         return image;
     }
+    public void setImage(String image){
+        this.image=image;
+    }
+
 
     @Override
     public boolean equals(@Nullable Object obj) {

@@ -132,7 +132,7 @@ public class FragmentSong extends Fragment {
         }
         else{
             songNameView.setText("No more recommendations for now");
-            songArtistView.setText("But stay calms. More are being generated");
+            songArtistView.setText("But stay calm. More are being generated");
             Glide.with(this).load("https://memegenerator.net/img/instances/74848295/please-wait-while-im-doing-my-magic.jpg").into(coverAlbum);
 
           //  Glide.with(this).clear(coverAlbum);
