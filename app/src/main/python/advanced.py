@@ -70,6 +70,7 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
         music  = music3.reset_index(drop=True)
 
 
+    music3 = music3.drop_duplicates(subset=['Song Name'], keep='first')
     music3 = music3.sort_values(by= 'Song Popularity', ascending = False)
     music3 = music3.head(10)[['Song Name','id','Artist']].values.tolist()
     music3 = [dict(zip(['song_name','id','artist'], l)) for l in music3]
@@ -91,21 +92,3 @@ print(music)
     lim_negative = lim_negative + 0.05
     lim_speechiness = lim_speechiness + 0.01
     music = filter_songs(music_aux) '''
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-
-    
-    

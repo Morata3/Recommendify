@@ -2,7 +2,6 @@ package com.app.recommendify4;
 
 import com.app.recommendify4.Dialogs.DialogCreatePlaylist;
 import com.app.recommendify4.Dialogs.DialogInformation;
-import com.app.recommendify4.Dialogs.DialogLoading;
 import com.app.recommendify4.Dialogs.DialogLogOut;
 import com.app.recommendify4.Fragments.FragmentArtistRecommendation;
 import com.app.recommendify4.Fragments.FragmentHybrid;
@@ -13,7 +12,6 @@ import com.app.recommendify4.RecomThreads.ContentThread;
 import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
-import com.app.recommendify4.SpotifyItems.Song.Song;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.ThreadManagers.RecomThreadPool;
 import com.app.recommendify4.UserInfo.OnShuffleRecommendationsChangeListener;
@@ -23,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.app.recommendify4.RecomThreads.CollaborativeThread;
 import com.app.recommendify4.Fragments.FragmentLauncher;
 import com.app.recommendify4.Fragments.FragmentSong;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.app.recommendify4.UserInfo.Credentials;
 import android.content.Intent;
@@ -67,10 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Credentials credentials;
 
     private Recommendations userRecommendations;
-
-
-
-
     private int lastSongProcessed = 0;
     private int lastArtistProcessed = 0;
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
@@ -93,9 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.menu_info:
                 openDialogInformation();
-                return true;
-            case R.id.menu_aboutMe:
-                openDialogAboutMe();
                 return true;
             case R.id.menu_logout:
                 openDialogLogOut();
@@ -159,6 +149,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.advanced:
                         intent = new Intent(getApplicationContext(), Advanced.class);
                         intent.putExtra("credentials", credentials);
+
+                        intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
+                        intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
                         startActivity(intent);
 
                         overridePendingTransition(0, 0);
@@ -169,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         intent = new Intent(getApplicationContext(), History.class);
                         intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
                         intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
+                        intent.putExtra("credentials", credentials);
                         startActivity(intent);
                         return true;
 
@@ -191,7 +185,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        //setUpUserInfo();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.home);
+
     }
 
 
@@ -211,11 +207,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void openDialogLogOut(){
         DialogLogOut dialogLogOut = new DialogLogOut();
         dialogLogOut.show(getSupportFragmentManager(),"LogOut");
-    }
-    public void openDialogAboutMe(){
-//        DialogLoading dialogLoading = new DialogLoading(MainActivity.this);
-//        dialogLoading.startLoadingAnimation();
-//        dialogLoading.dismiss();
     }
 
 

@@ -73,9 +73,6 @@ public class ContentThread implements Runnable{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-
         }
         //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);
         callback.onComplete(recommendationsList);

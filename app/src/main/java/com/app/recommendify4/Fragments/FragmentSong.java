@@ -197,5 +197,6 @@ public class FragmentSong extends Fragment {
         super.onStop();
         mediaPlayer.stop();
         mediaPlayer.release();
+        if(listOfRecommendations.size() == 0) generateMoreRecommendations();
     }
 }

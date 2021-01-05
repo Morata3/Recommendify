@@ -159,4 +159,12 @@ public class FragmentSoulmateArtist extends Fragment {
         else return listSize;
     }
 
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(listOfRecommendations.size() == 0) generateMoreRecommendations();
+
+    }
+
 }

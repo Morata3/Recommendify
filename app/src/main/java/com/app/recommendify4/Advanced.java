@@ -52,6 +52,8 @@ public class Advanced extends AppCompatActivity {
     private Switch loud;
     private Switch quiet;
     private Credentials credentials;
+    private ArrayList<RecommendedSong> songsShown;
+    private ArrayList<RecommendedArtist> artistsShown;
 
     private FragmentTransaction fragmentTransaction;
     private Fragment fragmentLauncher;
@@ -77,14 +79,9 @@ public class Advanced extends AppCompatActivity {
 
 
         credentials = getCredentials();
+        songsShown = getSongs();
+        artistsShown = getArtists();
         songs = (Button) findViewById(R.id.songs);
-      /*  songs.setOnClickListener(v -> {
-            try {
-                FilteredSongs();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });*/
 
         quiet.setOnClickListener(v -> ChangeQuietSwitch());
         loud.setOnClickListener(v -> ChangeLoudSwitch());
@@ -98,23 +95,21 @@ public class Advanced extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
+                Intent intent;
                 switch (menuItem.getItemId()) {
                     case R.id.advanced:
 
                         return true;
                     case R.id.home:
-
-                      /*  startActivity(new Intent(getApplicationContext()
-                                , MainActivity.class));
-                        overridePendingTransition(0, 0);*/
                         finish();
                         return true;
                     case R.id.history:
 
-                        startActivity(new Intent(getApplicationContext()
-                                , History.class));
-                        overridePendingTransition(0, 0);
+                        intent = new Intent(getApplicationContext(), History.class);
+                        intent.putParcelableArrayListExtra("Songs",songsShown);
+                        intent.putParcelableArrayListExtra("Artists",artistsShown);
+                        intent.putExtra("credentials", credentials);
+                        startActivity(intent);
                         return true;
 
                 }
@@ -123,6 +118,12 @@ public class Advanced extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        finish();
     }
 
     public void onClick(View view) throws JSONException {
@@ -247,6 +248,24 @@ public class Advanced extends AppCompatActivity {
         Bundle parameters = intent.getExtras();
         if(parameters != null && parameters.containsKey("credentials")){
             return (Credentials) parameters.get("credentials");}
+        else
+            return null;
+    }
+
+    private ArrayList<RecommendedSong> getSongs(){
+        Intent intent = getIntent();
+        Bundle parameters = intent.getExtras();
+        if(parameters != null && parameters.containsKey("Songs")){
+            return parameters.getParcelableArrayList("Songs");}
+        else
+            return null;
+    }
+
+    private ArrayList<RecommendedArtist> getArtists(){
+        Intent intent = getIntent();
+        Bundle parameters = intent.getExtras();
+        if(parameters != null && parameters.containsKey("Artists")){
+            return parameters.getParcelableArrayList("Artists");}
         else
             return null;
     }

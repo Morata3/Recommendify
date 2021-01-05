@@ -8,15 +8,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MenuItem;
-
-import com.app.recommendify4.Fragments.FragmentHistoryArtist;
-import com.app.recommendify4.Fragments.FragmentHistorySong;
-import com.app.recommendify4.Fragments.FragmentLauncher;
 import com.app.recommendify4.Fragments.FragmentLauncher_History;
-import com.app.recommendify4.Fragments.FragmentSong;
-import com.app.recommendify4.Fragments.FragmentSoulmateArtist;
 import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.UserInfo.Credentials;
@@ -27,12 +20,18 @@ import java.util.ArrayList;
 public class History extends AppCompatActivity {
 
     private FragmentLauncher_History fragmentLauncher;
+    private ArrayList<RecommendedArtist> artists;
+    private ArrayList<RecommendedSong> songs;
+    private Credentials credentials;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        artists = getArtists();
+        songs = getSongs();
+        credentials = getCredentials();
         setupFragment();
         changeFragment();
 
@@ -41,18 +40,17 @@ public class History extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Intent intent;
                 switch (menuItem.getItemId()) {
                     case R.id.advanced:
-                        startActivity(new Intent(getApplicationContext()
-                                , Advanced.class));
-                        overridePendingTransition(0, 0);
-                        return true;
+                        intent = new Intent(getApplicationContext(), Advanced.class);
+                        intent.putExtra("credentials", credentials);
+                        intent.putParcelableArrayListExtra("Songs",songs);
+                        intent.putParcelableArrayListExtra("Artists",artists);
+                        startActivity(intent);
+
                     case R.id.home:
-                        /*startActivity(new Intent(getApplicationContext()
-                                , MainActivity.class));
-                        overridePendingTransition(0, 0);*/
                         finish();
-                        return true;
                     case R.id.history:
                         return true;
                 }
@@ -62,11 +60,17 @@ public class History extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        finish();
+    }
+
     private ArrayList<RecommendedSong> getSongs(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("Songs")){
-            return parameters.getParcelableArrayList("Songs");}
+        if(parameters != null && parameters.containsKey("Songs"))
+            return parameters.getParcelableArrayList("Songs");
         else
             return null;
     }
@@ -74,8 +78,17 @@ public class History extends AppCompatActivity {
     private ArrayList<RecommendedArtist> getArtists(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("Artists")){
-            return parameters.getParcelableArrayList("Artists");}
+        if(parameters != null && parameters.containsKey("Artists"))
+            return parameters.getParcelableArrayList("Artists");
+        else
+            return null;
+    }
+
+    private Credentials getCredentials(){
+        Intent intent = getIntent();
+        Bundle parameters = intent.getExtras();
+        if(parameters != null && parameters.containsKey("credentials"))
+            return (Credentials) parameters.get("credentials");
         else
             return null;
     }
@@ -90,7 +103,7 @@ public class History extends AppCompatActivity {
 
     public void changeFragment(){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentLauncher = FragmentLauncher_History.newInstance(getSongs(), getArtists());
+        fragmentLauncher = FragmentLauncher_History.newInstance(songs, artists);
         fragmentTransaction.replace(R.id.fragmentHistory,fragmentLauncher).commit();
     }
 
