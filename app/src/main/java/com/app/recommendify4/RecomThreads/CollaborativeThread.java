@@ -1,5 +1,6 @@
 package com.app.recommendify4.RecomThreads;
 
+import com.app.recommendify4.MainActivity;
 import com.app.recommendify4.SpotifyApi.RequestSender;
 import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
 import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
@@ -52,12 +53,14 @@ public class CollaborativeThread implements Runnable{
                     JSONObject artistInfo = possibleArtistJSON.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
                     RecommendedArtist recommendedArtist = new RecommendedArtist(artistInfo, 0);
                     recommendationsList.add(recommendedArtist);
+
                     System.out.println("BASE ARTIST: " + baseForRecommendations.getName() + " --> Recommended artist: " + recommendedArtist.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
             //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);
+
             callback.onComplete(recommendationsList);
         }else
             System.out.println(recommenderOutput);

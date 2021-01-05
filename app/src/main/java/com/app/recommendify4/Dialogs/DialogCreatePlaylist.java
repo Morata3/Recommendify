@@ -40,7 +40,7 @@ public class DialogCreatePlaylist extends AppCompatDialogFragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String playlistName = input.getText().toString();
+                String playlistName = input.getText().toString()+" (by Recommendify4)";
                 System.out.println(playlistName);
                 Playlist playlist = new Playlist(playlistName, playlistSongs);
                 ThreadLauncher launcher = new ThreadLauncher();

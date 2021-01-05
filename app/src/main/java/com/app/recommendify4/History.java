@@ -48,9 +48,10 @@ public class History extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.home:
-                        startActivity(new Intent(getApplicationContext()
+                        /*startActivity(new Intent(getApplicationContext()
                                 , MainActivity.class));
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(0, 0);*/
+                        finish();
                         return true;
                     case R.id.history:
                         return true;

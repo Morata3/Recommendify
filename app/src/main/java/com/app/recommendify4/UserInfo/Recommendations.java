@@ -12,6 +12,18 @@ public class Recommendations {
     private ArrayList<RecommendedSong> songsShown;
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artistsShown;
 
+    private OnSoulmateRecommendationsChangeListener artistListener;
+    private OnShuffleRecommendationsChangeListener songListener;
+
+    public void setOnSoulmateRecommendationsChangeListener(OnSoulmateRecommendationsChangeListener listener)
+    {
+        this.artistListener = listener;
+    }
+
+    public void setOnShuffleRecommendationsChangeListener(OnShuffleRecommendationsChangeListener listener){
+        this.songListener=listener;
+    }
+
     public Recommendations(){
         this.songsRecommendations = new ArrayList<>();
         this.artistRecommendations = new ArrayList<>();
@@ -29,10 +41,18 @@ public class Recommendations {
 
     public void addSongRecommendations(ArrayList<RecommendedSong> newRecommendations){
         this.songsRecommendations.addAll(newRecommendations);
+        if(songListener != null)
+        {
+            songListener.onShuffleRecommendationsChanged(songsRecommendations);
+        }
     }
 
     public void addArtistRecommendations(ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> newRecommendations){
         this.artistRecommendations.addAll(newRecommendations);
+        if(artistListener != null)
+        {
+            artistListener.onSoulmateRecommendationsChanged(artistRecommendations);
+        }
     }
 
     public void moveToHistory(RecommendedSong song){

@@ -121,8 +121,10 @@ public class FragmentSong extends Fragment {
             songArtistView.setText(song.getArtists().get(0).getName());
             Glide.with(this).load(song.getCoverURL()).into(coverAlbum);
             try {
-                if(!song.getPreviewURL().equals("null") || song.getPreviewURL() == null) playSong(song);
-                else System.out.println("Song without preview URL");
+                if(song.getPreviewURL() != null) {
+                    if (!song.getPreviewURL().equals("null"))
+                        playSong(song);
+                }else System.out.println("Song without preview URL");
             } catch (IOException e) {
                 System.out.println("Error trying to play song");
                 e.printStackTrace();

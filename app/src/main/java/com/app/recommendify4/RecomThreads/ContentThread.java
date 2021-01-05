@@ -38,12 +38,17 @@ public class ContentThread implements Runnable{
         PyObject obj = pyf.callAttr("rank_song_similarity_by_measure", baseForRecommendations.toString(), 2);
         String recommendations = obj.toString();
         JSONArray jsonrecom = null;
+        try{
+            jsonrecom= new JSONArray(recommendations);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
         String title = null;
         String artist = null;
         String id = null;
         String Genres = null;
 
-        for(int index = 0; index < jsonrecom.length(); index++){
+        for(int index = 1; index < jsonrecom.length(); index++){
 
             try {
                 if(!(jsonrecom.getJSONObject(index).getString("song_name").length() == 1))
@@ -63,7 +68,7 @@ public class ContentThread implements Runnable{
                         }
                     });
                     recommendationsList.add(recommendedSong);
-                    System.out.println("(***DEBUG_MESAGE) BASE SONG: "+ baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString() +" - Genres:"+recommendedSong.getGenres());
+                    System.out.println("(DEBUG_MESAGE) BASE SONG: "+ baseForRecommendations.getName()+" --> Recommended song: "+recommendedSong.getName()+" - "+recommendedSong.getArtists().toString() +" - Genres:"+recommendedSong.getGenres());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

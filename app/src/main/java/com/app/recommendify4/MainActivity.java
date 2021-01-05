@@ -15,6 +15,8 @@ import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.SpotifyItems.Song.Song;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.ThreadManagers.RecomThreadPool;
+import com.app.recommendify4.UserInfo.OnShuffleRecommendationsChangeListener;
+import com.app.recommendify4.UserInfo.OnSoulmateRecommendationsChangeListener;
 import com.app.recommendify4.UserInfo.UserProfile;
 import com.bumptech.glide.Glide;
 import com.app.recommendify4.RecomThreads.CollaborativeThread;
@@ -25,9 +27,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.app.recommendify4.UserInfo.Credentials;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -61,12 +65,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Credentials credentials;
 
     private Recommendations userRecommendations;
+
+
+
+
     private int lastSongProcessed = 0;
     private int lastArtistProcessed = 0;
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
     private final ContentCallback contentThreadCallback = new ContentCallback() {
         @Override
         public synchronized void onComplete(ArrayList<RecommendedSong> recommendations) {
+            System.out.println("(DEBUGGGG): "+recommendations);
             userRecommendations.addSongRecommendations(recommendations);
         }
     };
@@ -104,6 +113,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupMenu(userProfile.getUser().getName(),userProfile.getUser().getImageURL());
         setupFragment();
 
+        userRecommendations.setOnSoulmateRecommendationsChangeListener(new OnSoulmateRecommendationsChangeListener(){
+
+
+            public void onSoulmateRecommendationsChanged(ArrayList<RecommendedArtist> artistRecommendations){
+
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        Button b= (Button) findViewById(R.id.buttonSoulmate);
+                        Drawable d =getResources().getDrawable(R.drawable.custom_main_button);
+                        b.setBackground(d);
+                    }
+                });
+            }
+        });
+
+        userRecommendations.setOnShuffleRecommendationsChangeListener(new OnShuffleRecommendationsChangeListener() {
+            @Override
+            public void onShuffleRecommendationsChanged(ArrayList<RecommendedSong> songRecommendations) {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (userRecommendations.getSongsRecommendations().size()>0) {
+                            Button b = (Button) findViewById(R.id.buttonShuffle);
+                            Drawable d = getResources().getDrawable(R.drawable.custom_main_button);
+                            b.setBackground(d);
+                        }
+                    }
+                });
+            }
+        });
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -121,11 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.home:
                         return true;
                     case R.id.history:
-//                        System.out.println("HISTORIAL DE CANCIONS: ");
-//                        for(RecommendedSong song : userRecommendations.getSongsShown()) System.out.println(song);
-//                    startActivity(new Intent(getApplicationContext()
-//                            , History.class));
-//                        overridePendingTransition(0, 0);
+
                         intent = new Intent(getApplicationContext(), History.class);
                         intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
                         intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
@@ -163,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DialogCreatePlaylist dialogCreatePlaylist = new DialogCreatePlaylist();
         Bundle arguments = new Bundle();
         arguments.putString("userId", userProfile.getUser().getId());
-        arguments.putParcelableArrayList("playlistSongs", userRecommendations.getSongsRecommendations());
+        arguments.putParcelableArrayList("playlistSongs", userRecommendations.getSongsShown());
         arguments.putParcelable("credentials", userProfile.getCredentials());
         dialogCreatePlaylist.setArguments(arguments);
         dialogCreatePlaylist.show(getSupportFragmentManager(),"Create Playlist");
@@ -337,15 +376,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 // System.out.println("Coincidence " + HybridRecommendations.size() + " " + this.userRecommendations.getArtistRecommendations().size() );
                                 song.setCoincidence(song.getCoincidence()+1);
                             }
-
-
                         }
-
-
                     }
-
-
-
                 }
             }
             Collections.sort(HybridRecommendations, RecommendedSong.Coincidences);

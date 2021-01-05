@@ -72,6 +72,7 @@ public class RequestSender {
                 else payloadBuilder.append("\"spotify:track:").append(songs.get(index).getId()).append("\",");
             }
             String payloadAsString = payloadBuilder.toString();
+            System.out.println("Payloudo: "+ payloadAsString);
             byte[] payload = payloadAsString.getBytes("utf-8");
             URL obj = new URL(ADD_SONGS_TO_PLAYLIST_ENDPOINT + playlist_id + "/tracks");
             HttpURLConnection con = buildHttpRequest(credentials.getAccess_token(), obj, "POST");

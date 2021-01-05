@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="Positive"
             android:textColor="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/negative"
             app:layout_constraintStart_toStartOf="@+id/loud"
             app:layout_constraintTop_toBottomOf="@+id/loud" />
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:text="Instrumental"
             android:textColor="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/quiet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:text="Danceable"
             android:textColor="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/instru"
             app:layout_constraintStart_toStartOf="@+id/instru"
             app:layout_constraintTop_toBottomOf="@+id/live" />
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:text="Low Energy"
             android:textColor="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/high"
             app:layout_constraintStart_toStartOf="@+id/negative"
             app:layout_constraintTop_toBottomOf="@+id/negative" />
@@ -80,7 +80,7 @@
             android:layout_height="38dp"
             android:text="Live"
             android:textColor="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/danceable"
             app:layout_constraintStart_toStartOf="@+id/danceable"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -93,7 +93,7 @@
             android:text="High Energy"
             android:textColor="#1DB954"
             android:textColorLink="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/songs"
             app:layout_constraintStart_toStartOf="@+id/low"
             app:layout_constraintTop_toBottomOf="@+id/low" />
@@ -105,7 +105,7 @@
             android:text="Negative"
             android:textColor="#1DB954"
             android:textColorLink="#A81F1F"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/low"
             app:layout_constraintStart_toStartOf="@+id/positive"
             app:layout_constraintTop_toBottomOf="@+id/positive" />
@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:text="Loud"
             android:textColor="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/positive"
             app:layout_constraintStart_toStartOf="@+id/quiet"
             app:layout_constraintTop_toBottomOf="@+id/quiet" />
@@ -128,7 +128,7 @@
             android:layout_marginBottom="1dp"
             android:text="Quiet"
             android:textColor="#1DB954"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/loud"
             app:layout_constraintStart_toStartOf="@+id/instru"
             app:layout_constraintTop_toBottomOf="@+id/instru" />
@@ -143,7 +143,7 @@
             android:text="Filters"
             android:textAllCaps="true"
             android:textColor="#1DB954"
-            android:textSize="55sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/live"
             app:layout_constraintEnd_toEndOf="parent"

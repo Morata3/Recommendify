@@ -86,7 +86,7 @@ def rank_song_similarity_by_measure(song, genre_parameter):
     similarity_data['Genres'] = GenresAux
     similarity_data = similarity_data.drop_duplicates(subset=['Song Name'], keep='first')
 
-    lista = similarity_data.head(4)[['Song Name','id','Artist','Genres']]
+    lista = similarity_data.head(5+1)[['Song Name','id','Artist','Genres']]
     #lista.loc[17] = ['Waste',''.join(wasted),'']
     lista = lista.values.tolist()
     #lista.append(['Waste',''.join(wasted),'',''])
