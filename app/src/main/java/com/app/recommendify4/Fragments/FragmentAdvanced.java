@@ -107,8 +107,11 @@ public class FragmentAdvanced extends Fragment {
                 e.printStackTrace();
             }
         }
-        else songNameView.setText("No more songs");
-
+        else {
+            songNameView.setText("No more recommendations for now");
+            songArtistView.setText("You should try with another filters");
+            Glide.with(this).load("https://assets-news-bcdn.dailyhunt.in/cmd/resize/400x400_80//fetchdata15/images/46/fb/b2/46fbb288c418cb6b8a173ea43bbebea2.jpg").into(coverAlbum);
+        }
     }
 
     public void playSong() throws IOException {

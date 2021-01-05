@@ -14,13 +14,13 @@ from os.path import dirname,join
 lim_dance = 0.7
 lim_liveness = 0.65
 lim_instru = 0.80
-lim_lowenergy = 0.40
-lim_highenergy = 0.70
-lim_positive = 0.70
-lim_negative = 0.40
+lim_lowenergy = 0.50
+lim_highenergy = 0.60
+lim_positive = 0.60
+lim_negative = 0.50
 lim_speechiness = 0.2
-lim_loudness = 0.7
-lim_quiet = 0.3
+lim_loudness = 0.55
+lim_quiet = 0.45
 
 SpotifyFile = join(dirname(__file__),"spotify2.csv")
 music = pd.read_csv(SpotifyFile)
@@ -78,7 +78,8 @@ def filter_songs(directo,bailable,positive,negative,lowenergy,highenergy,instrum
 
     return music3
 
-music = filter_songs(1,1,0,1,0,0,1,1,1)
+music = filter_songs(0,0,1,0,0,0,0,1,0)
+#directo,bailable,positive,negative,lowenergy,highenergy,instrumental,loudness,quiet
 print(music)
 '''while music['Song Name'].count() <= 15:
     lim_dance = lim_dance - 0.05

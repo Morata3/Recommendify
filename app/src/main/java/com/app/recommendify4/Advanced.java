@@ -154,9 +154,12 @@ public class Advanced extends AppCompatActivity {
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("advanced");
         //System.out.println("Live: " + live.isChecked() + " danceable: " + danceable.isChecked() + " positive: " + positive.isChecked() + " low: " + low.isChecked() + "high: " + high.isChecked() + " instru: " + instru.isChecked());
+
         PyObject obj= pyf.callAttr("filter_songs",live.isChecked(),danceable.isChecked(),positive.isChecked(),negative.isChecked(),low.isChecked(),
                 high.isChecked(),instru.isChecked(),loud.isChecked(),quiet.isChecked());
         String recommendations = obj.toString();
+
+        System.out.println("Switch" + recommendations);
 
 
         JSONArray jsonrecom = null;

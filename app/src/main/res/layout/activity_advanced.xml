@@ -152,8 +152,8 @@
 
         <Button
             android:id="@+id/songs"
-            android:layout_width="188dp"
-            android:layout_height="0dp"
+            android:layout_width="179dp"
+            android:layout_height="121dp"
             android:layout_marginBottom="60dp"
             android:background="@drawable/custom_main_button"
             android:onClick="onClick"
