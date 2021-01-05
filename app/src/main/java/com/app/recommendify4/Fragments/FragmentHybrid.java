@@ -84,7 +84,10 @@ public class FragmentHybrid extends Fragment {
     public void setNextSong() {
 
         if(currentSong < listOfRecommendations.size()){
-            if(mediaPlayer.isPlaying()) mediaPlayer.stop();
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+            }
             song = listOfRecommendations.get(currentSong++);
             song.setShown(1);
             ThreadLauncher builder_updateTrack = new ThreadLauncher();
@@ -117,10 +120,12 @@ public class FragmentHybrid extends Fragment {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setDataSource(song.getPreviewURL());
-        mediaPlayer.prepare();
-        mediaPlayer.start();
+        mediaPlayer.setOnPreparedListener(this::onPrepared);
+        mediaPlayer.prepareAsync();
     }
 
-
+    public void onPrepared(MediaPlayer player) {
+        player.start();
+    }
 
 }

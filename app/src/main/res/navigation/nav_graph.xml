@@ -22,8 +22,8 @@
             android:id="@+id/action_fragmentLauncher_to_fragmentAdvanced"
             app:destination="@id/fragmentAdvanced" />
         <action
-            android:id="@+id/action_fragmentLauncher_to_fragment3Artists"
-            app:destination="@id/fragment3Artists" />
+            android:id="@+id/action_fragmentLauncher_to_fragmentArtistRecommendation"
+            app:destination="@id/fragmentArtistRecommendation" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSong"
@@ -65,10 +65,22 @@
         android:id="@+id/fragment3Artists"
         android:name="com.app.recommendify4.Fragments.Fragment3Artists"
         android:label="fragment_fragment_3artists"
-        tools:layout="@layout/fragment_fragment_3artists" >
+        tools:layout="@layout/fragment_3artists" >
         <action
-            android:id="@+id/action_fragment3Artists_to_fragmentLauncher"
+            android:id="@+id/action_fragment3Artists_to_fragmentArtistRecommendation"
+            app:destination="@id/fragmentArtistRecommendation" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentArtistRecommendation"
+        android:name="com.app.recommendify4.Fragments.FragmentArtistRecommendation"
+        android:label="fragment_artist_recommendation"
+        tools:layout="@layout/fragment_artist_recommendation" >
+        <action
+            android:id="@+id/action_fragmentArtistRecommendation_to_fragmentLauncher"
             app:destination="@id/fragmentLauncher" />
+        <action
+            android:id="@+id/action_fragmentArtistRecommendation_to_fragment3Artists"
+            app:destination="@id/fragment3Artists" />
     </fragment>
 
 </navigation>

@@ -23,7 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.app.recommendify4.ArtistRecommendation" />
         <activity android:name="com.app.recommendify4.Advanced" />
         <activity android:name="com.app.recommendify4.History" />
         <activity

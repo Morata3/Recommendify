@@ -27,8 +27,8 @@
 
         <ImageButton
             android:id="@+id/nextArtist"
-            android:layout_width="136dp"
-            android:layout_height="60dp"
+            android:layout_width="125dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="145dp"
             android:src="@android:drawable/ic_media_next"
             app:layout_constraintBottom_toBottomOf="parent"

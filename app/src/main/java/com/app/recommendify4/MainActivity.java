@@ -4,6 +4,7 @@ import com.app.recommendify4.Dialogs.DialogCreatePlaylist;
 import com.app.recommendify4.Dialogs.DialogInformation;
 import com.app.recommendify4.Dialogs.DialogLoading;
 import com.app.recommendify4.Dialogs.DialogLogOut;
+import com.app.recommendify4.Fragments.FragmentArtistRecommendation;
 import com.app.recommendify4.Fragments.FragmentHybrid;
 import com.app.recommendify4.Fragments.FragmentSoulmateArtist;
 import com.app.recommendify4.RecomThreads.CollaborativeCallback;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentSong fragmentSong;
     private FragmentHybrid fragmentHybrid;
     private FragmentSoulmateArtist fragmentSoulmateArtist;
+    private FragmentArtistRecommendation fragmentArtistRecommender;
     public TextView text;
     private int index = 0;
 
@@ -164,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.home:
                         return true;
                     case R.id.history:
-
                         intent = new Intent(getApplicationContext(), History.class);
                         intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
                         intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
@@ -212,9 +213,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialogLogOut.show(getSupportFragmentManager(),"LogOut");
     }
     public void openDialogAboutMe(){
-        DialogLoading dialogLoading = new DialogLoading(MainActivity.this);
-        dialogLoading.startLoadingAnimation();
-        dialogLoading.dismiss();
+//        DialogLoading dialogLoading = new DialogLoading(MainActivity.this);
+//        dialogLoading.startLoadingAnimation();
+//        dialogLoading.dismiss();
     }
 
 
@@ -229,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }else System.out.println("Recommendations not yet ready ");
                 break;
             case R.id.buttonSoulmate:
-                //soulmateArtistRecommendation();
                 if(userRecommendations.getArtistRecommendations() != null && userRecommendations.getArtistRecommendations().size() > 0){
                     fragmentSoulmateArtist = FragmentSoulmateArtist.newInstance(userRecommendations.getArtistRecommendations(), userRecommendations.getArtistsShown(), userProfile.getTopArtists(),credentials, lastArtistProcessed);
                     fragmentTransaction.replace(R.id.fragmentMain, fragmentSoulmateArtist);
@@ -240,7 +240,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 openDialogCreatePlaylist();
                 break;
             case R.id.buttonArtist:
-                artistRecommendation();
+                fragmentArtistRecommender = FragmentArtistRecommendation.newInstance(userRecommendations.getArtistsShown(), credentials);
+                fragmentTransaction.replace(R.id.fragmentMain, fragmentArtistRecommender);
+                fragmentTransaction.addToBackStack(null);
                 break;
             case R.id.buttonHybrid:
                 if(this.userRecommendations.getArtistRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0 &&
@@ -285,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentLauncher = new FragmentLauncher();
         fragmentSong = new FragmentSong();
         fragmentSoulmateArtist = new FragmentSoulmateArtist();
+        fragmentArtistRecommender = new FragmentArtistRecommendation();
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentMain,fragmentLauncher).commit();
     }
 
@@ -312,14 +315,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
-
-    public void artistRecommendation(){
-        Intent intent = new Intent(this, ArtistRecommendation.class);
-        intent.putExtra("Credentials",credentials);
-        intent.putParcelableArrayListExtra("artistShown",userRecommendations.getArtistsShown());
-        startActivity(intent);
-    }
-
 
     @Override
     protected void onStop() {

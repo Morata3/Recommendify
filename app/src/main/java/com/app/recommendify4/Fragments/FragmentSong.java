@@ -40,6 +40,7 @@ public class FragmentSong extends Fragment {
     private static final String USERSONGSLISTKEY = "UserSongs";
     private static final String LASTINDEXPROCESSED = "LastIndexProcessed";
     private static final String CREDENTIALS = "Credentials";
+    private static final String GANDALFMEME = "https://memegenerator.net/img/instances/74848295/please-wait-while-im-doing-my-magic.jpg";
 
     private ArrayList<RecommendedSong> listOfRecommendations;
     private ArrayList<RecommendedSong> songsShown;
@@ -95,7 +96,6 @@ public class FragmentSong extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_song, container, false);
     }
 
@@ -112,7 +112,10 @@ public class FragmentSong extends Fragment {
 
     public void setNextSong() {
         if(listOfRecommendations.size() > 0){
-            if(mediaPlayer.isPlaying()) mediaPlayer.stop();
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+            }
             RecommendedSong song = listOfRecommendations.get(0);
             listOfRecommendations.remove(song);
             songsShown.add(song);
@@ -135,7 +138,7 @@ public class FragmentSong extends Fragment {
         else{
             songNameView.setText("No more recommendations for now");
             songArtistView.setText("But stay calm. More are being generated");
-            Glide.with(this).load("https://memegenerator.net/img/instances/74848295/please-wait-while-im-doing-my-magic.jpg").into(coverAlbum);
+            Glide.with(this).load(GANDALFMEME).into(coverAlbum);
 
           //  Glide.with(this).clear(coverAlbum);
         }
@@ -146,8 +149,12 @@ public class FragmentSong extends Fragment {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setDataSource(song.getPreviewURL());
-        mediaPlayer.prepare();
-        mediaPlayer.start();
+        mediaPlayer.setOnPreparedListener(this::onPrepared);
+        mediaPlayer.prepareAsync();
+    }
+
+    public void onPrepared(MediaPlayer player) {
+        player.start();
     }
 
     private void generateMoreRecommendations(){
@@ -189,5 +196,6 @@ public class FragmentSong extends Fragment {
     public void onStop() {
         super.onStop();
         mediaPlayer.stop();
+        mediaPlayer.release();
     }
 }
