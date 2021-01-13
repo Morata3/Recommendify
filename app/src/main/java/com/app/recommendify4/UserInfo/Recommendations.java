@@ -7,8 +7,9 @@ import java.util.ArrayList;
 public class Recommendations {
 
     private ArrayList<RecommendedSong> songsRecommendations;
+    private int lastSongProcessed;
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artistRecommendations;
-
+    private int lastArtistProcessed;
     private ArrayList<RecommendedSong> songsShown;
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artistsShown;
 
@@ -34,6 +35,10 @@ public class Recommendations {
     public ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtistRecommendations() { return artistRecommendations; }
 
     public ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtistsShown() { return artistsShown; }
+
+    public int getLastArtistProcessed() { return lastArtistProcessed; }
+
+    public int getLastSongProcessed() { return lastSongProcessed; }
 
     public ArrayList<RecommendedSong> getSongsRecommendations() { return songsRecommendations; }
 
@@ -89,5 +94,20 @@ public class Recommendations {
         this.artistRecommendations = newList;
     }
 
+    public boolean hasSongRecommendations(){
+        return (songsRecommendations.size() > 0);
+    }
+
+    public boolean hasArtistRecommendations(){
+        return (artistRecommendations.size() > 0);
+    }
+
+    public synchronized void addToSongIndex(int toAdd){
+        this.lastSongProcessed += toAdd;
+    }
+
+    public synchronized void addToArtistIndex(int toAdd){
+        this.lastArtistProcessed += toAdd;
+    }
 
 }

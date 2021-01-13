@@ -58,28 +58,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentSoulmateArtist fragmentSoulmateArtist;
     private FragmentArtistRecommendation fragmentArtistRecommender;
     public TextView text;
-    private int index = 0;
 
     private UserProfile userProfile;
     private Credentials credentials;
 
     private Recommendations userRecommendations;
-    private int lastSongProcessed = 0;
-    private int lastArtistProcessed = 0;
+    /*private int lastSongProcessed = 0;
+    private int lastArtistProcessed = 0;*/
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
     private final ContentCallback contentThreadCallback = new ContentCallback() {
         @Override
         public synchronized void onComplete(ArrayList<RecommendedSong> recommendations) {
-            System.out.println("(DEBUGGGG): "+recommendations);
+            System.out.println("(DEBUG): "+recommendations);
             userRecommendations.addSongRecommendations(recommendations);
+            if(!userRecommendations.hasSongRecommendations()){
+                int lastSongUsed = userProfile.getLastSongUsed();
+                if(lastSongUsed != userProfile.getTopSongs().size()) {
+                    UserSong song = userProfile.getTopSongs().get(lastSongUsed);
+                    song.setUsed(true);
+                    //addToSongIndex(1);
+                    threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
+                }
+            }
         }
     };
     private final CollaborativeCallback collaborativeThreadCallback = new CollaborativeCallback() {
         @Override
-        public void onComplete(ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> recommendations) {
+        public synchronized void onComplete(ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> recommendations) {
             userRecommendations.addArtistRecommendations(recommendations);
+            if(!userRecommendations.hasArtistRecommendations()){
+                int lastArtistUsed = userProfile.getLastArtistUsed();
+                if(lastArtistUsed != userProfile.getTopArtists().size()){
+                    UserArtist artist = userProfile.getTopArtists().get(lastArtistUsed);
+                    artist.setUsed(true);
+                    //addToArtistIndex(1);
+                    threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
+                }
+            }
         }
     };
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -215,14 +233,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (view.getId()){
             case R.id.buttonShuffle:
                 if(userRecommendations.getSongsRecommendations() != null && userRecommendations.getSongsRecommendations().size() > 0){
-                    fragmentSong = FragmentSong.newInstance(userRecommendations.getSongsRecommendations(), userRecommendations.getSongsShown(), userProfile.getTopSongs(),credentials, lastSongProcessed);
+                    fragmentSong = FragmentSong.newInstance(userRecommendations.getSongsRecommendations(), userRecommendations.getSongsShown(), userProfile.getTopSongs(),credentials/*, lastSongProcessed*/);
                     fragmentTransaction.replace(R.id.fragmentMain,fragmentSong);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Recommendations not yet ready ");
                 break;
             case R.id.buttonSoulmate:
                 if(userRecommendations.getArtistRecommendations() != null && userRecommendations.getArtistRecommendations().size() > 0){
-                    fragmentSoulmateArtist = FragmentSoulmateArtist.newInstance(userRecommendations.getArtistRecommendations(), userRecommendations.getArtistsShown(), userProfile.getTopArtists(),credentials, lastArtistProcessed);
+                    fragmentSoulmateArtist = FragmentSoulmateArtist.newInstance(userRecommendations.getArtistRecommendations(), userRecommendations.getArtistsShown(), userProfile.getTopArtists(),credentials/*, lastArtistProcessed*/);
                     fragmentTransaction.replace(R.id.fragmentMain, fragmentSoulmateArtist);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Artist recommendations not yet ready");
@@ -324,11 +342,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Collections.shuffle(userTopSongs,new Random(seed));
             Collections.shuffle(userTopArtists, new Random(seed));
 
-            for (UserSong song : userTopSongs.subList(lastSongProcessed, lastSongProcessed + 5)) threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
-            for (UserArtist artist: userTopArtists.subList(lastArtistProcessed, lastArtistProcessed + 5)) threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
+            int lastSongUsed = userProfile.getLastSongUsed();
+            int lastArtistUsed = userProfile.getLastArtistUsed();
 
-            lastSongProcessed = lastSongProcessed + 5;
-            lastArtistProcessed+=  5;
+            for (UserSong song : userTopSongs.subList(lastSongUsed, lastSongUsed + 5)){
+                song.setUsed(true);
+                threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
+            }
+            for (UserArtist artist: userTopArtists.subList(lastArtistUsed, lastArtistUsed + 5)){
+                artist.setUsed(true);
+                threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
+            }
+
+            /*addToSongIndex(5);
+            addToArtistIndex(5);*/
         }
 
 
@@ -381,5 +408,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return SongGenres;
     }
+
+    /*private synchronized void addToSongIndex(int toAdd){
+        this.lastSongProcessed += toAdd;
+    }
+
+    private synchronized void addToArtistIndex(int toAdd){
+        this.lastArtistProcessed += toAdd;
+    }*/
 
 }

@@ -45,7 +45,7 @@ public class FragmentSoulmateArtist extends Fragment {
     private TextView artistNameView;
     private ImageView artistImage;
 
-    private int lastIndexProcessed; //OS PRIMEIROS 5 PROCESANSE NO ON_CREATE DO MAIN ACTIVITY
+    //private int lastIndexProcessed; //OS PRIMEIROS 5 PROCESANSE NO ON_CREATE DO MAIN ACTIVITY
 
 
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
@@ -53,6 +53,13 @@ public class FragmentSoulmateArtist extends Fragment {
         @Override
         public synchronized void onComplete(ArrayList<RecommendedArtist> recommendations) {
             listOfRecommendations.addAll(recommendations);
+            if(listOfRecommendations.size() == 0){
+                int lastIndexUsed = getLastIndexUsed(userArtists);
+                UserArtist artist = userArtists.get(lastIndexUsed);
+                artist.setUsed(true);
+                //addToArtistIndex(1);
+                threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
+            }
         }
     };
 
@@ -61,14 +68,14 @@ public class FragmentSoulmateArtist extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentSoulmateArtist newInstance(ArrayList<RecommendedArtist> artistsToRecommend, ArrayList<RecommendedArtist> artistsShown, ArrayList<UserArtist> userArtists, Credentials credentials, int lastIndexProcessed) {
+    public static FragmentSoulmateArtist newInstance(ArrayList<RecommendedArtist> artistsToRecommend, ArrayList<RecommendedArtist> artistsShown, ArrayList<UserArtist> userArtists, Credentials credentials/*, int lastIndexProcessed*/) {
         FragmentSoulmateArtist fragment = new FragmentSoulmateArtist();
         Bundle args = new Bundle();
         args.putParcelableArrayList(RECOMMENDATIONSLISTKEY, artistsToRecommend);
         args.putParcelableArrayList(ARTISTSSHOWNLISTKEY, artistsShown);
         args.putParcelableArrayList(USERARTISTSLISTKEY, userArtists);
         args.putParcelable(CREDENTIALS,credentials);
-        args.putInt(LASTINDEXPROCESSED, lastIndexProcessed);
+        //args.putInt(LASTINDEXPROCESSED, lastIndexProcessed);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,7 +88,7 @@ public class FragmentSoulmateArtist extends Fragment {
             artistsShown = getArguments().getParcelableArrayList(ARTISTSSHOWNLISTKEY);
             userArtists = getArguments().getParcelableArrayList(USERARTISTSLISTKEY);
             credentials = getArguments().getParcelable(CREDENTIALS);
-            lastIndexProcessed = getArguments().getInt(LASTINDEXPROCESSED);
+            //lastIndexProcessed = getArguments().getInt(LASTINDEXPROCESSED);
         }
     }
 
@@ -125,16 +132,18 @@ public class FragmentSoulmateArtist extends Fragment {
 
 
     private void generateMoreRecommendations(){
-        if(lastIndexProcessed != userArtists.size()){
-            int indexToProccessLast = getLastIndexToProccess(lastIndexProcessed, userArtists.size());
-            for (UserArtist artist : userArtists.subList(lastIndexProcessed, indexToProccessLast)) {
+        int lastIndexUsed = getLastIndexUsed(userArtists);
+        if(lastIndexUsed != userArtists.size()){
+            int indexToProccessLast = getLastIndexToProccess(lastIndexUsed, userArtists.size());
+            for (UserArtist artist : userArtists.subList(lastIndexUsed, indexToProccessLast)) {
+                artist.setUsed(true);
                 threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
-                lastIndexProcessed = indexToProccessLast;
+                //lastIndexProcessed = indexToProccessLast;
             }
         }
         else {
             updateUserProfile();
-            lastIndexProcessed = 0;
+            //lastIndexProcessed = 0;
         }
 
 
@@ -153,6 +162,11 @@ public class FragmentSoulmateArtist extends Fragment {
         userArtists = userProfile.getTopArtists();
     }
 
+    private int getLastIndexUsed(ArrayList<UserArtist> userArtists){
+        for(UserArtist artist: userArtists) if(!artist.isUsed()) return userArtists.indexOf(artist);
+        return 0;
+    }
+
 
     private int getLastIndexToProccess(int currentIndex, int listSize){
         if(currentIndex + 5 <= listSize) return currentIndex + 5;
@@ -166,5 +180,9 @@ public class FragmentSoulmateArtist extends Fragment {
         if(listOfRecommendations.size() == 0) generateMoreRecommendations();
 
     }
+
+    /*private synchronized void addToArtistIndex(int toAdd){
+        this.lastIndexProcessed += toAdd;
+    }*/
 
 }

@@ -94,6 +94,18 @@ public class UserProfile implements Runnable{
 
     }
 
+    public synchronized int getLastSongUsed(){
+        for(UserSong song : topSongs) if(!song.isUsed()) return topSongs.indexOf(song);
+
+        return 0;
+    }
+
+    public synchronized int getLastArtistUsed(){
+        for(UserArtist artist : topArtists) if(!artist.isUsed()) return topArtists.indexOf(artist);
+
+        return 0;
+    }
+
 
     @Override
     public void run() {

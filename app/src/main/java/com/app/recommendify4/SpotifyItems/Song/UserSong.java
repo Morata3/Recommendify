@@ -18,11 +18,13 @@ public class UserSong extends Song implements Parcelable{
 
     private ArrayList<UserArtist> artists;
     private int timesInList;
+    private boolean used;
 
     public UserSong(String songName, String albumName, ArrayList<UserArtist> artistsList, String songId, int timesInList){
         super(songName, albumName, songId);
         this.artists = artistsList;
         this.timesInList = timesInList;
+        this.used = false;
     }
 
     public UserSong(JSONObject songInfo, int timesInList) throws JSONException {
@@ -32,8 +34,13 @@ public class UserSong extends Song implements Parcelable{
         for(int artist = 0; artist < artistsJSON.length(); artist++)
             this.artists.add(new UserArtist(artistsJSON.getJSONObject(artist).getString("name"), artistsJSON.getJSONObject(artist).getString("id")));
         this.timesInList = timesInList;
+        this.used = false;
 
     }
+
+    public void setUsed(boolean used) { this.used = used; }
+
+    public boolean isUsed() { return used; }
 
     public void setArtists(ArrayList<UserArtist> artists) { this.artists = artists; }
 

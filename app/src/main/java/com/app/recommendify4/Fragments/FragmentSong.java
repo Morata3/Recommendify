@@ -53,7 +53,7 @@ public class FragmentSong extends Fragment {
     private TextView songArtistView;
     private ImageView coverAlbum;
 
-    private int lastIndexProcessed; //AS PRIMEIRAS 5 PROCESANSE NO ON_CREATE DO MAIN ACTIVITY
+    //private int lastIndexProcessed;
 
 
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
@@ -61,22 +61,33 @@ public class FragmentSong extends Fragment {
         @Override
         public synchronized void onComplete(ArrayList<RecommendedSong> recommendations) {
             listOfRecommendations.addAll(recommendations);
+            if(listOfRecommendations.size() == 0){
+                int lastIndexUsed = getLastIndexUsed(userSongs);
+                UserSong song = userSongs.get(lastIndexUsed);
+                song.setUsed(true);
+                //addToSongIndex(1);
+                threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
+            }
         }
     };
+
+    /*public interface FragmentSongCallback{
+        void updateLastSongProccessed(int lastIndexProcessed);
+    }*/
 
 
     public FragmentSong() {
         // Required empty public constructor
     }
 
-    public static FragmentSong newInstance(ArrayList<RecommendedSong> songsToRecommend, ArrayList<RecommendedSong> songsShown, ArrayList<UserSong> userSongs, Credentials credentials, int lastIndexProcessed) {
+    public static FragmentSong newInstance(ArrayList<RecommendedSong> songsToRecommend, ArrayList<RecommendedSong> songsShown, ArrayList<UserSong> userSongs, Credentials credentials/*, int lastIndexProcessed*/) {
         FragmentSong fragment = new FragmentSong();
         Bundle args = new Bundle();
         args.putParcelableArrayList(RECOMMENDATIONSLISTKEY, songsToRecommend);
         args.putParcelableArrayList(SONGSSHOWNLISTKEY, songsShown);
         args.putParcelableArrayList(USERSONGSLISTKEY, userSongs);
         args.putParcelable(CREDENTIALS,credentials);
-        args.putInt(LASTINDEXPROCESSED, lastIndexProcessed);
+        //args.putInt(LASTINDEXPROCESSED, lastIndexProcessed);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,7 +100,7 @@ public class FragmentSong extends Fragment {
             songsShown = getArguments().getParcelableArrayList(SONGSSHOWNLISTKEY);
             userSongs = getArguments().getParcelableArrayList(USERSONGSLISTKEY);
             credentials = getArguments().getParcelable(CREDENTIALS);
-            lastIndexProcessed = getArguments().getInt(LASTINDEXPROCESSED);
+            //lastIndexProcessed = getArguments().getInt(LASTINDEXPROCESSED);
         }
     }
 
@@ -158,16 +169,18 @@ public class FragmentSong extends Fragment {
     }
 
     private void generateMoreRecommendations(){
-        if(lastIndexProcessed != userSongs.size()){
-            int indexToProccessLast = getLastIndexToProccess(lastIndexProcessed, userSongs.size());
-            for (UserSong song : userSongs.subList(lastIndexProcessed, indexToProccessLast)) {
+        int lastIndexUsed = getLastIndexUsed(userSongs);
+        if(lastIndexUsed != userSongs.size()){
+            int indexToProccessLast = getLastIndexToProccess(lastIndexUsed, userSongs.size());
+            for (UserSong song : userSongs.subList(lastIndexUsed, indexToProccessLast)) {
+                song.setUsed(true);
                 threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
-                lastIndexProcessed = indexToProccessLast;
+                //lastIndexUsed = indexToProccessLast;
             }
         }
         else {
             updateUserProfile();
-            lastIndexProcessed = 0;
+            //lastIndexProcessed = 0;
         }
 
 
@@ -192,11 +205,22 @@ public class FragmentSong extends Fragment {
         else return listSize;
     }
 
+    private int getLastIndexUsed(ArrayList<UserSong> songs){
+        for(UserSong song : songs) if(!song.isUsed()) return songs.indexOf(song);
+        return 0;
+    }
+
     @Override
     public void onStop() {
         super.onStop();
         mediaPlayer.stop();
         mediaPlayer.release();
         if(listOfRecommendations.size() == 0) generateMoreRecommendations();
+
     }
+
+    /*private synchronized void addToSongIndex(int toAdd){
+        this.lastIndexProcessed += toAdd;
+    }*/
 }
+
