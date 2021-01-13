@@ -28,9 +28,6 @@ public class RecommendedSong extends Song implements Parcelable {
         this.shown = shown;
         this.Coincidence = 0;
         this.genres = Genres;
-        //this.ArtistString = artistsList;
-
-
     }
 
     public void setArtists(ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artists) { this.artists = artists; }
@@ -51,10 +48,6 @@ public class RecommendedSong extends Song implements Parcelable {
 
     public String getGenres(){return this.genres;}
 
-    //public String getartistsString() {return ArtistString;}
-
-    //public void setArtists(String Artist){this.ArtistString = Artist;}
-
     public void setCoincidence(int Coincidence){this.Coincidence = Coincidence;}
 
     public boolean wasShown() { return shown != 0; }
@@ -69,6 +62,15 @@ public class RecommendedSong extends Song implements Parcelable {
             list.add(artist);
         }
         return list;
+    }
+
+    public String[] getSongGenres(){
+        String[] SongGenres = this.genres.split(",");
+
+        for(int i = 0; i< SongGenres.length; i++) {
+            SongGenres[i] = SongGenres[i].substring(4,SongGenres[i].length()-3);
+        }
+        return SongGenres;
     }
 
     //PARCELABLE IMPLEMENTATION

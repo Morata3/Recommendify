@@ -27,9 +27,11 @@ import com.app.recommendify4.UserInfo.Credentials;
 public class FragmentHybrid extends Fragment {
 
     private static final String SONGRECOMMENDED = "RecommendedSong";
+    private static final String SONGSHOWN = "songsShown";
     private static final String CREDENTIALS = "Credentials";
-    private ArrayList<RecommendedSong> listOfRecommendations;
 
+    private ArrayList<RecommendedSong> listOfRecommendations;
+    private ArrayList<RecommendedSong> songShown;
     private RecommendedSong song;
     private int currentSong = 0;
     private Credentials credentials;
@@ -44,11 +46,12 @@ public class FragmentHybrid extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentHybrid newInstance(ArrayList<RecommendedSong> songsToRecommend, Credentials credentials) {
+    public static FragmentHybrid newInstance(ArrayList<RecommendedSong> songsToRecommend,ArrayList<RecommendedSong> songsShown, Credentials credentials) {
         FragmentHybrid fragment = new FragmentHybrid();
         Bundle args = new Bundle();
         args.putParcelableArrayList(SONGRECOMMENDED, songsToRecommend);
         args.putParcelable(CREDENTIALS,credentials);
+        args.putParcelableArrayList(SONGSHOWN,songsShown);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,13 +62,13 @@ public class FragmentHybrid extends Fragment {
         if (getArguments() != null) {
             listOfRecommendations = getArguments().getParcelableArrayList(SONGRECOMMENDED);
             credentials = getArguments().getParcelable(CREDENTIALS);
+            songShown = getArguments().getParcelableArrayList(SONGSHOWN);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_hybrid, container, false);
     }
 
@@ -88,8 +91,10 @@ public class FragmentHybrid extends Fragment {
                 mediaPlayer.stop();
                 mediaPlayer.reset();
             }
-            song = listOfRecommendations.get(currentSong++);
-            song.setShown(1);
+            song = listOfRecommendations.get(0);
+            listOfRecommendations.remove(song);
+            if(!songShown.contains(song)) songShown.add(song);
+
             ThreadLauncher builder_updateTrack = new ThreadLauncher();
             builder_updateTrack.execute(new Runnable() {
                 @Override

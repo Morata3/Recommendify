@@ -10,10 +10,6 @@
         app:showAsAction="ifRoom"/>
 
     <group>
-    <item
-        android:id="@+id/menu_aboutMe"
-        android:icon="@drawable/ic_about_user"
-        android:title="About me" />
 
     <item
         android:id="@+id/menu_logout"

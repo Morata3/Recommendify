@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.app.recommendify4.SpotifyApi.RequestSender;
 import com.app.recommendify4.SpotifyItems.Playlist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.ThreadManagers.RecomThreadPool;
 import com.app.recommendify4.ThreadManagers.ThreadLauncher;
 import com.app.recommendify4.UserInfo.Credentials;
 
@@ -21,8 +22,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class DialogCreatePlaylist extends AppCompatDialogFragment {
+    private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -43,8 +47,7 @@ public class DialogCreatePlaylist extends AppCompatDialogFragment {
                 String playlistName = input.getText().toString()+" (by Recommendify4)";
                 System.out.println(playlistName);
                 Playlist playlist = new Playlist(playlistName, playlistSongs);
-                ThreadLauncher launcher = new ThreadLauncher();
-                launcher.execute(new Runnable() {
+                threadPoolExecutor.execute(new Runnable() {
                     @Override
                     public void run() {
                         String response = RequestSender.createPlaylist(credentials, playlistName, userId);

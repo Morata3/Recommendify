@@ -23,6 +23,7 @@ import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.UserInfo.Credentials;
+import com.app.recommendify4.UserInfo.Recommendations;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -40,6 +41,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Advanced extends AppCompatActivity {
+
+    private static final String CREDENTIALS = "credentials";
+    private static final String RECOMMENDATIONS = "recommendations";
+
     private Button songs;
     private TextView text;
     private Switch live;
@@ -52,8 +57,7 @@ public class Advanced extends AppCompatActivity {
     private Switch loud;
     private Switch quiet;
     private Credentials credentials;
-    private ArrayList<RecommendedSong> songsShown;
-    private ArrayList<RecommendedArtist> artistsShown;
+    private Recommendations recommendations;
 
     private FragmentTransaction fragmentTransaction;
     private Fragment fragmentLauncher;
@@ -79,8 +83,7 @@ public class Advanced extends AppCompatActivity {
 
 
         credentials = getCredentials();
-        songsShown = getSongs();
-        artistsShown = getArtists();
+        recommendations = getRecommendations();
         songs = (Button) findViewById(R.id.songs);
 
         quiet.setOnClickListener(v -> ChangeQuietSwitch());
@@ -106,8 +109,8 @@ public class Advanced extends AppCompatActivity {
                     case R.id.history:
 
                         intent = new Intent(getApplicationContext(), History.class);
-                        intent.putParcelableArrayListExtra("Songs",songsShown);
-                        intent.putParcelableArrayListExtra("Artists",artistsShown);
+                        intent.putExtra(CREDENTIALS, credentials);
+                        intent.putExtra(RECOMMENDATIONS,recommendations);
                         intent.putExtra("credentials", credentials);
                         startActivity(intent);
                         return true;
@@ -132,12 +135,10 @@ public class Advanced extends AppCompatActivity {
         switch (view.getId()) {
 
             case R.id.songs:
-                    fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs(),credentials);
+//                    fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs(),songsShown ,credentials);
                     fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
                     fragmentTransaction.addToBackStack(null);
-
                 break;
-
             }
 
         fragmentTransaction.commit();
@@ -154,14 +155,12 @@ public class Advanced extends AppCompatActivity {
         }
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("advanced");
-        //System.out.println("Live: " + live.isChecked() + " danceable: " + danceable.isChecked() + " positive: " + positive.isChecked() + " low: " + low.isChecked() + "high: " + high.isChecked() + " instru: " + instru.isChecked());
 
         PyObject obj= pyf.callAttr("filter_songs",live.isChecked(),danceable.isChecked(),positive.isChecked(),negative.isChecked(),low.isChecked(),
                 high.isChecked(),instru.isChecked(),loud.isChecked(),quiet.isChecked());
         String recommendations = obj.toString();
 
         System.out.println("Switch" + recommendations);
-
 
         JSONArray jsonrecom = null;
 
@@ -182,64 +181,43 @@ public class Advanced extends AppCompatActivity {
     }
 
     public void setupFragment(){
-
         fragmentLauncher = new FragmentLauncher();
         fragmentAdvanced = new FragmentAdvanced();
-//        getSupportFragmentManager().beginTransaction().add(R.id.fragmentMainAdvanced,fragmentLauncher).commit();
-
     }
 
     private void ChangePositiveSwitch() {
-
         if (negative.isChecked()) {
-
             negative.toggle();
-
         }
     }
 
     private void ChangeNegativeSwitch() {
-
         if (positive.isChecked()) {
-
             positive.toggle();
-
         }
     }
 
     private void ChangeLowSwitch() {
-
         if (high.isChecked()) {
-
             high.toggle();
-
         }
     }
 
     private void ChangeHighSwitch() {
-
         if (low.isChecked()) {
-
             low.toggle();
-
         }
     }
 
     private void ChangeLoudSwitch() {
-
         if (quiet.isChecked()) {
-
             quiet.toggle();
-
         }
     }
 
     private void ChangeQuietSwitch() {
-
         if (loud.isChecked()) {
-
             loud.toggle();
-
         }
     }
 
@@ -252,20 +230,11 @@ public class Advanced extends AppCompatActivity {
             return null;
     }
 
-    private ArrayList<RecommendedSong> getSongs(){
+    private Recommendations getRecommendations(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("Songs")){
-            return parameters.getParcelableArrayList("Songs");}
-        else
-            return null;
-    }
-
-    private ArrayList<RecommendedArtist> getArtists(){
-        Intent intent = getIntent();
-        Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("Artists")){
-            return parameters.getParcelableArrayList("Artists");}
+        if(parameters != null && parameters.containsKey(RECOMMENDATIONS)){
+            return parameters.getParcelable(RECOMMENDATIONS);}
         else
             return null;
     }

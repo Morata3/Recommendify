@@ -1,15 +1,20 @@
 package com.app.recommendify4.UserInfo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
-public class Recommendations {
+public class Recommendations implements Parcelable{
 
     private ArrayList<RecommendedSong> songsRecommendations;
-    private int lastSongProcessed;
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artistRecommendations;
-    private int lastArtistProcessed;
+    private ArrayList<RecommendedSong> hybridRecommendations;
     private ArrayList<RecommendedSong> songsShown;
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artistsShown;
 
@@ -28,6 +33,7 @@ public class Recommendations {
     public Recommendations(){
         this.songsRecommendations = new ArrayList<>();
         this.artistRecommendations = new ArrayList<>();
+        this.hybridRecommendations = new ArrayList<>();
         this.songsShown = new ArrayList<>();
         this.artistsShown = new ArrayList<>();
     }
@@ -36,9 +42,7 @@ public class Recommendations {
 
     public ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtistsShown() { return artistsShown; }
 
-    public int getLastArtistProcessed() { return lastArtistProcessed; }
-
-    public int getLastSongProcessed() { return lastSongProcessed; }
+    public ArrayList<RecommendedSong> getHybridRecommendations(){ return hybridRecommendations; }
 
     public ArrayList<RecommendedSong> getSongsRecommendations() { return songsRecommendations; }
 
@@ -62,36 +66,14 @@ public class Recommendations {
 
     public void moveToHistory(RecommendedSong song){
         this.songsRecommendations.remove(song);
-        this.songsShown.add(song);
+        if(!this.songsShown.contains(song)) this.songsShown.add(song);
+        checkHybrid();
     }
 
     public void moveToHistory(com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist){
         this.artistRecommendations.remove(artist);
-        this.artistsShown.add(artist);
-    }
-
-    public void updateLists(){
-        updateSongsList();
-        updateArtistsList();
-    }
-
-    private void updateSongsList(){
-        ArrayList<RecommendedSong> newList = new ArrayList<>();
-        for(RecommendedSong song : songsRecommendations){
-            if(song.wasShown()) this.songsShown.add(song);
-            else newList.add(song);
-        }
-        this.songsRecommendations = newList;
-
-    }
-
-    private void updateArtistsList(){
-        ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> newList = new ArrayList<>();
-        for(com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist: artistRecommendations) {
-            if (artist.wasShown()) this.artistsShown.add(artist);
-            else newList.add(artist);
-        }
-        this.artistRecommendations = newList;
+        if(!this.artistsShown.contains(artist)) this.artistsShown.add(artist);
+        checkHybrid();
     }
 
     public boolean hasSongRecommendations(){
@@ -102,12 +84,67 @@ public class Recommendations {
         return (artistRecommendations.size() > 0);
     }
 
-    public synchronized void addToSongIndex(int toAdd){
-        this.lastSongProcessed += toAdd;
+    private void checkHybrid(){
+        if (this.artistRecommendations == null || this.artistRecommendations.size() == 0 ||
+                this.songsRecommendations == null || this.songsRecommendations.size() == 0) {
+        }
+        else {
+            for (RecommendedSong song : this.songsRecommendations) {
+                for (com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.artistRecommendations) {
+                    String[] SongGenres = song.getSongGenres();
+                    ArrayList<String> ArtistGenres = artist.getGenres();
+                    for (String songGenre : SongGenres) {
+                        for (String artistgenre : ArtistGenres) {
+                            if (songGenre.equals(artistgenre)) {
+                                song.setCoincidence(song.getCoincidence() + 1);
+                                hybridRecommendations.add(song);
+                                System.out.println("COINCIDE!: " + song.getCoincidence());
+                            }
+                        }
+                    }
+                }
+            }
+            Collections.sort(this.hybridRecommendations, RecommendedSong.Coincidences);
+        }
     }
 
-    public synchronized void addToArtistIndex(int toAdd){
-        this.lastArtistProcessed += toAdd;
+    //PARCELABLE IMPLEMENTATION
+    private Recommendations(Parcel in) {
+        songsRecommendations = new ArrayList<>();
+        artistRecommendations = new ArrayList<>();
+        hybridRecommendations = new ArrayList<>();
+        songsShown = new ArrayList<>();
+        artistsShown = new ArrayList<>();
+
+        in.readTypedList(songsRecommendations, RecommendedSong.CREATOR);
+        in.readTypedList(artistRecommendations, RecommendedArtist.CREATOR);
+        in.readTypedList(hybridRecommendations, RecommendedSong.CREATOR);
+        in.readTypedList(songsRecommendations, RecommendedSong.CREATOR);
+        in.readTypedList(artistRecommendations,RecommendedArtist.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Recommendations> CREATOR
+            = new Parcelable.Creator<Recommendations>() {
+        public Recommendations createFromParcel(Parcel in) {
+            return new Recommendations(in);
+        }
+        public Recommendations[] newArray(int size) {
+            return new Recommendations[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(songsRecommendations);
+        dest.writeTypedList(artistRecommendations);
+        dest.writeTypedList(hybridRecommendations);
+        dest.writeTypedList(songsShown);
+        dest.writeTypedList(artistsShown);
     }
 
 }

@@ -13,15 +13,18 @@ import com.app.recommendify4.Fragments.FragmentLauncher_History;
 import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.UserInfo.Credentials;
+import com.app.recommendify4.UserInfo.Recommendations;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
 public class History extends AppCompatActivity {
 
+    private static final String CREDENTIALS = "credentials";
+    private static final String RECOMMENDATIONS = "recommendations";
+
     private FragmentLauncher_History fragmentLauncher;
-    private ArrayList<RecommendedArtist> artists;
-    private ArrayList<RecommendedSong> songs;
+    private Recommendations recommendations;
     private Credentials credentials;
 
     @Override
@@ -29,9 +32,9 @@ public class History extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        artists = getArtists();
-        songs = getSongs();
+        recommendations = getRecommendations();
         credentials = getCredentials();
+
         setupFragment();
         changeFragment();
 
@@ -44,9 +47,8 @@ public class History extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.advanced:
                         intent = new Intent(getApplicationContext(), Advanced.class);
-                        intent.putExtra("credentials", credentials);
-                        intent.putParcelableArrayListExtra("Songs",songs);
-                        intent.putParcelableArrayListExtra("Artists",artists);
+                        intent.putExtra(CREDENTIALS, credentials);
+                        intent.putExtra(RECOMMENDATIONS,recommendations);
                         startActivity(intent);
 
                     case R.id.home:
@@ -66,20 +68,11 @@ public class History extends AppCompatActivity {
         finish();
     }
 
-    private ArrayList<RecommendedSong> getSongs(){
+    private Recommendations getRecommendations(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("Songs"))
-            return parameters.getParcelableArrayList("Songs");
-        else
-            return null;
-    }
-
-    private ArrayList<RecommendedArtist> getArtists(){
-        Intent intent = getIntent();
-        Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("Artists"))
-            return parameters.getParcelableArrayList("Artists");
+        if(parameters != null && parameters.containsKey(RECOMMENDATIONS))
+            return parameters.getParcelable(RECOMMENDATIONS);
         else
             return null;
     }
@@ -87,8 +80,8 @@ public class History extends AppCompatActivity {
     private Credentials getCredentials(){
         Intent intent = getIntent();
         Bundle parameters = intent.getExtras();
-        if(parameters != null && parameters.containsKey("credentials"))
-            return (Credentials) parameters.get("credentials");
+        if(parameters != null && parameters.containsKey(CREDENTIALS))
+            return (Credentials) parameters.get(CREDENTIALS);
         else
             return null;
     }
@@ -97,13 +90,12 @@ public class History extends AppCompatActivity {
     public void setupFragment(){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentLauncher = new FragmentLauncher_History();
-
         fragmentTransaction.add(R.id.fragmentHistory,fragmentLauncher).commit();
     }
 
     public void changeFragment(){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentLauncher = FragmentLauncher_History.newInstance(songs, artists);
+        fragmentLauncher = FragmentLauncher_History.newInstance(recommendations);
         fragmentTransaction.replace(R.id.fragmentHistory,fragmentLauncher).commit();
     }
 

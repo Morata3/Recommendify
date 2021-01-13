@@ -18,6 +18,7 @@ import com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist;
 import com.app.recommendify4.SpotifyItems.Artist.UserArtist;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.ThreadManagers.RecomThreadPool;
+import com.app.recommendify4.UserInfo.Recommendations;
 import com.app.recommendify4.UserInfo.UserProfile;
 import com.bumptech.glide.Glide;
 import com.app.recommendify4.R;
@@ -31,22 +32,19 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentSoulmateArtist extends Fragment {
 
-    private static final String RECOMMENDATIONSLISTKEY = "RecommendationsList";
+    private static final String RECOMMENDATIONS = "Recommendations";
     private static final String ARTISTSSHOWNLISTKEY = "ArtistsShown";
     private static final String USERARTISTSLISTKEY = "Userrtists";
     private static final String LASTINDEXPROCESSED = "LastIndexProcessed";
     private static final String CREDENTIALS = "Credentials";
 
+    private Recommendations recommendations;
     private ArrayList<RecommendedArtist> listOfRecommendations;
-    private ArrayList<RecommendedArtist> artistsShown;
     private ArrayList<UserArtist> userArtists;
     private Credentials credentials;
 
     private TextView artistNameView;
     private ImageView artistImage;
-
-    //private int lastIndexProcessed; //OS PRIMEIROS 5 PROCESANSE NO ON_CREATE DO MAIN ACTIVITY
-
 
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
     private final CollaborativeCallback collaborativeThreadCallback = new CollaborativeCallback() {
@@ -57,7 +55,6 @@ public class FragmentSoulmateArtist extends Fragment {
                 int lastIndexUsed = getLastIndexUsed(userArtists);
                 UserArtist artist = userArtists.get(lastIndexUsed);
                 artist.setUsed(true);
-                //addToArtistIndex(1);
                 threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
             }
         }
@@ -68,14 +65,12 @@ public class FragmentSoulmateArtist extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentSoulmateArtist newInstance(ArrayList<RecommendedArtist> artistsToRecommend, ArrayList<RecommendedArtist> artistsShown, ArrayList<UserArtist> userArtists, Credentials credentials/*, int lastIndexProcessed*/) {
+    public static FragmentSoulmateArtist newInstance(Recommendations recommendations, ArrayList<UserArtist> userArtists, Credentials credentials) {
         FragmentSoulmateArtist fragment = new FragmentSoulmateArtist();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(RECOMMENDATIONSLISTKEY, artistsToRecommend);
-        args.putParcelableArrayList(ARTISTSSHOWNLISTKEY, artistsShown);
+        args.putParcelable(RECOMMENDATIONS, recommendations);
         args.putParcelableArrayList(USERARTISTSLISTKEY, userArtists);
         args.putParcelable(CREDENTIALS,credentials);
-        //args.putInt(LASTINDEXPROCESSED, lastIndexProcessed);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,18 +79,15 @@ public class FragmentSoulmateArtist extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            listOfRecommendations = getArguments().getParcelableArrayList(RECOMMENDATIONSLISTKEY);
-            artistsShown = getArguments().getParcelableArrayList(ARTISTSSHOWNLISTKEY);
-            userArtists = getArguments().getParcelableArrayList(USERARTISTSLISTKEY);
+            recommendations = getArguments().getParcelable(RECOMMENDATIONS);
             credentials = getArguments().getParcelable(CREDENTIALS);
-            //lastIndexProcessed = getArguments().getInt(LASTINDEXPROCESSED);
         }
+        listOfRecommendations = recommendations.getArtistRecommendations();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_soulmate_artist, container, false);
     }
 
@@ -113,8 +105,7 @@ public class FragmentSoulmateArtist extends Fragment {
     public void setNextArtist() {
         if(listOfRecommendations.size() > 0){
             RecommendedArtist artist = listOfRecommendations.get(0);
-            listOfRecommendations.remove(artist);
-            artistsShown.add(artist);
+            recommendations.moveToHistory(artist);
 
             artistNameView.setText(artist.getName());
             Glide.with(this).load(artist.getImage()).into(artistImage);
@@ -138,12 +129,10 @@ public class FragmentSoulmateArtist extends Fragment {
             for (UserArtist artist : userArtists.subList(lastIndexUsed, indexToProccessLast)) {
                 artist.setUsed(true);
                 threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
-                //lastIndexProcessed = indexToProccessLast;
             }
         }
         else {
             updateUserProfile();
-            //lastIndexProcessed = 0;
         }
 
 

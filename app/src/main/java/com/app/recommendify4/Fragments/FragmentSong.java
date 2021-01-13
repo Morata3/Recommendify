@@ -22,6 +22,7 @@ import com.app.recommendify4.RecomThreads.ContentThread;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
 import com.app.recommendify4.SpotifyItems.Song.UserSong;
 import com.app.recommendify4.ThreadManagers.RecomThreadPool;
+import com.app.recommendify4.UserInfo.Recommendations;
 import com.app.recommendify4.UserInfo.UserProfile;
 import com.bumptech.glide.Glide;
 import com.app.recommendify4.R;
@@ -38,13 +39,13 @@ public class FragmentSong extends Fragment {
     private static final String RECOMMENDATIONSLISTKEY = "RecommendationsList";
     private static final String SONGSSHOWNLISTKEY = "SongsShown";
     private static final String USERSONGSLISTKEY = "UserSongs";
-    private static final String LASTINDEXPROCESSED = "LastIndexProcessed";
+    private static final String RECOMMENDATIONS = "recommendations";
     private static final String CREDENTIALS = "Credentials";
     private static final String GANDALFMEME = "https://memegenerator.net/img/instances/74848295/please-wait-while-im-doing-my-magic.jpg";
 
-    private ArrayList<RecommendedSong> listOfRecommendations;
-    private ArrayList<RecommendedSong> songsShown;
-    private ArrayList<UserSong> userSongs;
+    private  Recommendations recommendations;
+    private ArrayList<RecommendedSong> listOfRecommendations = new ArrayList<>();
+    private ArrayList<UserSong> userSongs = new ArrayList<>();
     private Credentials credentials;
 
     private MediaPlayer mediaPlayer = new MediaPlayer();
@@ -52,9 +53,6 @@ public class FragmentSong extends Fragment {
     private TextView songNameView;
     private TextView songArtistView;
     private ImageView coverAlbum;
-
-    //private int lastIndexProcessed;
-
 
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
     private final ContentCallback contentThreadCallback = new ContentCallback() {
@@ -65,29 +63,21 @@ public class FragmentSong extends Fragment {
                 int lastIndexUsed = getLastIndexUsed(userSongs);
                 UserSong song = userSongs.get(lastIndexUsed);
                 song.setUsed(true);
-                //addToSongIndex(1);
                 threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
             }
         }
     };
 
-    /*public interface FragmentSongCallback{
-        void updateLastSongProccessed(int lastIndexProcessed);
-    }*/
-
-
     public FragmentSong() {
         // Required empty public constructor
     }
 
-    public static FragmentSong newInstance(ArrayList<RecommendedSong> songsToRecommend, ArrayList<RecommendedSong> songsShown, ArrayList<UserSong> userSongs, Credentials credentials/*, int lastIndexProcessed*/) {
+    public static FragmentSong newInstance(Recommendations recommendations, ArrayList<UserSong> userSongs,Credentials credentials) {
         FragmentSong fragment = new FragmentSong();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(RECOMMENDATIONSLISTKEY, songsToRecommend);
-        args.putParcelableArrayList(SONGSSHOWNLISTKEY, songsShown);
+        args.putParcelable(RECOMMENDATIONS, recommendations);
         args.putParcelableArrayList(USERSONGSLISTKEY, userSongs);
         args.putParcelable(CREDENTIALS,credentials);
-        //args.putInt(LASTINDEXPROCESSED, lastIndexProcessed);
         fragment.setArguments(args);
         return fragment;
     }
@@ -96,12 +86,11 @@ public class FragmentSong extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            listOfRecommendations = getArguments().getParcelableArrayList(RECOMMENDATIONSLISTKEY);
-            songsShown = getArguments().getParcelableArrayList(SONGSSHOWNLISTKEY);
+            recommendations = getArguments().getParcelable(RECOMMENDATIONS);
             userSongs = getArguments().getParcelableArrayList(USERSONGSLISTKEY);
             credentials = getArguments().getParcelable(CREDENTIALS);
-            //lastIndexProcessed = getArguments().getInt(LASTINDEXPROCESSED);
         }
+        listOfRecommendations = recommendations.getSongsRecommendations();
     }
 
     @Override
@@ -118,6 +107,7 @@ public class FragmentSong extends Fragment {
         coverAlbum = (ImageView) view.findViewById(R.id.playSong);
         songNameView = (TextView) view.findViewById(R.id.songName);
         songArtistView = (TextView) view.findViewById(R.id.songArtist);
+
         setNextSong();
     }
 
@@ -128,8 +118,7 @@ public class FragmentSong extends Fragment {
                 mediaPlayer.reset();
             }
             RecommendedSong song = listOfRecommendations.get(0);
-            listOfRecommendations.remove(song);
-            songsShown.add(song);
+            recommendations.moveToHistory(song);
 
             songNameView.setText(song.getName());
             songArtistView.setText(song.getArtists().get(0).getName());
@@ -150,8 +139,6 @@ public class FragmentSong extends Fragment {
             songNameView.setText("No more recommendations for now");
             songArtistView.setText("But stay calm. More are being generated");
             Glide.with(this).load(GANDALFMEME).into(coverAlbum);
-
-          //  Glide.with(this).clear(coverAlbum);
         }
 
     }
@@ -175,12 +162,10 @@ public class FragmentSong extends Fragment {
             for (UserSong song : userSongs.subList(lastIndexUsed, indexToProccessLast)) {
                 song.setUsed(true);
                 threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
-                //lastIndexUsed = indexToProccessLast;
             }
         }
         else {
             updateUserProfile();
-            //lastIndexProcessed = 0;
         }
 
 
@@ -219,8 +204,5 @@ public class FragmentSong extends Fragment {
 
     }
 
-    /*private synchronized void addToSongIndex(int toAdd){
-        this.lastIndexProcessed += toAdd;
-    }*/
 }
 

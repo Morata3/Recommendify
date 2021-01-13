@@ -41,6 +41,9 @@ public class Login extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {} //On back pressed do nothing
+
+    @Override
     protected void onStart() {
         super.onStart();
 

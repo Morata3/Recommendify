@@ -49,8 +49,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout drawer;
+    private static final String CREDENTIALS = "credentials";
+    private static final String RECOMMENDATIONS = "recommendations";
 
+    private DrawerLayout drawer;
     private FragmentTransaction fragmentTransaction;
     private FragmentLauncher fragmentLauncher;
     private FragmentSong fragmentSong;
@@ -61,22 +63,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private UserProfile userProfile;
     private Credentials credentials;
-
     private Recommendations userRecommendations;
-    /*private int lastSongProcessed = 0;
-    private int lastArtistProcessed = 0;*/
+
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
     private final ContentCallback contentThreadCallback = new ContentCallback() {
         @Override
         public synchronized void onComplete(ArrayList<RecommendedSong> recommendations) {
-            System.out.println("(DEBUG): "+recommendations);
             userRecommendations.addSongRecommendations(recommendations);
             if(!userRecommendations.hasSongRecommendations()){
                 int lastSongUsed = userProfile.getLastSongUsed();
                 if(lastSongUsed != userProfile.getTopSongs().size()) {
                     UserSong song = userProfile.getTopSongs().get(lastSongUsed);
                     song.setUsed(true);
-                    //addToSongIndex(1);
                     threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
                 }
             }
@@ -91,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(lastArtistUsed != userProfile.getTopArtists().size()){
                     UserArtist artist = userProfile.getTopArtists().get(lastArtistUsed);
                     artist.setUsed(true);
-                    //addToArtistIndex(1);
                     threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
                 }
             }
@@ -166,10 +163,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (menuItem.getItemId()) {
                     case R.id.advanced:
                         intent = new Intent(getApplicationContext(), Advanced.class);
-                        intent.putExtra("credentials", credentials);
-
-                        intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
-                        intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
+                        intent.putExtra(CREDENTIALS, credentials);
+                        intent.putExtra(RECOMMENDATIONS,userRecommendations);
                         startActivity(intent);
 
                         overridePendingTransition(0, 0);
@@ -178,9 +173,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         return true;
                     case R.id.history:
                         intent = new Intent(getApplicationContext(), History.class);
-                        intent.putParcelableArrayListExtra("Songs",userRecommendations.getSongsShown());
-                        intent.putParcelableArrayListExtra("Artists",userRecommendations.getArtistsShown());
-                        intent.putExtra("credentials", credentials);
+                        intent.putExtra(CREDENTIALS, credentials);
+                        intent.putExtra(RECOMMENDATIONS,userRecommendations);
                         startActivity(intent);
                         return true;
 
@@ -233,14 +227,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (view.getId()){
             case R.id.buttonShuffle:
                 if(userRecommendations.getSongsRecommendations() != null && userRecommendations.getSongsRecommendations().size() > 0){
-                    fragmentSong = FragmentSong.newInstance(userRecommendations.getSongsRecommendations(), userRecommendations.getSongsShown(), userProfile.getTopSongs(),credentials/*, lastSongProcessed*/);
+                    fragmentSong = FragmentSong.newInstance(userRecommendations, userProfile.getTopSongs(),credentials);
                     fragmentTransaction.replace(R.id.fragmentMain,fragmentSong);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Recommendations not yet ready ");
                 break;
             case R.id.buttonSoulmate:
                 if(userRecommendations.getArtistRecommendations() != null && userRecommendations.getArtistRecommendations().size() > 0){
-                    fragmentSoulmateArtist = FragmentSoulmateArtist.newInstance(userRecommendations.getArtistRecommendations(), userRecommendations.getArtistsShown(), userProfile.getTopArtists(),credentials/*, lastArtistProcessed*/);
+                    fragmentSoulmateArtist = FragmentSoulmateArtist.newInstance(userRecommendations, userProfile.getTopArtists(),credentials);
                     fragmentTransaction.replace(R.id.fragmentMain, fragmentSoulmateArtist);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Artist recommendations not yet ready");
@@ -257,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(this.userRecommendations.getArtistRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0 &&
                         this.userRecommendations.getSongsRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0){
 
-                    fragmentHybrid = FragmentHybrid.newInstance(getHybridSongs_bygenre(),credentials);
+//                    fragmentHybrid = FragmentHybrid.newInstance(getHybridSongs_bygenre(), userRecommendations.getSongsShown(),credentials);
                     fragmentTransaction.replace(R.id.fragmentMain,fragmentHybrid);
                     fragmentTransaction.addToBackStack(null);
                 }else System.out.println("Recommendations not yet ready ");
@@ -275,12 +269,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ArrayList<RecommendedSong> HybridRecommendations =  this.userRecommendations.getSongsRecommendations();
             for(RecommendedSong song : HybridRecommendations ){
                 for(com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()){
-
-                    //if(song.getartistsString().equals(artist.getName())){
-                    //COMO ESTA AHORA AS CANCIONS QUE SALEN DE FinalRecommendator solo teñen un artista (os artistas que colaboran aparecen no titulo
                     if(song.getArtists().get(0).getName().equals(artist.getName())){
                         song.setCoincidence(song.getCoincidence()+1);
-
                     }
                 }
             }
@@ -288,9 +278,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return HybridRecommendations;
         }
-
-
     }
+
+//    public ArrayList<RecommendedSong> getHybridSongs_bygenre() {
+//        if (this.userRecommendations.getArtistRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0 ||
+//                this.userRecommendations.getSongsRecommendations() == null || this.userRecommendations.getSongsRecommendations().size() == 0)
+//            return new ArrayList<>();
+//        else {
+//            ArrayList<RecommendedSong> HybridRecommendations = this.userRecommendations.getSongsRecommendations();
+//            for (RecommendedSong song : HybridRecommendations) {
+//                for (com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()) {
+//                    String[] SongGenres = getSongGenres(song);
+//                    ArrayList<String> ArtistGenres = artist.getGenres();
+//                    for(int i = 0; i < SongGenres.length; i++){
+//                        for(String artistgenre : ArtistGenres){
+//                            System.out.println("COMPROBANDO");
+//                            if(SongGenres[i].equals(artistgenre)){
+//                                song.setCoincidence(song.getCoincidence()+1);
+//                                System.out.println("COINCIDE!: " + song.getCoincidence());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            Collections.sort(HybridRecommendations, RecommendedSong.Coincidences);
+//            return HybridRecommendations;
+//        }
+//    }
 
     public void setupFragment(){
         fragmentLauncher = new FragmentLauncher();
@@ -354,8 +368,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
             }
 
-            /*addToSongIndex(5);
-            addToArtistIndex(5);*/
         }
 
 
@@ -370,51 +382,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else return this.userProfile;
     }
-
-    public ArrayList<RecommendedSong> getHybridSongs_bygenre() {
-
-        if (this.userRecommendations.getArtistRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0 ||
-                this.userRecommendations.getSongsRecommendations() == null || this.userRecommendations.getSongsRecommendations().size() == 0)
-            return new ArrayList<>();
-        else {
-            ArrayList<RecommendedSong> HybridRecommendations = this.userRecommendations.getSongsRecommendations();
-            for (RecommendedSong song : HybridRecommendations) {
-                for (com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()) {
-                    String[] SongGenres = getSongGenres(song);
-                    ArrayList<String> ArtistGenres = artist.getGenres();
-                    for(int i = 0; i < SongGenres.length; i++){
-                        for(String artistgenre : ArtistGenres){
-                            //System.out.println("SG: " + SongGenres[i] + "AG: " + artistgenre);
-                            if(SongGenres[i].equals(artistgenre)){
-                                // System.out.println("Coincidence " + HybridRecommendations.size() + " " + this.userRecommendations.getArtistRecommendations().size() );
-                                song.setCoincidence(song.getCoincidence()+1);
-                            }
-                        }
-                    }
-                }
-            }
-            Collections.sort(HybridRecommendations, RecommendedSong.Coincidences);
-
-            return HybridRecommendations;
-        }
-    }
-
-    public String[] getSongGenres(RecommendedSong Song){
-        String[] SongGenres = Song.getGenres().split(",");
-
-        for(int i = 0; i< SongGenres.length; i++) {
-
-            SongGenres[i] = SongGenres[i].substring(4,SongGenres[i].length()-3);
-        }
-        return SongGenres;
-    }
-
-    /*private synchronized void addToSongIndex(int toAdd){
-        this.lastSongProcessed += toAdd;
-    }
-
-    private synchronized void addToArtistIndex(int toAdd){
-        this.lastArtistProcessed += toAdd;
-    }*/
 
 }

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@color/teal_700"
+    android:background="@color/green_spotify"
     android:gravity="center"
     android:padding="16dp"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">

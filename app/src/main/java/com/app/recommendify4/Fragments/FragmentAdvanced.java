@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.app.recommendify4.SpotifyItems.Song.RecommendedSong;
+import com.app.recommendify4.UserInfo.Recommendations;
 import com.bumptech.glide.Glide;
 import com.app.recommendify4.R;
 import com.app.recommendify4.SpotifyApi.RequestSender;
@@ -26,9 +27,11 @@ import com.app.recommendify4.UserInfo.Credentials;
 
 public class FragmentAdvanced extends Fragment {
 
-    private static final String SONGRECOMMENDED = "RecommendedSong";
-    private static final String CREDENTIALS = "Credentials";
-    private ArrayList<RecommendedSong> listOfRecommendations;
+    private static final String CREDENTIALS = "credentials";
+    private static final String RECOMMENDATIONS = "recommendations";
+
+    private Recommendations recommendations;
+    private ArrayList<RecommendedSong> listOfRecommendations = new ArrayList<>();
 
     private RecommendedSong song;
     private int currentSong = 0;
@@ -44,10 +47,10 @@ public class FragmentAdvanced extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentAdvanced newInstance(ArrayList<RecommendedSong> songsToRecommend, Credentials credentials) {
+    public static FragmentAdvanced newInstance(Recommendations recommendations, Credentials credentials) {
         FragmentAdvanced fragment = new FragmentAdvanced();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(SONGRECOMMENDED, songsToRecommend);
+        args.putParcelable(RECOMMENDATIONS, recommendations);
         args.putParcelable(CREDENTIALS,credentials);
         fragment.setArguments(args);
         return fragment;
@@ -57,9 +60,10 @@ public class FragmentAdvanced extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            listOfRecommendations = getArguments().getParcelableArrayList(SONGRECOMMENDED);
+            recommendations = getArguments().getParcelable(RECOMMENDATIONS);
             credentials = getArguments().getParcelable(CREDENTIALS);
         }
+        listOfRecommendations = recommendations.getSongsRecommendations();
     }
 
     @Override
@@ -83,13 +87,14 @@ public class FragmentAdvanced extends Fragment {
 
     public void setNextSong() {
 
-        if(currentSong < listOfRecommendations.size()){
+        if(listOfRecommendations.size() > 0){
             if(mediaPlayer.isPlaying()){
                 mediaPlayer.stop();
                 mediaPlayer.reset();
             }
-            song = listOfRecommendations.get(currentSong++);
-            song.setShown(1);
+            song = listOfRecommendations.get(currentSong);
+            currentSong ++;
+
             ThreadLauncher builder_updateTrack = new ThreadLauncher();
             builder_updateTrack.execute(new Runnable() {
                 @Override

@@ -33,16 +33,19 @@ public class FragmentArtistRecommendation extends Fragment {
 
     private Recommendations userRecommendations = new Recommendations();
     private ArrayList<RecommendedArtist> artistsShown;
+    private ArrayList<RecommendedArtist> recommendedArtists;
     private Credentials credentials;
     private final ThreadPoolExecutor threadPoolExecutor = RecomThreadPool.getThreadPoolExecutor();
-    private FragmentTransaction fragmentTransaction;
 
     private static final String ARTISTSHOWN = "artistShown";
     private static final String CREDENTIALS = "credentials";
+    private static final String ARTISTS = "artists";
+
 
     private final ArtistCallback artistThreadCallback = new ArtistCallback() {
         @Override
         public void onComplete(ArrayList<RecommendedArtist> artistRecommended) {
+            userRecommendations.getArtistRecommendations().clear();
             userRecommendations.addArtistRecommendations(artistRecommended);
         }
     };
@@ -103,13 +106,18 @@ public class FragmentArtistRecommendation extends Fragment {
             }
         },20000);
 
+        recommendedArtists = userRecommendations.getArtistRecommendations();
+
+        for(RecommendedArtist artist : recommendedArtists){
+            if(!artistsShown.contains(artist)) artistsShown.add(artist);
+        }
+
     }
 
 
     public void showArtists(View view){
         Bundle args = new Bundle();
-        args.putParcelableArrayList("artistsShown",artistsShown);
-        args.putParcelableArrayList("artists",userRecommendations.getArtistRecommendations());
+        args.putParcelableArrayList(ARTISTS,userRecommendations.getArtistRecommendations());
 
         NavController navigation = Navigation.findNavController(view);
         navigation.navigate(R.id.fragment3Artists,args);

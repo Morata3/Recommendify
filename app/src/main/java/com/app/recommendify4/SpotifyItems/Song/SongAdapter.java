@@ -40,7 +40,6 @@ public class SongAdapter extends ArrayAdapter<RecommendedSong> {
 
         songName.setText(song.getName());
         songArtist.setText(song.getArtistNameList(song.getArtists()));
-        System.out.println("Song : "+ song);
         Glide.with(convertView).load(song.getCoverURL()).into(songImage);
 
         return convertView;

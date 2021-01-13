@@ -29,4 +29,17 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/text_hybrid_info"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="140dp"
+        android:text="@string/hybrid_information_message"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>
