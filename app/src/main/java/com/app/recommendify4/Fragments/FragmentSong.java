@@ -36,8 +36,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentSong extends Fragment {
 
-    private static final String RECOMMENDATIONSLISTKEY = "RecommendationsList";
-    private static final String SONGSSHOWNLISTKEY = "SongsShown";
     private static final String USERSONGSLISTKEY = "UserSongs";
     private static final String RECOMMENDATIONS = "recommendations";
     private static final String CREDENTIALS = "Credentials";
@@ -136,6 +134,8 @@ public class FragmentSong extends Fragment {
 
         }
         else{
+            mediaPlayer.stop();
+            mediaPlayer.reset();
             songNameView.setText("No more recommendations for now");
             songArtistView.setText("But stay calm. More are being generated");
             Glide.with(this).load(GANDALFMEME).into(coverAlbum);

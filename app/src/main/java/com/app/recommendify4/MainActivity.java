@@ -247,16 +247,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.replace(R.id.fragmentMain, fragmentArtistRecommender);
                 fragmentTransaction.addToBackStack(null);
                 break;
-            case R.id.buttonHybrid:
-                if(this.userRecommendations.getArtistRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0 &&
-                        this.userRecommendations.getSongsRecommendations() != null && this.userRecommendations.getArtistRecommendations().size() != 0){
-
-//                    fragmentHybrid = FragmentHybrid.newInstance(getHybridSongs_bygenre(), userRecommendations.getSongsShown(),credentials);
-                    fragmentTransaction.replace(R.id.fragmentMain,fragmentHybrid);
-                    fragmentTransaction.addToBackStack(null);
-                }else System.out.println("Recommendations not yet ready ");
-                break;
-
         }
         fragmentTransaction.commit();
     }
@@ -279,32 +269,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return HybridRecommendations;
         }
     }
-
-//    public ArrayList<RecommendedSong> getHybridSongs_bygenre() {
-//        if (this.userRecommendations.getArtistRecommendations() == null || this.userRecommendations.getArtistRecommendations().size() == 0 ||
-//                this.userRecommendations.getSongsRecommendations() == null || this.userRecommendations.getSongsRecommendations().size() == 0)
-//            return new ArrayList<>();
-//        else {
-//            ArrayList<RecommendedSong> HybridRecommendations = this.userRecommendations.getSongsRecommendations();
-//            for (RecommendedSong song : HybridRecommendations) {
-//                for (com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.userRecommendations.getArtistRecommendations()) {
-//                    String[] SongGenres = getSongGenres(song);
-//                    ArrayList<String> ArtistGenres = artist.getGenres();
-//                    for(int i = 0; i < SongGenres.length; i++){
-//                        for(String artistgenre : ArtistGenres){
-//                            System.out.println("COMPROBANDO");
-//                            if(SongGenres[i].equals(artistgenre)){
-//                                song.setCoincidence(song.getCoincidence()+1);
-//                                System.out.println("COINCIDE!: " + song.getCoincidence());
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            Collections.sort(HybridRecommendations, RecommendedSong.Coincidences);
-//            return HybridRecommendations;
-//        }
-//    }
 
     public void setupFragment(){
         fragmentLauncher = new FragmentLauncher();

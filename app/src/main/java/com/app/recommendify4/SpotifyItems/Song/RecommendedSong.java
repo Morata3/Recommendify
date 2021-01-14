@@ -8,24 +8,20 @@ import java.util.Comparator;
 
 public class RecommendedSong extends Song implements Parcelable {
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artists;
-    private int shown;
     private String genres;
     private String coverURL;
     private int Coincidence;
     private String previewURL;
-    //private String ArtistString;
 
     public RecommendedSong(String songName, String albumName, String songId, ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> artists, int shown){
         super(songName, albumName, songId);
         this.artists = artists;
-        this.shown = shown;
         this.Coincidence = 0;
     }
 
     public RecommendedSong(String songName, String artistsList, String songId, int shown, String Genres){
         super(songName, songId);
         this.artists = getArtistsFromString(artistsList);
-        this.shown = shown;
         this.Coincidence = 0;
         this.genres = Genres;
     }
@@ -49,10 +45,6 @@ public class RecommendedSong extends Song implements Parcelable {
     public String getGenres(){return this.genres;}
 
     public void setCoincidence(int Coincidence){this.Coincidence = Coincidence;}
-
-    public boolean wasShown() { return shown != 0; }
-
-    public void setShown(int shown) { this.shown = shown; }
 
     private ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> getArtistsFromString(String artistList){
         ArrayList<com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist> list = new ArrayList<>();
@@ -84,9 +76,9 @@ public class RecommendedSong extends Song implements Parcelable {
         this.setCoverURL(in.readString());
         this.setGenres(in.readString());
         this.setPreviewURL(in.readString());
+        this.setCoincidence(in.readInt());
 
         in.readTypedList(artists, com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist.CREATOR);
-        shown = in.readInt();
     }
 
     public static final Parcelable.Creator<RecommendedSong> CREATOR
@@ -112,9 +104,9 @@ public class RecommendedSong extends Song implements Parcelable {
         dest.writeString(this.getCoverURL());
         dest.writeString(this.getGenres());
         dest.writeString(this.getPreviewURL());
+        dest.writeInt(this.getCoincidence());
 
         dest.writeTypedList(artists);
-        dest.writeInt(shown);
     }
 
     @Override

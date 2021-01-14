@@ -86,23 +86,11 @@
             android:onClick="onClick"
             android:text="Recommend artist"
             android:background="@drawable/custom_main_button"
-            app:layout_constraintBottom_toTopOf="@+id/buttonHybrid"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPlaylist" />
 
-        <Button
-            android:id="@+id/buttonHybrid"
-            android:layout_width="160dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="64dp"
-            android:onClick="onClick"
-            android:text="hybrid"
-            android:background="@drawable/custom_main_button"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonArtist" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

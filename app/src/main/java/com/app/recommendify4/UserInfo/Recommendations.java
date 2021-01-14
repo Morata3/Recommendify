@@ -72,7 +72,6 @@ public class Recommendations implements Parcelable{
         }
         this.songsRecommendations.remove(song);
         if(!this.songsShown.contains(song)) this.songsShown.add(song);
-        //checkHybrid();
     }
 
     public void moveToHistory(RecommendedArtist artist){
@@ -92,17 +91,15 @@ public class Recommendations implements Parcelable{
         return (artistRecommendations.size() > 0);
     }
 
+
     private void setSongCoincidences(RecommendedSong song){
-        System.out.println("GENEROS DA CANCION: " + song.getGenres());
         String[] songGenres = song.getSongGenres();
         for(RecommendedArtist shownArtist : this.artistsShown){
             ArrayList<String> artistGenres = shownArtist.getGenres();
             for(String artistGenre : artistGenres){
                 for(String songGenre : songGenres){
-                    System.out.println("GENERO DA CANCION: " + songGenre);
                     if(songGenre.equals(artistGenre)){
                         System.out.println("Song: " +  song.toString() + " contains genre " + songGenre + " like the artist " + shownArtist.getName());
-
                         song.setCoincidence(song.getCoincidence() + 1);
                     }
                 }
@@ -114,24 +111,19 @@ public class Recommendations implements Parcelable{
     private void updateSongsCoincidences(RecommendedArtist artist){
         ArrayList<String> artistGenres = artist.getGenres();
         for(RecommendedSong hybridSong : this.hybridRecommendations){
-            System.out.println("GENEROS DA CANCION: " + hybridSong.getGenres());
             String[] songGenres = hybridSong.getSongGenres();
             for(String songGenre : songGenres){
-                System.out.println("GENERO DA CANCION: " + songGenre);
-
                 if(artistGenres.contains(songGenre)){
-                    System.out.println("Song: " +  hybridSong.toString() + " contains genre " + songGenre + " like the artist " + artist.getName());
+                    System.out.println("Song: " +  hybridSong.getName() + " contains genre " + songGenre + " like the artist " + artist.getName());
                     hybridSong.setCoincidence(hybridSong.getCoincidence() + 1);
                 }
             }
         }
         for(RecommendedSong shownSong : this.songsShown){
-            System.out.println("GENEROS DA CANCION: " + shownSong.getGenres());
             String[] songGenres = shownSong.getSongGenres();
             for(String songGenre : songGenres){
-                System.out.println("GENERO DA CANCION: " + songGenre);
                 if(artistGenres.contains(songGenre)){
-                    System.out.println("Song: " +  shownSong.toString() + " contains genre " + songGenre + " like the artist " + artist.getName());
+                    System.out.println("Song: " +  shownSong.getName() + " contains genre " + songGenre + " like the artist " + artist.getName());
                     shownSong.setCoincidence(shownSong.getCoincidence() + 1);
                 }
             }

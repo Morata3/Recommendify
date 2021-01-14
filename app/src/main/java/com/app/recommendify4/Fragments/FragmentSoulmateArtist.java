@@ -33,10 +33,11 @@ import static android.content.Context.MODE_PRIVATE;
 public class FragmentSoulmateArtist extends Fragment {
 
     private static final String RECOMMENDATIONS = "Recommendations";
-    private static final String ARTISTSSHOWNLISTKEY = "ArtistsShown";
     private static final String USERARTISTSLISTKEY = "UserArtists";
-    private static final String LASTINDEXPROCESSED = "LastIndexProcessed";
+
     private static final String CREDENTIALS = "Credentials";
+    private static final String GANDALFMEME = "https://memegenerator.net/img/instances/74848295/please-wait-while-im-doing-my-magic.jpg";
+
 
     private Recommendations recommendations;
     private ArrayList<RecommendedArtist> listOfRecommendations;
@@ -80,6 +81,7 @@ public class FragmentSoulmateArtist extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             recommendations = getArguments().getParcelable(RECOMMENDATIONS);
+            userArtists = getArguments().getParcelableArrayList(USERARTISTSLISTKEY);
             credentials = getArguments().getParcelable(CREDENTIALS);
             userArtists = getArguments().getParcelableArrayList(USERARTISTSLISTKEY);
         }
@@ -116,7 +118,7 @@ public class FragmentSoulmateArtist extends Fragment {
         }
         else{
             artistNameView.setText("No more recommendations for now");
-            Glide.with(this).clear(artistImage);
+            Glide.with(this).load(GANDALFMEME).into(artistImage);
         }
 
     }

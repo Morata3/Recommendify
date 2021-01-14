@@ -88,6 +88,8 @@ public class FragmentLauncher_History extends Fragment {
         fragmentHistoryHybrid = FragmentHistorySong.newInstance(hybridSongs);
         fragmentHistoryArtist = FragmentHistoryArtist.newInstance(artists);
 
+        for(RecommendedSong song : hybridSongs) System.out.println("HYBRID: " + song);
+
         viewAdapter.addFragment(fragmentHistorySong,"Songs");
         viewAdapter.addFragment(fragmentHistoryArtist,"Artists");
         viewAdapter.addFragment(fragmentHistoryHybrid, "Hybrid");
