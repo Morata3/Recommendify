@@ -62,7 +62,7 @@ public class FragmentSong extends Fragment {
             if(listOfRecommendations.size() == 0){
                 int lastIndexUsed = getLastIndexUsed(userSongs);
                 UserSong song = userSongs.get(lastIndexUsed);
-                song.setUsed(true);
+                song.setUsed(1);
                 threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
             }
         }
@@ -160,7 +160,7 @@ public class FragmentSong extends Fragment {
         if(lastIndexUsed != userSongs.size()){
             int indexToProccessLast = getLastIndexToProccess(lastIndexUsed, userSongs.size());
             for (UserSong song : userSongs.subList(lastIndexUsed, indexToProccessLast)) {
-                song.setUsed(true);
+                song.setUsed(1);
                 threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
             }
         }

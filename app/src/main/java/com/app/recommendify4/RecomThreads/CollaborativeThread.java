@@ -48,8 +48,9 @@ public class CollaborativeThread implements Runnable{
 
                 //call the Spotify API to obtain data for the recommended artist
                 String recommendedArtistStr = RequestSender.searchArtistByName(recommended_artists[k], credentials);
+                JSONObject possibleArtistJSON = null;
                 try {
-                    JSONObject possibleArtistJSON = new JSONObject(recommendedArtistStr);
+                    possibleArtistJSON = new JSONObject(recommendedArtistStr);
                     JSONObject artistInfo = possibleArtistJSON.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
                     RecommendedArtist recommendedArtist = new RecommendedArtist(artistInfo, 0);
                     recommendationsList.add(recommendedArtist);
@@ -57,6 +58,7 @@ public class CollaborativeThread implements Runnable{
                     System.out.println("BASE ARTIST: " + baseForRecommendations.getName() + " --> Recommended artist: " + recommendedArtist.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    System.out.println(possibleArtistJSON.toString());
                 }
             }
             //System.out.println("NUMBER OF RECOMMENDATIONS: " + recommendationsList.size() + ". FOR SONG: " + baseForRecommendations);

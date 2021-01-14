@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int lastSongUsed = userProfile.getLastSongUsed();
                 if(lastSongUsed != userProfile.getTopSongs().size()) {
                     UserSong song = userProfile.getTopSongs().get(lastSongUsed);
-                    song.setUsed(true);
+                    song.setUsed(1);
                     threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
                 }
             }
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int lastArtistUsed = userProfile.getLastArtistUsed();
                 if(lastArtistUsed != userProfile.getTopArtists().size()){
                     UserArtist artist = userProfile.getTopArtists().get(lastArtistUsed);
-                    artist.setUsed(true);
+                    artist.setUsed(1);
                     threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
                 }
             }
@@ -360,11 +360,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             int lastArtistUsed = userProfile.getLastArtistUsed();
 
             for (UserSong song : userTopSongs.subList(lastSongUsed, lastSongUsed + 5)){
-                song.setUsed(true);
+                song.setUsed(1);
                 threadPoolExecutor.execute(new ContentThread(song, contentThreadCallback, credentials));
             }
             for (UserArtist artist: userTopArtists.subList(lastArtistUsed, lastArtistUsed + 5)){
-                artist.setUsed(true);
+                artist.setUsed(1);
                 threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
             }
 

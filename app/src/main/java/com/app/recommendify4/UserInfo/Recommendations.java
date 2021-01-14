@@ -65,15 +65,23 @@ public class Recommendations implements Parcelable{
     }
 
     public void moveToHistory(RecommendedSong song){
+        setSongCoincidences(song);
+        if(song.getCoincidence() > 0 && !hybridRecommendations.contains(song)){
+            hybridRecommendations.add(song);
+            Collections.sort(this.hybridRecommendations, RecommendedSong.Coincidences);
+        }
         this.songsRecommendations.remove(song);
         if(!this.songsShown.contains(song)) this.songsShown.add(song);
-        checkHybrid();
+        //checkHybrid();
     }
 
-    public void moveToHistory(com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist){
+    public void moveToHistory(RecommendedArtist artist){
+        updateSongsCoincidences(artist);
         this.artistRecommendations.remove(artist);
-        if(!this.artistsShown.contains(artist)) this.artistsShown.add(artist);
-        checkHybrid();
+        if(!this.artistsShown.contains(artist))
+            this.artistsShown.add(artist);
+
+        //checkHybrid();
     }
 
     public boolean hasSongRecommendations(){
@@ -84,28 +92,56 @@ public class Recommendations implements Parcelable{
         return (artistRecommendations.size() > 0);
     }
 
-    private void checkHybrid(){
-        if (this.artistRecommendations == null || this.artistRecommendations.size() == 0 ||
-                this.songsRecommendations == null || this.songsRecommendations.size() == 0) {
-        }
-        else {
-            for (RecommendedSong song : this.songsRecommendations) {
-                for (com.app.recommendify4.SpotifyItems.Artist.RecommendedArtist artist : this.artistRecommendations) {
-                    String[] SongGenres = song.getSongGenres();
-                    ArrayList<String> ArtistGenres = artist.getGenres();
-                    for (String songGenre : SongGenres) {
-                        for (String artistgenre : ArtistGenres) {
-                            if (songGenre.equals(artistgenre)) {
-                                song.setCoincidence(song.getCoincidence() + 1);
-                                hybridRecommendations.add(song);
-                                System.out.println("COINCIDE!: " + song.getCoincidence());
-                            }
-                        }
+    private void setSongCoincidences(RecommendedSong song){
+        System.out.println("GENEROS DA CANCION: " + song.getGenres());
+        String[] songGenres = song.getSongGenres();
+        for(RecommendedArtist shownArtist : this.artistsShown){
+            ArrayList<String> artistGenres = shownArtist.getGenres();
+            for(String artistGenre : artistGenres){
+                for(String songGenre : songGenres){
+                    System.out.println("GENERO DA CANCION: " + songGenre);
+                    if(songGenre.equals(artistGenre)){
+                        System.out.println("Song: " +  song.toString() + " contains genre " + songGenre + " like the artist " + shownArtist.getName());
+
+                        song.setCoincidence(song.getCoincidence() + 1);
                     }
                 }
             }
-            Collections.sort(this.hybridRecommendations, RecommendedSong.Coincidences);
         }
+
+    }
+
+    private void updateSongsCoincidences(RecommendedArtist artist){
+        ArrayList<String> artistGenres = artist.getGenres();
+        for(RecommendedSong hybridSong : this.hybridRecommendations){
+            System.out.println("GENEROS DA CANCION: " + hybridSong.getGenres());
+            String[] songGenres = hybridSong.getSongGenres();
+            for(String songGenre : songGenres){
+                System.out.println("GENERO DA CANCION: " + songGenre);
+
+                if(artistGenres.contains(songGenre)){
+                    System.out.println("Song: " +  hybridSong.toString() + " contains genre " + songGenre + " like the artist " + artist.getName());
+                    hybridSong.setCoincidence(hybridSong.getCoincidence() + 1);
+                }
+            }
+        }
+        for(RecommendedSong shownSong : this.songsShown){
+            System.out.println("GENEROS DA CANCION: " + shownSong.getGenres());
+            String[] songGenres = shownSong.getSongGenres();
+            for(String songGenre : songGenres){
+                System.out.println("GENERO DA CANCION: " + songGenre);
+                if(artistGenres.contains(songGenre)){
+                    System.out.println("Song: " +  shownSong.toString() + " contains genre " + songGenre + " like the artist " + artist.getName());
+                    shownSong.setCoincidence(shownSong.getCoincidence() + 1);
+                }
+            }
+        }
+        for(RecommendedSong shownSong : this.songsShown)
+            if(shownSong.getCoincidence() > 0 && !this.hybridRecommendations.contains(shownSong))
+                this.hybridRecommendations.add(shownSong);
+
+        Collections.sort(this.hybridRecommendations, RecommendedSong.Coincidences);
+
     }
 
     //PARCELABLE IMPLEMENTATION
@@ -119,8 +155,8 @@ public class Recommendations implements Parcelable{
         in.readTypedList(songsRecommendations, RecommendedSong.CREATOR);
         in.readTypedList(artistRecommendations, RecommendedArtist.CREATOR);
         in.readTypedList(hybridRecommendations, RecommendedSong.CREATOR);
-        in.readTypedList(songsRecommendations, RecommendedSong.CREATOR);
-        in.readTypedList(artistRecommendations,RecommendedArtist.CREATOR);
+        in.readTypedList(songsShown, RecommendedSong.CREATOR);
+        in.readTypedList(artistsShown,RecommendedArtist.CREATOR);
     }
 
     public static final Parcelable.Creator<Recommendations> CREATOR

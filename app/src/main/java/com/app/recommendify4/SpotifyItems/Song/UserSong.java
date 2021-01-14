@@ -18,13 +18,13 @@ public class UserSong extends Song implements Parcelable{
 
     private ArrayList<UserArtist> artists;
     private int timesInList;
-    private boolean used;
+    private int used;
 
     public UserSong(String songName, String albumName, ArrayList<UserArtist> artistsList, String songId, int timesInList){
         super(songName, albumName, songId);
         this.artists = artistsList;
         this.timesInList = timesInList;
-        this.used = false;
+        this.used = 0;
     }
 
     public UserSong(JSONObject songInfo, int timesInList) throws JSONException {
@@ -34,13 +34,13 @@ public class UserSong extends Song implements Parcelable{
         for(int artist = 0; artist < artistsJSON.length(); artist++)
             this.artists.add(new UserArtist(artistsJSON.getJSONObject(artist).getString("name"), artistsJSON.getJSONObject(artist).getString("id")));
         this.timesInList = timesInList;
-        this.used = false;
+        this.used = 0;
 
     }
 
-    public void setUsed(boolean used) { this.used = used; }
+    public void setUsed(int used) { this.used = used; }
 
-    public boolean isUsed() { return used; }
+    public boolean isUsed() { return used > 0; }
 
     public void setArtists(ArrayList<UserArtist> artists) { this.artists = artists; }
 
@@ -72,6 +72,7 @@ public class UserSong extends Song implements Parcelable{
         this.setId(in.readString());
         in.readTypedList(artists, UserArtist.CREATOR);
         timesInList = in.readInt();
+        used = in.readInt();
     }
 
     public static final Parcelable.Creator<UserSong> CREATOR
@@ -96,6 +97,7 @@ public class UserSong extends Song implements Parcelable{
         dest.writeString(this.getAlbum());
         dest.writeTypedList(artists);
         dest.writeInt(timesInList);
+        dest.writeInt(used);
     }
 
 

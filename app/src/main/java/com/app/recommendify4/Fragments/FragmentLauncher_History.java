@@ -63,7 +63,7 @@ public class FragmentLauncher_History extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             recommendations = getArguments().getParcelable(RECOMMENDATIONS);
-            songs = recommendations.getSongsRecommendations();
+            songs = recommendations.getSongsShown();
             artists = recommendations.getArtistsShown();
             hybridSongs = recommendations.getHybridRecommendations();
         }

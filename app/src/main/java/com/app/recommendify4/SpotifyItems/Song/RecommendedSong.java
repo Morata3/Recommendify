@@ -65,12 +65,14 @@ public class RecommendedSong extends Song implements Parcelable {
     }
 
     public String[] getSongGenres(){
-        String[] SongGenres = this.genres.split(",");
-
-        for(int i = 0; i< SongGenres.length; i++) {
-            SongGenres[i] = SongGenres[i].substring(4,SongGenres[i].length()-3);
-        }
-        return SongGenres;
+        String str = this.genres;
+        str = str.replace("\"","");
+        str = str.replace("\'","");
+        str = str.replace("[","");
+        str = str.replace("]","");
+        str = str.trim();
+        String[] songGenres = str.split(", ");
+        return songGenres;
     }
 
     //PARCELABLE IMPLEMENTATION

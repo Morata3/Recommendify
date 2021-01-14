@@ -34,7 +34,7 @@ public class FragmentSoulmateArtist extends Fragment {
 
     private static final String RECOMMENDATIONS = "Recommendations";
     private static final String ARTISTSSHOWNLISTKEY = "ArtistsShown";
-    private static final String USERARTISTSLISTKEY = "Userrtists";
+    private static final String USERARTISTSLISTKEY = "UserArtists";
     private static final String LASTINDEXPROCESSED = "LastIndexProcessed";
     private static final String CREDENTIALS = "Credentials";
 
@@ -54,7 +54,7 @@ public class FragmentSoulmateArtist extends Fragment {
             if(listOfRecommendations.size() == 0){
                 int lastIndexUsed = getLastIndexUsed(userArtists);
                 UserArtist artist = userArtists.get(lastIndexUsed);
-                artist.setUsed(true);
+                artist.setUsed(1);
                 threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
             }
         }
@@ -81,6 +81,7 @@ public class FragmentSoulmateArtist extends Fragment {
         if (getArguments() != null) {
             recommendations = getArguments().getParcelable(RECOMMENDATIONS);
             credentials = getArguments().getParcelable(CREDENTIALS);
+            userArtists = getArguments().getParcelableArrayList(USERARTISTSLISTKEY);
         }
         listOfRecommendations = recommendations.getArtistRecommendations();
     }
@@ -127,7 +128,7 @@ public class FragmentSoulmateArtist extends Fragment {
         if(lastIndexUsed != userArtists.size()){
             int indexToProccessLast = getLastIndexToProccess(lastIndexUsed, userArtists.size());
             for (UserArtist artist : userArtists.subList(lastIndexUsed, indexToProccessLast)) {
-                artist.setUsed(true);
+                artist.setUsed(1);
                 threadPoolExecutor.execute(new CollaborativeThread(artist, collaborativeThreadCallback, credentials));
             }
         }

@@ -16,29 +16,29 @@ import java.util.ArrayList;
 
 public class UserArtist extends Artist implements Parcelable{
     private int songsInList;
-    private boolean used;
+    private int used;
 
     public UserArtist(String artistName, ArrayList<String> artistGenres, String artistId){
         super(artistName, artistGenres, artistId);
         this.songsInList = 1;
-        this.used = false;
+        this.used = 0;
     }
 
     public UserArtist(String artistName, String artistId){
         super(artistName, artistId);
         this.songsInList = 1;
-        this.used = false;
+        this.used = 0;
     }
 
     public UserArtist(JSONObject artistJSON, int songsInList) throws JSONException {
         super(artistJSON);
         this.songsInList = songsInList;
-        this.used = false;
+        this.used = 0;
     }
 
-    public boolean isUsed() { return used; }
+    public boolean isUsed() { return used > 0; }
 
-    public void setUsed(boolean used) { this.used = used; }
+    public void setUsed(int used) { this.used = used; }
 
     public int getSongsInList() { return songsInList; }
 
@@ -64,6 +64,7 @@ public class UserArtist extends Artist implements Parcelable{
         this.setId(in.readString());
         this.setGenres(in.readArrayList(null));
         songsInList = in.readInt();
+        used = in.readInt();
     }
 
     public static final Parcelable.Creator<UserArtist> CREATOR
@@ -88,6 +89,7 @@ public class UserArtist extends Artist implements Parcelable{
         dest.writeString(this.getId());
         dest.writeList(this.getGenres());
         dest.writeInt(songsInList);
+        dest.writeInt(this.used);
     }
 
 
