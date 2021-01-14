@@ -1,11 +1,19 @@
 package com.app.recommendify4.Fragments;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +45,7 @@ public class FragmentAdvanced extends Fragment {
     private Credentials credentials;
     private MediaPlayer mediaPlayer = new MediaPlayer();
 
+    private ImageButton nextSong;
     private TextView songNameView;
     private TextView songArtistView;
     private ImageView coverAlbum;
@@ -75,23 +84,22 @@ public class FragmentAdvanced extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageButton nextSong = (ImageButton) view.findViewById(R.id.nextSongAdvanced);
-        nextSong.setOnClickListener(v -> setNextSong());
+        nextSong = (ImageButton) view.findViewById(R.id.nextSongAdvanced);
+        nextSong.setOnClickListener(v -> setNextSong(view));
         coverAlbum = (ImageView) view.findViewById(R.id.playSongAdvanced);
         songNameView = (TextView) view.findViewById(R.id.songNameAdvanced);
         songArtistView = (TextView) view.findViewById(R.id.songArtistAdvanced);
-        setNextSong();
+        setNextSong(view);
     }
 
-    public void setNextSong() {
+    public void setNextSong(View view) {
 
-        if(listOfRecommendations.size() > 0){
+        if(currentSong < listOfRecommendations.size()){
             if(mediaPlayer.isPlaying()){
                 mediaPlayer.stop();
                 mediaPlayer.reset();
             }
-            song = listOfRecommendations.get(currentSong);
-            currentSong ++;
+            song = listOfRecommendations.get(currentSong ++);
 
             ThreadLauncher builder_updateTrack = new ThreadLauncher();
             builder_updateTrack.execute(new Runnable() {
@@ -114,6 +122,10 @@ public class FragmentAdvanced extends Fragment {
             }
         }
         else {
+            nextSong.setImageResource(R.drawable.ic_return);
+            nextSong.setOnClickListener(v -> {
+                getActivity().onBackPressed();
+            });
             songNameView.setText("No more recommendations for now");
             songArtistView.setText("You should try with another filters");
             Glide.with(this).load("https://assets-news-bcdn.dailyhunt.in/cmd/resize/400x400_80//fetchdata15/images/46/fb/b2/46fbb288c418cb6b8a173ea43bbebea2.jpg").into(coverAlbum);

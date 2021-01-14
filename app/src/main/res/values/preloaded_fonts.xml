@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+        <item>@font/bowlby_one</item>
         <item>@font/love_ya_like_a_sister</item>
+        <item>@font/new_rocker</item>
     </array>
 </resources>
