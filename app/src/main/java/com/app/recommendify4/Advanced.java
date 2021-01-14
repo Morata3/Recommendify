@@ -135,7 +135,7 @@ public class Advanced extends AppCompatActivity {
         switch (view.getId()) {
 
             case R.id.songs:
-//                    fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs(),songsShown ,credentials);
+                    fragmentAdvanced = FragmentAdvanced.newInstance(FilteredSongs() ,credentials);
                     fragmentTransaction.replace(R.id.fragmentMainAdvanced,fragmentAdvanced);
                     fragmentTransaction.addToBackStack(null);
                 break;

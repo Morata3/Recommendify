@@ -30,7 +30,6 @@ public class FragmentAdvanced extends Fragment {
     private static final String CREDENTIALS = "credentials";
     private static final String RECOMMENDATIONS = "recommendations";
 
-    private Recommendations recommendations;
     private ArrayList<RecommendedSong> listOfRecommendations = new ArrayList<>();
 
     private RecommendedSong song;
@@ -47,10 +46,10 @@ public class FragmentAdvanced extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentAdvanced newInstance(Recommendations recommendations, Credentials credentials) {
+    public static FragmentAdvanced newInstance(ArrayList<RecommendedSong> recommendedSongs, Credentials credentials) {
         FragmentAdvanced fragment = new FragmentAdvanced();
         Bundle args = new Bundle();
-        args.putParcelable(RECOMMENDATIONS, recommendations);
+        args.putParcelableArrayList(RECOMMENDATIONS, recommendedSongs);
         args.putParcelable(CREDENTIALS,credentials);
         fragment.setArguments(args);
         return fragment;
@@ -60,10 +59,9 @@ public class FragmentAdvanced extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            recommendations = getArguments().getParcelable(RECOMMENDATIONS);
+            listOfRecommendations = getArguments().getParcelableArrayList(RECOMMENDATIONS);
             credentials = getArguments().getParcelable(CREDENTIALS);
         }
-        listOfRecommendations = recommendations.getSongsRecommendations();
     }
 
     @Override
